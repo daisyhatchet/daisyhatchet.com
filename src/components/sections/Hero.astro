@@ -20,9 +20,9 @@ const { kicker, title, body, image = '/images/daisy-hatchet-mark.webp' } = Astro
   h1 { max-width: 14ch; font-size: clamp(3.4rem,5vw,5.25rem); }
   .hero__copy > p:not(.eyebrow) { max-width: 31rem; margin-block: 2rem; font-size: clamp(1.05rem,1.7vw,1.35rem); }
   .hero__copy > p:not(.eyebrow) { color: var(--cream); text-shadow: 0 1px 18px rgba(104,24,65,.42); }
-  .hero__art { position: absolute; z-index: 0; top: 50%; right: clamp(-18rem,-13vw,-8rem); width: clamp(48rem,70vw,82rem); transform: translateY(-50%); pointer-events: none; }
+  .hero__art { position: absolute; z-index: 0; top: 50%; left: 66.666%; width: clamp(48rem,70vw,82rem); transform: translate(-50%,-50%); pointer-events: none; }
   .hero__art img { width: 100%; aspect-ratio: 1; object-fit: contain; filter: invert(1); opacity: .42; }
   .button { color: var(--ink); background: var(--chartreuse); border-color: var(--chartreuse); }
   @media (min-width: 761px) and (prefers-reduced-motion: no-preference) { .hero { background-attachment: fixed; } }
-  @media (max-width: 760px) { .hero { height: auto; max-height: none; min-height: calc(100svh - 9rem); overflow: hidden; } .hero__copy { width: 100%; } .hero__art { right: -48vw; width: min(145vw,50rem); } h1 { font-size: clamp(3.6rem,16vw,6.5rem); } }
+  @media (max-width: 760px) { .hero { height: auto; max-height: none; min-height: calc(100svh - 9rem); overflow: hidden; } .hero__copy { width: 100%; } .hero__art { left: 72%; width: min(145vw,50rem); } h1 { font-size: clamp(3.6rem,16vw,6.5rem); } }
 </style>
