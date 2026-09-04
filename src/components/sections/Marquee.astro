@@ -2,11 +2,11 @@
 interface Props { items: string[]; }
 const { items } = Astro.props;
 ---
-<div class="marquee" aria-label={items.join(', ')}>
+<div class="marquee wave-edge" aria-label={items.join(', ')}>
   <div aria-hidden="true">{[...items, ...items].map((item) => <span>{item}&nbsp; ✦ &nbsp;</span>)}</div>
 </div>
 <style>
-  .marquee { overflow: hidden; color: var(--ink); background: var(--chartreuse); }
+  .marquee { --wave-color: var(--chartreuse); overflow-x: clip; overflow-y: visible; color: var(--ink); background: var(--chartreuse); }
   .marquee div { display: flex; width: max-content; padding-block: 1.1rem; animation: crawl 25s linear infinite; }
   span { font: 400 clamp(2rem,3.5vw,3.5rem)/.92 var(--heading); letter-spacing: .012em; white-space: nowrap; }
   @keyframes crawl { to { transform: translateX(-50%); } }

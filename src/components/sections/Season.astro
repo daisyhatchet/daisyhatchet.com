@@ -2,7 +2,7 @@
 interface Props { title: string; current: string[]; soon: string[]; note: string; }
 const { title, current, soon, note } = Astro.props;
 ---
-<section class="season shell" id="season">
+<section class="season shell wave-edge" id="season">
   <header>
     <p class="eyebrow">Field notes · right now</p>
     <h2 class="display">{title}</h2>
@@ -14,7 +14,7 @@ const { title, current, soon, note } = Astro.props;
   </div>
 </section>
 <style>
-  .season { display: grid; grid-template-columns: minmax(0,1.15fr) minmax(24rem,.85fr); gap: clamp(3rem,8vw,9rem); padding-block: clamp(6rem,12vw,11rem); background: var(--cream); }
+  .season { --wave-color: var(--cream); display: grid; grid-template-columns: minmax(0,1.15fr) minmax(24rem,.85fr); gap: clamp(3rem,8vw,9rem); padding-block: clamp(6rem,12vw,11rem); background: var(--cream); }
   header { position: sticky; top: 2rem; align-self: start; }
   .eyebrow { margin-bottom: 1.5rem; color: var(--olive); }
   h2 { max-width: 8ch; font-size: clamp(4.5rem,10vw,9.5rem); }

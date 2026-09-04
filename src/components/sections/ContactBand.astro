@@ -2,7 +2,7 @@
 interface Props { title: string; body: string; email: string; }
 const { title, body, email } = Astro.props;
 ---
-<section class="contact shell">
+<section class="contact shell wave-edge wave-edge--reverse">
   <div class="contact__intro"><p class="eyebrow">Flowers with an edge</p><h2 class="display">{title}</h2><p>{body}</p></div>
   <form action={`mailto:${email}`} method="post" enctype="text/plain">
     <div class="names"><label>First name<input name="first-name" autocomplete="given-name" /></label><label>Last name<input name="last-name" autocomplete="family-name" /></label></div>
@@ -12,7 +12,7 @@ const { title, body, email } = Astro.props;
   </form>
 </section>
 <style>
-  .contact { display: grid; grid-template-columns: 1fr minmax(22rem,.85fr); gap: clamp(3rem,9vw,10rem); padding-block: clamp(6rem,11vw,10rem); color: var(--cream); background: var(--ink); }
+  .contact { --wave-color: var(--ink); display: grid; grid-template-columns: 1fr minmax(22rem,.85fr); gap: clamp(3rem,9vw,10rem); padding-block: clamp(6rem,11vw,10rem); color: var(--cream); background: var(--ink); }
   .eyebrow { margin-bottom: 1.5rem; color: var(--chartreuse); }
   h2 { max-width: 7ch; font-size: clamp(4.3rem,9vw,8rem); }
   .contact__intro > p:last-child { max-width: 29rem; margin-top: 2rem; color: #d7cbd0; font-size: 1.05rem; }
@@ -25,4 +25,3 @@ const { title, body, email } = Astro.props;
   button { justify-self: start; color: var(--ink); background: var(--chartreuse); border-color: var(--chartreuse); }
   @media (max-width: 760px) { .contact { grid-template-columns: 1fr; } .names { grid-template-columns: 1fr; } }
 </style>
-

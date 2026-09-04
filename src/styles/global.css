@@ -24,6 +24,9 @@ button, input, textarea { font: inherit; }
 .shell { padding-inline: max(var(--gutter), calc((100vw - var(--max)) / 2)); }
 .eyebrow { margin: 0; font-size: .78rem; font-weight: 600; letter-spacing: .15em; text-transform: uppercase; }
 .display { margin: 0; font-family: var(--heading); font-weight: 400; line-height: .94; letter-spacing: .012em; }
+.wave-edge { position: relative; z-index: 1; }
+.wave-edge::before { content: ''; position: absolute; z-index: -1; inset: -1.5rem 0 auto; height: 1.6rem; background: var(--wave-color); -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 32' preserveAspectRatio='none'%3E%3Cpath fill='white' d='M0 19C150 5 280 6 420 18S700 31 850 16 1070 7 1200 18V32H0Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 32' preserveAspectRatio='none'%3E%3Cpath fill='white' d='M0 19C150 5 280 6 420 18S700 31 850 16 1070 7 1200 18V32H0Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat; pointer-events: none; }
+.wave-edge--reverse::before { transform: scaleX(-1); }
 .button { display: inline-flex; justify-content: center; align-items: center; min-height: 3.25rem; padding: .75rem 1.4rem; color: var(--cream); background: var(--ink); border: 1px solid var(--ink); border-radius: 100vmax; font-size: .82rem; font-weight: 600; letter-spacing: .08em; text-decoration: none; text-transform: uppercase; cursor: pointer; transition: transform .18s ease, background .18s ease; }
 .button:hover { transform: translateY(-2px); background: var(--olive); }
 .button--dark { color: var(--cream); background: var(--ink); }
