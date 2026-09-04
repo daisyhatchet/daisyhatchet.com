@@ -17,7 +17,7 @@ const links = [{ href: '/about', label: 'About' }, { href: '/gallery', label: 'G
 </script>
 <style>
   .site-header { position: relative; z-index: 10; min-height: 88px; display: flex; align-items: center; justify-content: space-between; gap: 2rem; color: var(--cream); background: var(--ink); }
-  .site-header--overlay { position: fixed; inset: 0 0 auto; background: transparent; transition: background-color .28s ease, box-shadow .28s ease, backdrop-filter .28s ease; }
+  .site-header--overlay { position: fixed; inset: 0 0 auto; background: rgba(41,21,31,.28); backdrop-filter: blur(4px); transition: background-color .28s ease, box-shadow .28s ease, backdrop-filter .28s ease; }
   .site-header--overlay.is-scrolled { background: rgba(41,21,31,.88); box-shadow: 0 1px 0 rgba(255,250,244,.12); backdrop-filter: blur(12px); }
   .wordmark { font-family: var(--brand); font-size: clamp(1.9rem, 3.5vw, 3rem); line-height: .9; letter-spacing: .01em; text-decoration: none; white-space: nowrap; }
   nav { display: flex; gap: clamp(1rem, 2.5vw, 2.2rem); align-items: center; }
