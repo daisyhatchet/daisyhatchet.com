@@ -3,14 +3,13 @@ interface Props { title: string; body: string; link?: { label: string; href: str
 const { title, body, link } = Astro.props;
 ---
 <section class="statement shell">
-  <p class="eyebrow">Flowers with an edge</p>
-  <h2>{title}</h2>
-  <div><p>{body}</p>{link && <a class="button button--dark" href={link.href}>{link.label} →</a>}</div>
+  <h2 class="display">{title}</h2>
+  <p>{body}</p>
+  {link && <a class="button" href={link.href}>{link.label}</a>}
 </section>
 <style>
-  .statement { padding-block: clamp(5rem, 12vw, 11rem); background: var(--paper); border-bottom: var(--line); }
-  h2 { max-width: 18ch; margin: 1.5rem 0 3rem; font: italic clamp(3rem, 8vw, 8rem)/.9 var(--serif); letter-spacing: -.05em; }
-  .statement > div { display: grid; grid-template-columns: 1fr auto; gap: 2rem; align-items: end; margin-left: 35%; }
-  .statement div p { max-width: 50ch; line-height: 1.75; }
-  @media (max-width: 700px) { .statement > div { margin-left: 0; grid-template-columns: 1fr; } }
+  .statement { min-height: 72vh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2rem; padding-block: 6rem; color: var(--lime); background: var(--pink); text-align: center; }
+  h2 { max-width: 11ch; font-size: clamp(4.8rem, 12vw, 11rem); }
+  p { max-width: 42ch; margin: 0; color: var(--ink); font-size: clamp(1.15rem, 2vw, 1.5rem); line-height: 1.4; }
 </style>
+

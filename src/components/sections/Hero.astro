@@ -1,28 +1,17 @@
 ---
 interface Props { kicker: string; title: string; body: string; image?: string; }
-const { kicker, title, body, image = '/images/hero.jpg' } = Astro.props;
+const { kicker, title, body, image = '/images/daisy-hatchet-mark.webp' } = Astro.props;
 ---
 <section class="hero shell">
-  <div class="hero__copy">
-    <p class="eyebrow">{kicker}</p>
-    <h1 class="display">{title}</h1>
-    <p class="intro">{body}</p>
-    <a class="button" href="#season">What’s growin’ ↓</a>
-  </div>
-  <figure>
-    <img src={image} alt="A bold arrangement of locally grown seasonal flowers" width="1200" height="800" fetchpriority="high" />
-    <figcaption>Grown in Pacifica · cut by hand</figcaption>
-  </figure>
+  <p class="hero__top">{title}</p>
+  <img src={image} alt="A black and white drawing of a daisy crossing over a hatchet" width="900" height="900" fetchpriority="high" />
+  <p class="hero__bottom">{body}<br /><span>{kicker}</span></p>
 </section>
 <style>
-  .hero { display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); min-height: calc(100svh - 86px); padding-block: var(--gutter); gap: var(--gutter); background: var(--orange); border-bottom: var(--line); }
-  .hero__copy { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; }
-  h1 { max-width: 8ch; margin-block: 1.2rem 1.5rem; font-size: clamp(4rem, 9vw, 9rem); }
-  .intro { max-width: 40ch; font: italic clamp(1.25rem, 2vw, 1.8rem)/1.25 var(--serif); }
-  .button { margin-top: 1.2rem; }
-  figure { position: relative; margin: 0; min-height: 65vh; border: var(--line); overflow: hidden; background: var(--ink); }
-  figure::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, transparent 60%, rgba(212,255,0,.28)); mix-blend-mode: screen; pointer-events: none; }
-  img { height: 100%; object-fit: cover; filter: saturate(1.12) contrast(1.05); }
-  figcaption { position: absolute; inset: auto 1rem 1rem auto; padding: .45rem .65rem; background: var(--paper); border: 1px solid var(--ink); font-size: .65rem; text-transform: uppercase; }
-  @media (max-width: 800px) { .hero { grid-template-columns: 1fr; } figure { min-height: 55vh; order: -1; } h1 { font-size: clamp(3.7rem, 18vw, 7rem); } }
+  .hero { min-height: calc(100svh - 86px); display: flex; flex-direction: column; align-items: center; justify-content: center; padding-block: clamp(3rem, 7vw, 6rem); text-align: center; background: var(--pink); }
+  .hero__top { margin: 0 0 2.5rem; color: var(--lime); font-size: clamp(1.7rem, 3vw, 2.4rem); }
+  img { width: min(44vw, 34rem); height: min(44vw, 34rem); object-fit: contain; mix-blend-mode: multiply; }
+  .hero__bottom { margin: 1rem 0 0; color: var(--lavender); font-size: clamp(1.45rem, 2.5vw, 2rem); line-height: 1.18; }
+  @media (max-width: 650px) { .hero { min-height: 78svh; } img { width: min(88vw, 30rem); height: min(88vw, 30rem); } }
 </style>
+

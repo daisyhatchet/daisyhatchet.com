@@ -3,32 +3,26 @@ interface Props { title: string; current: string[]; soon: string[]; note: string
 const { title, current, soon, note } = Astro.props;
 ---
 <section class="season shell" id="season">
-  <div class="season__title">
-    <p class="eyebrow">Field notes · right now</p>
-    <h2 class="display">{title}</h2>
-    <p class="note">{note}</p>
-  </div>
-  <div class="list current">
-    <h3>Currently blooming</h3>
-    <ul>{current.map((flower, i) => <li><span>{String(i + 1).padStart(2, '0')}</span>{flower}</li>)}</ul>
-  </div>
-  <div class="list soon">
-    <h3>Coming up</h3>
-    <ul>{soon.map((flower, i) => <li><span>{String(i + 1).padStart(2, '0')}</span>{flower}</li>)}</ul>
+  <div class="season__heading"><h2 class="display">{title}</h2><p>{note}</p></div>
+  <div class="hourglass">
+    <img src="/images/field.webp" alt="A field of daisies glowing in the evening light" width="1000" height="1400" loading="lazy" />
+    <div class="lists">
+      <div><h3>Currently Blooming</h3><ul>{current.map((flower) => <li>{flower}</li>)}</ul></div>
+      <div><h3>Blooming Soon</h3><ul>{soon.map((flower) => <li>{flower}</li>)}</ul></div>
+    </div>
   </div>
 </section>
 <style>
-  .season { display: grid; grid-template-columns: 1.2fr 1fr 1fr; border-bottom: var(--line); padding-block: clamp(4rem, 9vw, 8rem); }
-  .season__title { padding-right: var(--gutter); }
-  h2 { margin-block: 1rem 2rem; font-size: clamp(4rem, 9vw, 9rem); }
-  .note { max-width: 34ch; font: italic 1.3rem/1.3 var(--serif); }
-  .list { padding-inline: var(--gutter); border-left: var(--line); }
-  h3 { margin: 0 0 2rem; font: 1rem/1 var(--display); text-transform: uppercase; }
-  ul { list-style: none; padding: 0; margin: 0; }
-  li { display: grid; grid-template-columns: 3rem 1fr; padding-block: .75rem; border-top: 1px solid var(--ink); font-size: clamp(1rem, 1.5vw, 1.2rem); }
-  li span { font-size: .65rem; opacity: .6; }
-  .current { background: var(--paper); }
-  .soon { background: var(--pink); }
-  @media (max-width: 850px) { .season { grid-template-columns: 1fr 1fr; } .season__title { grid-column: 1 / -1; padding-bottom: 3rem; } .list:first-of-type { border-left: 0; padding-left: 0; } }
-  @media (max-width: 560px) { .season { grid-template-columns: 1fr; } .list { padding: 2rem 0; border: 0; border-top: var(--line); } }
+  .season { min-height: 100svh; display: grid; grid-template-columns: 1fr minmax(24rem, .75fr); gap: clamp(2rem, 6vw, 7rem); align-items: center; padding-block: clamp(5rem, 10vw, 9rem); background: var(--lime); }
+  .season__heading h2 { max-width: 6ch; color: var(--dust); font-size: clamp(6rem, 14vw, 13rem); }
+  .season__heading p { max-width: 28ch; font-size: 1.15rem; line-height: 1.35; }
+  .hourglass { position: relative; min-height: 47rem; overflow: hidden; clip-path: polygon(14% 0,86% 0,100% 15%,100% 34%,88% 50%,100% 66%,100% 85%,86% 100%,14% 100%,0 85%,0 66%,12% 50%,0 34%,0 15%); }
+  .hourglass::after { content: ''; position: absolute; inset: 0; background: rgba(240,192,68,.18); pointer-events: none; }
+  .hourglass > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .lists { position: relative; z-index: 1; display: grid; gap: 1.5rem; padding: 2rem 20% 3rem; }
+  h3 { margin: 0 0 .7rem; color: var(--pink); font: 400 1.7rem/1 var(--heading); }
+  ul { margin: 0; padding-left: 1.4rem; }
+  li { margin: .38rem 0; font-size: 1.1rem; }
+  @media (max-width: 850px) { .season { grid-template-columns: 1fr; } .hourglass { min-height: 44rem; width: min(100%, 34rem); margin-inline: auto; } .season__heading h2 { max-width: none; font-size: clamp(5rem, 22vw, 10rem); } }
 </style>
+

@@ -4,13 +4,26 @@ const { title, body, email } = Astro.props;
 ---
 <section class="contact shell">
   <h2 class="display">{title}</h2>
-  <div><p>{body}</p><a class="button" href={`mailto:${email}`}>Get in touch ↗</a></div>
+  <p>{body}</p>
+  <form action={`mailto:${email}`} method="post" enctype="text/plain">
+    <div class="names"><label>First Name<input name="first-name" autocomplete="given-name" /></label><label>Last Name<input name="last-name" autocomplete="family-name" /></label></div>
+    <label>Email<input type="email" name="email" autocomplete="email" required /></label>
+    <label>Questions, comments, compliments<textarea name="message" rows="4" required></textarea></label>
+    <button class="button" type="submit">Submit</button>
+  </form>
 </section>
 <style>
-  .contact { display: grid; grid-template-columns: 1.5fr 1fr; gap: var(--gutter); align-items: end; padding-block: clamp(4rem, 10vw, 9rem); background: var(--acid); border-bottom: var(--line); }
-  h2 { font-size: clamp(4rem, 11vw, 11rem); }
-  .contact div { padding-bottom: .4rem; }
-  p { max-width: 35ch; margin: 0 0 2rem; font: italic 1.5rem/1.25 var(--serif); }
-  .button { background: var(--paper); }
-  @media (max-width: 700px) { .contact { grid-template-columns: 1fr; } }
+  .contact { min-height: 85vh; padding-block: clamp(5rem, 10vw, 9rem); color: var(--lime); background: var(--ink); }
+  h2 { max-width: 8ch; margin-inline: auto; font-size: clamp(4.5rem, 10vw, 9rem); text-align: center; }
+  .contact > p { max-width: 34rem; margin: 1rem auto 3rem; text-align: center; }
+  form { width: min(100%, 34rem); display: grid; gap: 1.4rem; margin-inline: auto; }
+  .names { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; }
+  label { display: grid; gap: .35rem; }
+  input, textarea { width: 100%; padding: .8rem 1rem; color: var(--ink); background: #ad82c8; border: 0; border-radius: 1.6rem; outline: 2px solid transparent; }
+  input { min-height: 3.4rem; }
+  textarea { resize: vertical; border-radius: 1.6rem 1.6rem 1.6rem 0; }
+  input:focus, textarea:focus { outline-color: var(--lime); }
+  button { justify-self: start; min-width: 10rem; }
+  @media (max-width: 520px) { .names { grid-template-columns: 1fr; } }
 </style>
+

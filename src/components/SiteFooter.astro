@@ -1,15 +1,13 @@
-<footer class="footer shell">
-  <p class="display">Stay wild.<br />Buy local.</p>
-  <div>
-    <p>Cut flowers grown by the coast<br />Pacifica, California</p>
-    <a href="https://instagram.com/daisy_hatchet_flowers/" target="_blank" rel="noreferrer">@daisy_hatchet_flowers ↗</a>
+<footer class="footer">
+  <div class="track" aria-hidden="true">
+    <span>Flowers with an edge&nbsp; ~ &nbsp;</span><span>Flowers with an edge&nbsp; ~ &nbsp;</span><span>Flowers with an edge&nbsp; ~ &nbsp;</span>
   </div>
-  <p class="mark" aria-hidden="true">✣</p>
+  <div class="footer__small shell"><span>Pacifica, CA</span><a href="https://instagram.com/daisy_hatchet_flowers/" target="_blank" rel="noreferrer">Instagram</a></div>
 </footer>
 <style>
-  .footer { display: grid; grid-template-columns: 2fr 1fr auto; gap: 2rem; padding-block: clamp(3rem, 8vw, 7rem) 2rem; color: var(--paper); background: var(--ink); }
-  .display { font-size: clamp(3rem, 8vw, 8rem); }
-  .footer div { align-self: end; font-size: .8rem; line-height: 1.8; }
-  .mark { margin: 0; align-self: end; color: var(--acid); font-size: 3rem; }
-  @media (max-width: 700px) { .footer { grid-template-columns: 1fr; } .mark { display: none; } }
+  .footer { overflow: hidden; color: var(--pink); background: var(--ink); }
+  .track { display: flex; width: max-content; padding-block: 1.8rem 1.1rem; font: 400 clamp(3rem, 7vw, 6rem)/.8 var(--heading); white-space: nowrap; animation: move 24s linear infinite; }
+  .footer__small { display: flex; justify-content: space-between; padding-block: 1.5rem; color: var(--lime); font-size: 1rem; }
+  @keyframes move { to { transform: translateX(-33.333%); } }
 </style>
+
