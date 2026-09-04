@@ -14,15 +14,15 @@ const { kicker, title, body, image = '/images/daisy-hatchet-mark.webp' } = Astro
   </div>
 </section>
 <style>
-  .hero { height: calc(100svh - 88px); max-height: calc(100svh - 88px); display: grid; grid-template-columns: minmax(0,1.3fr) minmax(15rem,.5fr); align-items: center; gap: clamp(2rem,7vw,8rem); padding-block: clamp(2.5rem,5vw,5rem); color: var(--cream); background: linear-gradient(rgba(172,34,105,.48),rgba(118,31,78,.58)), url('/images/field.webp') center 44% / cover no-repeat; overflow: hidden; }
-  .hero__copy { max-width: 49rem; }
+  .hero { position: relative; isolation: isolate; height: calc(100svh - 88px); max-height: calc(100svh - 88px); display: flex; align-items: center; padding-block: clamp(2.5rem,5vw,5rem); color: var(--cream); background: linear-gradient(rgba(172,34,105,.48),rgba(118,31,78,.58)), url('/images/field.webp') center 44% / cover no-repeat; overflow: hidden; }
+  .hero__copy { position: relative; z-index: 1; width: min(58%,49rem); }
   .eyebrow { margin-bottom: 1.6rem; color: var(--chartreuse); }
   h1 { max-width: 14ch; font-size: clamp(3.4rem,5vw,5.25rem); }
   .hero__copy > p:not(.eyebrow) { max-width: 31rem; margin-block: 2rem; font-size: clamp(1.05rem,1.7vw,1.35rem); }
   .hero__copy > p:not(.eyebrow) { color: var(--cream); text-shadow: 0 1px 18px rgba(104,24,65,.42); }
-  .hero__art { position: relative; padding: clamp(.5rem,2vw,1.5rem); }
-  .hero__art img { width: 100%; aspect-ratio: 1; object-fit: contain; filter: invert(1); opacity: .94; }
+  .hero__art { position: absolute; z-index: 0; right: clamp(-13rem,-10vw,-6rem); bottom: clamp(-15rem,-17vw,-8rem); width: clamp(38rem,58vw,68rem); pointer-events: none; }
+  .hero__art img { width: 100%; aspect-ratio: 1; object-fit: contain; filter: invert(1); opacity: .3; }
   .button { color: var(--ink); background: var(--chartreuse); border-color: var(--chartreuse); }
   @media (min-width: 761px) and (prefers-reduced-motion: no-preference) { .hero { background-attachment: fixed; } }
-  @media (max-width: 760px) { .hero { height: auto; max-height: none; min-height: calc(100svh - 9rem); grid-template-columns: 1fr; overflow: visible; } .hero__art { width: min(72vw,22rem); margin-inline: auto; order: -1; } h1 { font-size: clamp(3.6rem,16vw,6.5rem); } }
+  @media (max-width: 760px) { .hero { height: auto; max-height: none; min-height: calc(100svh - 9rem); overflow: hidden; } .hero__copy { width: 100%; } .hero__art { right: -35vw; bottom: -10vw; width: min(125vw,42rem); } h1 { font-size: clamp(3.6rem,16vw,6.5rem); } }
 </style>
