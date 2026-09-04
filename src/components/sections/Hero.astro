@@ -26,7 +26,7 @@ const { kicker, title, body, image = '/images/daisy-hatchet-mark.webp' } = Astro
       return;
     }
     const bounds = hero.getBoundingClientRect();
-    const shift = Math.max(0, Math.min(-bounds.top * .2, hero.offsetHeight * .16));
+    const shift = Math.max(0, Math.min(-bounds.top * .4, hero.offsetHeight * .3));
     hero.style.setProperty('--parallax-y', `${shift}px`);
   };
 
@@ -43,7 +43,7 @@ const { kicker, title, body, image = '/images/daisy-hatchet-mark.webp' } = Astro
 <style>
   .hero { --parallax-y: 0px; position: relative; isolation: isolate; height: calc(100svh - 88px); max-height: calc(100svh - 88px); display: flex; align-items: center; padding-block: clamp(2.5rem,5vw,5rem); color: var(--cream); background: #76204e; overflow: hidden; }
   .hero::before, .hero::after { content: ''; position: absolute; pointer-events: none; }
-  .hero::before { z-index: -2; inset: -12% -4%; background: url('/images/field.webp') center 44% / cover no-repeat; transform: translate3d(0,var(--parallax-y),0) scale(1.04); will-change: transform; }
+  .hero::before { z-index: -2; inset: -20% -6%; background: url('/images/field.webp') center 44% / cover no-repeat; transform: translate3d(0,var(--parallax-y),0) scale(1.04); will-change: transform; }
   .hero::after { z-index: -1; inset: 0; background: linear-gradient(rgba(172,34,105,.34),rgba(118,31,78,.44)); }
   .hero__copy { position: relative; z-index: 1; width: min(58%,49rem); }
   .eyebrow { margin-bottom: 1.6rem; color: var(--chartreuse); }
