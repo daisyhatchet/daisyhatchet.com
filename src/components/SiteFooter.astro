@@ -1,13 +1,12 @@
-<footer class="footer">
-  <div class="track" aria-hidden="true">
-    <span>Flowers with an edge&nbsp; ~ &nbsp;</span><span>Flowers with an edge&nbsp; ~ &nbsp;</span><span>Flowers with an edge&nbsp; ~ &nbsp;</span>
-  </div>
-  <div class="footer__small shell"><span>Pacifica, CA</span><a href="https://instagram.com/daisy_hatchet_flowers/" target="_blank" rel="noreferrer">Instagram</a></div>
+<footer class="footer shell">
+  <a class="wordmark" href="/">DAISY HATCHET</a>
+  <p>Seasonal cut flowers<br />Pacifica, California</p>
+  <a href="https://instagram.com/daisy_hatchet_flowers/" target="_blank" rel="noreferrer">@daisy_hatchet_flowers ↗</a>
 </footer>
 <style>
-  .footer { overflow: hidden; color: var(--pink); background: var(--ink); }
-  .track { display: flex; width: max-content; padding-block: 1.8rem 1.1rem; font: 400 clamp(3rem, 7vw, 6rem)/.8 var(--heading); white-space: nowrap; animation: move 24s linear infinite; }
-  .footer__small { display: flex; justify-content: space-between; padding-block: 1.5rem; color: var(--lime); font-size: 1rem; }
-  @keyframes move { to { transform: translateX(-33.333%); } }
+  .footer { display: grid; grid-template-columns: 1fr auto auto; align-items: end; gap: 3rem; padding-block: 3rem; color: var(--cream); background: var(--ink); }
+  .wordmark { font: 400 clamp(2rem,4vw,3.7rem)/.8 var(--brand); text-decoration: none; }
+  p, .footer > a:last-child { margin: 0; color: #bcaeb4; font-size: .78rem; line-height: 1.6; }
+  @media (max-width: 700px) { .footer { grid-template-columns: 1fr; gap: 1.5rem; } }
 </style>
 

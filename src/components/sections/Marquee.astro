@@ -3,12 +3,12 @@ interface Props { items: string[]; }
 const { items } = Astro.props;
 ---
 <div class="marquee" aria-label={items.join(', ')}>
-  <div aria-hidden="true">{[...items, ...items].map((item) => <span>{item}&nbsp; ~ &nbsp;</span>)}</div>
+  <div aria-hidden="true">{[...items, ...items].map((item) => <span>{item}&nbsp; ✦ &nbsp;</span>)}</div>
 </div>
 <style>
-  .marquee { overflow: hidden; color: var(--pink); background: var(--ink); }
-  .marquee div { display: flex; width: max-content; padding-block: 1.1rem; animation: crawl 22s linear infinite; }
-  span { font: 400 clamp(2rem, 4vw, 4rem)/.8 var(--heading); white-space: nowrap; }
+  .marquee { overflow: hidden; color: var(--cream); background: var(--olive); }
+  .marquee div { display: flex; width: max-content; padding-block: 1.1rem; animation: crawl 25s linear infinite; }
+  span { font: 750 clamp(1.8rem,3.5vw,3.4rem)/1 var(--heading); letter-spacing: -.04em; white-space: nowrap; }
   @keyframes crawl { to { transform: translateX(-50%); } }
 </style>
 

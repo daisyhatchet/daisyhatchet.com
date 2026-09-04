@@ -3,27 +3,26 @@ interface Props { title: string; body: string; email: string; }
 const { title, body, email } = Astro.props;
 ---
 <section class="contact shell">
-  <h2 class="display">{title}</h2>
-  <p>{body}</p>
+  <div class="contact__intro"><p class="eyebrow">Flowers with an edge</p><h2 class="display">{title}</h2><p>{body}</p></div>
   <form action={`mailto:${email}`} method="post" enctype="text/plain">
-    <div class="names"><label>First Name<input name="first-name" autocomplete="given-name" /></label><label>Last Name<input name="last-name" autocomplete="family-name" /></label></div>
+    <div class="names"><label>First name<input name="first-name" autocomplete="given-name" /></label><label>Last name<input name="last-name" autocomplete="family-name" /></label></div>
     <label>Email<input type="email" name="email" autocomplete="email" required /></label>
-    <label>Questions, comments, compliments<textarea name="message" rows="4" required></textarea></label>
-    <button class="button" type="submit">Submit</button>
+    <label>What do you have in mind?<textarea name="message" rows="5" required></textarea></label>
+    <button class="button" type="submit">Send a note</button>
   </form>
 </section>
 <style>
-  .contact { min-height: 85vh; padding-block: clamp(5rem, 10vw, 9rem); color: var(--lime); background: var(--ink); }
-  h2 { max-width: 8ch; margin-inline: auto; font-size: clamp(4.5rem, 10vw, 9rem); text-align: center; }
-  .contact > p { max-width: 34rem; margin: 1rem auto 3rem; text-align: center; }
-  form { width: min(100%, 34rem); display: grid; gap: 1.4rem; margin-inline: auto; }
+  .contact { display: grid; grid-template-columns: 1fr minmax(22rem,.85fr); gap: clamp(3rem,9vw,10rem); padding-block: clamp(6rem,11vw,10rem); color: var(--cream); background: var(--ink); }
+  .eyebrow { margin-bottom: 1.5rem; color: var(--chartreuse); }
+  h2 { max-width: 7ch; font-size: clamp(4.3rem,9vw,8rem); }
+  .contact__intro > p:last-child { max-width: 29rem; margin-top: 2rem; color: #d7cbd0; font-size: 1.05rem; }
+  form { display: grid; gap: 1.25rem; align-content: start; }
   .names { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; }
-  label { display: grid; gap: .35rem; }
-  input, textarea { width: 100%; padding: .8rem 1rem; color: var(--ink); background: #ad82c8; border: 0; border-radius: 1.6rem; outline: 2px solid transparent; }
-  input { min-height: 3.4rem; }
-  textarea { resize: vertical; border-radius: 1.6rem 1.6rem 1.6rem 0; }
-  input:focus, textarea:focus { outline-color: var(--lime); }
-  button { justify-self: start; min-width: 10rem; }
-  @media (max-width: 520px) { .names { grid-template-columns: 1fr; } }
+  label { display: grid; gap: .45rem; color: #d7cbd0; font-size: .76rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+  input, textarea { width: 100%; padding: .9rem 1rem; color: var(--cream); background: transparent; border: 0; border-bottom: 1px solid #806f77; border-radius: 0; outline: 0; }
+  textarea { resize: vertical; border: 1px solid #806f77; border-radius: .7rem; }
+  input:focus, textarea:focus { border-color: var(--chartreuse); }
+  button { justify-self: start; color: var(--ink); background: var(--chartreuse); border-color: var(--chartreuse); }
+  @media (max-width: 760px) { .contact { grid-template-columns: 1fr; } .names { grid-template-columns: 1fr; } }
 </style>
 

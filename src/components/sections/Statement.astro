@@ -3,13 +3,16 @@ interface Props { title: string; body: string; link?: { label: string; href: str
 const { title, body, link } = Astro.props;
 ---
 <section class="statement shell">
+  <p class="eyebrow">Our approach</p>
   <h2 class="display">{title}</h2>
-  <p>{body}</p>
-  {link && <a class="button" href={link.href}>{link.label}</a>}
+  <div class="statement__body"><p>{body}</p>{link && <a class="button" href={link.href}>{link.label}</a>}</div>
 </section>
 <style>
-  .statement { min-height: 72vh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2rem; padding-block: 6rem; color: var(--lime); background: var(--pink); text-align: center; }
-  h2 { max-width: 11ch; font-size: clamp(4.8rem, 12vw, 11rem); }
-  p { max-width: 42ch; margin: 0; color: var(--ink); font-size: clamp(1.15rem, 2vw, 1.5rem); line-height: 1.4; }
+  .statement { padding-block: clamp(6rem,12vw,11rem); background: var(--cream); }
+  .eyebrow { margin-bottom: 1.5rem; color: var(--olive); }
+  h2 { max-width: 12ch; font-size: clamp(4rem,9vw,8.5rem); }
+  .statement__body { display: grid; grid-template-columns: 1fr auto; gap: 2rem; align-items: end; margin: 3rem 0 0 35%; }
+  .statement__body p { max-width: 39rem; margin: 0; color: #604b54; font-size: 1.08rem; }
+  @media (max-width: 700px) { .statement__body { grid-template-columns: 1fr; margin-left: 0; } }
 </style>
 
