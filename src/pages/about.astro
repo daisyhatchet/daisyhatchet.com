@@ -1,0 +1,19 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Statement from '@/components/sections/Statement.astro';
+import ContactBand from '@/components/sections/ContactBand.astro';
+---
+<BaseLayout title="About — Daisy Hatchet" description="Meet Daisy Hatchet, a small cut-flower farm in Pacifica, California.">
+  <section class="about-hero shell">
+    <p class="eyebrow">About the farm</p>
+    <h1 class="display">Rooted by<br />the coast.</h1>
+    <p>We grow the strange ones, the dramatic ones, and the stems that refuse to blend in.</p>
+  </section>
+  <Statement title="Small farm. Big personality." body="Daisy Hatchet grows seasonal cut flowers in Pacifica, California. Working with the rhythm of the coast, we choose character over uniformity and let each harvest be exactly what it is: fleeting, local, and alive." />
+  <ContactBand title="Say hello." body="For availability, collaborations, and event flowers, drop us a line." email="hello@daisyhatchet.com" />
+</BaseLayout>
+<style>
+  .about-hero { min-height: 72vh; padding-block: clamp(5rem, 12vw, 11rem); background: var(--pink); border-bottom: var(--line); }
+  h1 { margin-block: 1.5rem 2rem; font-size: clamp(5rem, 14vw, 14rem); }
+  .about-hero > p:last-child { max-width: 36ch; margin-left: auto; font: italic clamp(1.5rem, 3vw, 2.5rem)/1.2 var(--serif); }
+</style>

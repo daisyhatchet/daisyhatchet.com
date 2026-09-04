@@ -1,0 +1,15 @@
+<footer class="footer shell">
+  <p class="display">Stay wild.<br />Buy local.</p>
+  <div>
+    <p>Cut flowers grown by the coast<br />Pacifica, California</p>
+    <a href="https://instagram.com/daisy_hatchet_flowers/" target="_blank" rel="noreferrer">@daisy_hatchet_flowers ↗</a>
+  </div>
+  <p class="mark" aria-hidden="true">✣</p>
+</footer>
+<style>
+  .footer { display: grid; grid-template-columns: 2fr 1fr auto; gap: 2rem; padding-block: clamp(3rem, 8vw, 7rem) 2rem; color: var(--paper); background: var(--ink); }
+  .display { font-size: clamp(3rem, 8vw, 8rem); }
+  .footer div { align-self: end; font-size: .8rem; line-height: 1.8; }
+  .mark { margin: 0; align-self: end; color: var(--acid); font-size: 3rem; }
+  @media (max-width: 700px) { .footer { grid-template-columns: 1fr; } .mark { display: none; } }
+</style>

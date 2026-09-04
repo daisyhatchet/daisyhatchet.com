@@ -1,0 +1,16 @@
+---
+interface Props { title: string; body: string; link?: { label: string; href: string }; }
+const { title, body, link } = Astro.props;
+---
+<section class="statement shell">
+  <p class="eyebrow">Flowers with an edge</p>
+  <h2>{title}</h2>
+  <div><p>{body}</p>{link && <a class="button button--dark" href={link.href}>{link.label} →</a>}</div>
+</section>
+<style>
+  .statement { padding-block: clamp(5rem, 12vw, 11rem); background: var(--paper); border-bottom: var(--line); }
+  h2 { max-width: 18ch; margin: 1.5rem 0 3rem; font: italic clamp(3rem, 8vw, 8rem)/.9 var(--serif); letter-spacing: -.05em; }
+  .statement > div { display: grid; grid-template-columns: 1fr auto; gap: 2rem; align-items: end; margin-left: 35%; }
+  .statement div p { max-width: 50ch; line-height: 1.75; }
+  @media (max-width: 700px) { .statement > div { margin-left: 0; grid-template-columns: 1fr; } }
+</style>

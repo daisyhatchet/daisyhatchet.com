@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Mono:wght@300;400;500&family=Newsreader:ital,opsz,wght@0,6..72,300;1,6..72,300&display=swap');
+
+:root {
+  --ink: #11100e;
+  --paper: #f4efdf;
+  --acid: #d4ff00;
+  --orange: #ff5b20;
+  --pink: #ff8fb7;
+  --line: 2px solid var(--ink);
+  --gutter: clamp(1rem, 3vw, 2.5rem);
+  --display: 'Archivo Black', sans-serif;
+  --serif: 'Newsreader', Georgia, serif;
+  --mono: 'DM Mono', monospace;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; background: var(--ink); }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--mono); font-size: 1rem; }
+a { color: inherit; }
+img { display: block; width: 100%; }
+::selection { background: var(--acid); color: var(--ink); }
+.shell { padding-inline: var(--gutter); }
+.eyebrow { margin: 0; font: 500 .78rem/1.2 var(--mono); letter-spacing: .14em; text-transform: uppercase; }
+.display { margin: 0; font-family: var(--display); text-transform: uppercase; letter-spacing: -.065em; line-height: .84; }
+.button { display: inline-flex; align-items: center; gap: .8rem; padding: .9rem 1.1rem; border: var(--line); background: var(--acid); text-decoration: none; text-transform: uppercase; font-weight: 500; box-shadow: 5px 5px 0 var(--ink); transition: transform .15s, box-shadow .15s; }
+.button:hover { transform: translate(3px, 3px); box-shadow: 2px 2px 0 var(--ink); }
+.button--dark { color: var(--paper); background: var(--ink); box-shadow: 5px 5px 0 var(--orange); }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { animation: none !important; transition: none !important; } }

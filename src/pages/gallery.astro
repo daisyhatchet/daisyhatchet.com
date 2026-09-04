@@ -1,0 +1,28 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+---
+<BaseLayout title="Gallery — Daisy Hatchet" description="A look at the flowers growing at Daisy Hatchet in Pacifica, California.">
+  <section class="gallery shell">
+    <header><p class="eyebrow">From the field</p><h1 class="display">Cuttings.</h1></header>
+    <div class="frames">
+      {['Dahlias after the fog', 'The loud bunch', 'Good stems, bad attitude', 'Fresh from Pacifica'].map((caption, i) => (
+        <figure class={`frame frame--${i + 1}`}>
+          <img src="/images/hero.jpg" alt={caption} width="1200" height="800" loading={i ? 'lazy' : 'eager'} />
+          <figcaption><span>0{i + 1}</span>{caption}</figcaption>
+        </figure>
+      ))}
+    </div>
+  </section>
+</BaseLayout>
+<style>
+  .gallery { padding-block: clamp(4rem, 9vw, 8rem); background: var(--orange); }
+  header { display: flex; justify-content: space-between; align-items: start; gap: 2rem; margin-bottom: 4rem; }
+  h1 { font-size: clamp(5rem, 14vw, 14rem); }
+  .frames { display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--gutter); }
+  figure { margin: 0; }
+  .frame--1 { grid-column: 1 / 9; } .frame--2 { grid-column: 9 / 13; margin-top: 9rem; } .frame--3 { grid-column: 2 / 7; } .frame--4 { grid-column: 7 / 13; }
+  img { aspect-ratio: 4 / 3; object-fit: cover; border: var(--line); filter: saturate(1.1) contrast(1.04); }
+  .frame--2 img { object-position: 80% center; aspect-ratio: 3 / 4; } .frame--3 img { object-position: 20% center; } .frame--4 img { object-position: center 70%; aspect-ratio: 1 / 1; }
+  figcaption { display: flex; justify-content: space-between; gap: 1rem; padding-top: .6rem; font-size: .75rem; text-transform: uppercase; }
+  @media (max-width: 700px) { header { display: block; } .frames { display: block; } figure { margin: 0 0 3rem; } }
+</style>

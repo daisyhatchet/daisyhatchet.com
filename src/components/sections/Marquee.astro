@@ -1,0 +1,15 @@
+---
+interface Props { items: string[]; }
+const { items } = Astro.props;
+const line = [...items, ...items];
+---
+<div class="marquee" aria-label={items.join(', ')}>
+  <div aria-hidden="true">{line.map((item) => <span>{item} <b>✣</b></span>)}</div>
+</div>
+<style>
+  .marquee { overflow: hidden; border-bottom: var(--line); background: var(--acid); }
+  .marquee div { display: flex; width: max-content; animation: crawl 22s linear infinite; }
+  span { padding: .8rem .6rem; font: 1rem/1 var(--display); text-transform: uppercase; white-space: nowrap; }
+  b { margin-left: 1.2rem; color: var(--orange); }
+  @keyframes crawl { to { transform: translateX(-50%); } }
+</style>

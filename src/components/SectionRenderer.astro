@@ -1,0 +1,13 @@
+---
+import Hero from './sections/Hero.astro';
+import Marquee from './sections/Marquee.astro';
+import Season from './sections/Season.astro';
+import Statement from './sections/Statement.astro';
+import ContactBand from './sections/ContactBand.astro';
+const { sections } = Astro.props;
+const components = { hero: Hero, marquee: Marquee, season: Season, statement: Statement, contact: ContactBand };
+---
+{sections.map((section: { type: keyof typeof components; [key: string]: unknown }) => {
+  const Component = components[section.type] as any;
+  return <Component {...section} />;
+})}

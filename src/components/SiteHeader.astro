@@ -1,0 +1,23 @@
+---
+const path = Astro.url.pathname;
+const links = [
+  { href: '/about', label: 'About' },
+  { href: '/gallery', label: 'Gallery' },
+];
+---
+<header class="site-header shell">
+  <a class="wordmark" href="/" aria-label="Daisy Hatchet home">DAISY<span>✣</span>HATCHET</a>
+  <nav aria-label="Main navigation">
+    {links.map(({ href, label }) => <a href={href} aria-current={path === href ? 'page' : undefined}>{label}</a>)}
+    <a href="https://instagram.com/daisy_hatchet_flowers/" target="_blank" rel="noreferrer">Instagram ↗</a>
+  </nav>
+</header>
+<style>
+  .site-header { min-height: 86px; display: flex; align-items: center; justify-content: space-between; gap: 2rem; border-bottom: var(--line); background: var(--paper); }
+  .wordmark { font: 1.25rem/1 var(--display); letter-spacing: -.06em; text-decoration: none; white-space: nowrap; }
+  .wordmark span { color: var(--orange); padding-inline: .18em; }
+  nav { display: flex; align-items: center; gap: clamp(.8rem, 2vw, 2rem); }
+  nav a { font-size: .77rem; text-transform: uppercase; text-decoration-thickness: 1px; text-underline-offset: .3em; }
+  nav a:not([aria-current]):not(:hover) { text-decoration: none; }
+  @media (max-width: 620px) { .site-header { align-items: flex-start; padding-block: 1rem; flex-direction: column; gap: .8rem; } nav { width: 100%; justify-content: space-between; } }
+</style>

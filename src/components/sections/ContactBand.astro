@@ -1,0 +1,16 @@
+---
+interface Props { title: string; body: string; email: string; }
+const { title, body, email } = Astro.props;
+---
+<section class="contact shell">
+  <h2 class="display">{title}</h2>
+  <div><p>{body}</p><a class="button" href={`mailto:${email}`}>Get in touch ↗</a></div>
+</section>
+<style>
+  .contact { display: grid; grid-template-columns: 1.5fr 1fr; gap: var(--gutter); align-items: end; padding-block: clamp(4rem, 10vw, 9rem); background: var(--acid); border-bottom: var(--line); }
+  h2 { font-size: clamp(4rem, 11vw, 11rem); }
+  .contact div { padding-bottom: .4rem; }
+  p { max-width: 35ch; margin: 0 0 2rem; font: italic 1.5rem/1.25 var(--serif); }
+  .button { background: var(--paper); }
+  @media (max-width: 700px) { .contact { grid-template-columns: 1fr; } }
+</style>
