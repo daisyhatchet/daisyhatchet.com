@@ -8,6 +8,6 @@ const { items } = Astro.props;
 <style>
   .marquee { overflow: hidden; color: var(--ink); background: var(--chartreuse); }
   .marquee div { display: flex; width: max-content; padding-block: 1.1rem; animation: crawl 25s linear infinite; }
-  span { font: 400 clamp(2.2rem,4vw,4rem)/.85 var(--heading); letter-spacing: -.025em; white-space: nowrap; }
+  span { font: 400 clamp(2rem,3.5vw,3.5rem)/.92 var(--heading); letter-spacing: .04em; white-space: nowrap; }
   @keyframes crawl { to { transform: translateX(-50%); } }
 </style>
