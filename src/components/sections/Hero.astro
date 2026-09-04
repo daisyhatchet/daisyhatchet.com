@@ -14,17 +14,21 @@ const { kicker, title, body, image = '/images/daisy-hatchet-mark.webp' } = Astro
     <img src={image} alt="A black and white drawing of a daisy crossing over a hatchet" width="900" height="900" fetchpriority="high" />
   </div>
 </section>
-<div class="photo-break" role="img" aria-label="A field of daisies glowing in the evening light"></div>
+<section class="photo-break" aria-label="A field of daisies glowing in the evening light">
+  <p class="eyebrow">Pacifica grown</p>
+  <p>Flowers shaped by fog,<br />salt air, and the season.</p>
+</section>
 <style>
-  .hero { min-height: 76svh; display: grid; grid-template-columns: minmax(0,1.05fr) minmax(20rem,.8fr); align-items: center; gap: clamp(2rem,7vw,8rem); padding-block: clamp(5rem,10vw,9rem); background: var(--rose); }
+  .hero { min-height: 76svh; display: grid; grid-template-columns: minmax(0,1.05fr) minmax(20rem,.8fr); align-items: center; gap: clamp(2rem,7vw,8rem); padding-block: clamp(5rem,10vw,9rem); background: var(--pink); }
   .hero__copy { max-width: 49rem; }
   .eyebrow { margin-bottom: 1.6rem; color: var(--ink); }
   h1 { max-width: 10ch; font-size: clamp(4.3rem,9vw,9.2rem); }
   .hero__copy > p:not(.eyebrow) { max-width: 31rem; margin-block: 2rem; font-size: clamp(1.05rem,1.7vw,1.35rem); }
-  .hero__art { position: relative; padding: clamp(1.5rem,3vw,3rem); background: var(--blush); border-radius: 50% 50% 44% 56% / 55% 44% 56% 45%; }
+  .hero__art { position: relative; padding: clamp(1.5rem,3vw,3rem); background: var(--chartreuse); border-radius: 50% 50% 44% 56% / 55% 44% 56% 45%; }
   .hero__art img { width: 100%; aspect-ratio: 1; object-fit: contain; mix-blend-mode: multiply; }
-  .hero__art span { position: absolute; top: 4%; right: 4%; color: var(--chartreuse); font-size: clamp(3rem,7vw,6rem); }
-  .photo-break { min-height: clamp(24rem,62vw,52rem); background: linear-gradient(rgba(41,21,31,.12),rgba(41,21,31,.12)), url('/images/field.webp') center 44% / cover no-repeat; }
+  .hero__art span { position: absolute; top: 4%; right: 4%; color: var(--pink); font-size: clamp(3rem,7vw,6rem); }
+  .photo-break { min-height: clamp(30rem,62vw,52rem); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: var(--gutter); color: var(--cream); background: linear-gradient(rgba(41,21,31,.58),rgba(41,21,31,.58)), url('/images/field.webp') center 44% / cover no-repeat; text-align: center; }
+  .photo-break .eyebrow { margin-bottom: 1.5rem; color: var(--chartreuse); }
+  .photo-break > p:last-child { margin: 0; font: 400 clamp(4rem,9vw,9rem)/.84 var(--heading); }
   @media (max-width: 760px) { .hero { grid-template-columns: 1fr; } .hero__art { width: min(85vw,28rem); margin-inline: auto; order: -1; } h1 { font-size: clamp(4rem,18vw,7rem); } }
 </style>
-

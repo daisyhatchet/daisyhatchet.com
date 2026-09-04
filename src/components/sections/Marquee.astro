@@ -6,9 +6,8 @@ const { items } = Astro.props;
   <div aria-hidden="true">{[...items, ...items].map((item) => <span>{item}&nbsp; ✦ &nbsp;</span>)}</div>
 </div>
 <style>
-  .marquee { overflow: hidden; color: var(--cream); background: var(--olive); }
+  .marquee { overflow: hidden; color: var(--ink); background: var(--chartreuse); }
   .marquee div { display: flex; width: max-content; padding-block: 1.1rem; animation: crawl 25s linear infinite; }
-  span { font: 750 clamp(1.8rem,3.5vw,3.4rem)/1 var(--heading); letter-spacing: -.04em; white-space: nowrap; }
+  span { font: 400 clamp(2.2rem,4vw,4rem)/.85 var(--heading); letter-spacing: -.025em; white-space: nowrap; }
   @keyframes crawl { to { transform: translateX(-50%); } }
 </style>
-
