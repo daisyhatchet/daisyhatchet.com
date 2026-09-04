@@ -2,15 +2,23 @@
 const path = Astro.url.pathname;
 const links = [{ href: '/about', label: 'About' }, { href: '/gallery', label: 'Gallery' }];
 ---
-<header class="site-header shell">
+<header class:list={['site-header', 'shell', { 'site-header--overlay': path === '/' }]}>
   <a class="wordmark" href="/" aria-label="Daisy Hatchet home">DAISY HATCHET</a>
   <nav aria-label="Main navigation">
     {links.map(({ href, label }) => <a href={href} aria-current={path === href ? 'page' : undefined}>{label}</a>)}
     <a href="https://instagram.com/daisy_hatchet_flowers/" target="_blank" rel="noreferrer">Instagram ↗</a>
   </nav>
 </header>
+<script>
+  const overlayHeader = document.querySelector<HTMLElement>('.site-header--overlay');
+  const updateHeader = () => overlayHeader?.classList.toggle('is-scrolled', window.scrollY > 24);
+  updateHeader();
+  window.addEventListener('scroll', updateHeader, { passive: true });
+</script>
 <style>
   .site-header { position: relative; z-index: 10; min-height: 88px; display: flex; align-items: center; justify-content: space-between; gap: 2rem; color: var(--cream); background: var(--ink); }
+  .site-header--overlay { position: fixed; inset: 0 0 auto; background: transparent; transition: background-color .28s ease, box-shadow .28s ease, backdrop-filter .28s ease; }
+  .site-header--overlay.is-scrolled { background: rgba(41,21,31,.88); box-shadow: 0 1px 0 rgba(255,250,244,.12); backdrop-filter: blur(12px); }
   .wordmark { font-family: var(--brand); font-size: clamp(1.9rem, 3.5vw, 3rem); line-height: .9; letter-spacing: .01em; text-decoration: none; white-space: nowrap; }
   nav { display: flex; gap: clamp(1rem, 2.5vw, 2.2rem); align-items: center; }
   nav a { font-size: .75rem; font-weight: 600; letter-spacing: .12em; text-decoration: none; text-transform: uppercase; }

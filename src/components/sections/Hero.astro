@@ -41,7 +41,7 @@ const { kicker, title, body, image = '/images/daisy-hatchet-mark.webp' } = Astro
   window.addEventListener('resize', requestParallaxUpdate);
 </script>
 <style>
-  .hero { --parallax-y: 0px; position: relative; isolation: isolate; height: calc(100svh - 88px); max-height: calc(100svh - 88px); display: flex; align-items: center; padding-block: clamp(2.5rem,5vw,5rem); color: var(--cream); background: #76204e; overflow: hidden; }
+  .hero { --parallax-y: 0px; position: relative; isolation: isolate; height: 100svh; max-height: 100svh; display: flex; align-items: center; padding-block: clamp(6.5rem,10vw,8rem) clamp(2.5rem,5vw,5rem); color: var(--cream); background: #76204e; overflow: hidden; }
   .hero::before, .hero::after { content: ''; position: absolute; pointer-events: none; }
   .hero::before { z-index: -2; inset: -20% -6%; background: url('/images/field.webp') center 44% / cover no-repeat; transform: translate3d(0,var(--parallax-y),0) scale(1.04); will-change: transform; }
   .hero::after { z-index: -1; inset: 0; background: linear-gradient(rgba(172,34,105,.34),rgba(118,31,78,.44)); }
@@ -53,6 +53,6 @@ const { kicker, title, body, image = '/images/daisy-hatchet-mark.webp' } = Astro
   .hero__art { position: absolute; z-index: 0; top: 50%; left: 66.666%; width: clamp(48rem,70vw,82rem); transform: translate(-50%,-50%); pointer-events: none; }
   .hero__art img { width: 100%; aspect-ratio: 1; object-fit: contain; filter: invert(1); opacity: .42; }
   .button { color: var(--ink); background: var(--chartreuse); border-color: var(--chartreuse); }
-  @media (max-width: 760px) { .hero { height: auto; max-height: none; min-height: calc(100svh - 9rem); overflow: hidden; } .hero__copy { width: 100%; } .hero__art { left: 72%; width: min(145vw,50rem); } h1 { font-size: clamp(3.6rem,16vw,6.5rem); } }
+  @media (max-width: 760px) { .hero { height: auto; max-height: none; min-height: 100svh; padding-top: 10.5rem; overflow: hidden; } .hero__copy { width: 100%; } .hero__art { left: 72%; width: min(145vw,50rem); } h1 { font-size: clamp(3.6rem,16vw,6.5rem); } }
   @media (prefers-reduced-motion: reduce) { .hero::before { transform: scale(1.04); } }
 </style>
