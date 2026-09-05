@@ -1,50 +1,34 @@
 [
   {
-    "id": "main-character-energy",
-    "name": "Main Character Energy",
-    "price": 48,
-    "image": "0C8DE050-4C61-4E11-A4F5-619A3AAAC557_1_102_o.jpeg",
-    "available": true,
-    "purchaseUrl": "https://local-blooms.com/product/candy-says/"
-  },
-  {
     "id": "hot-gossip",
-    "name": "Hot Gossip",
-    "price": 38,
+    "name": "The First Date",
+    "price": 50,
     "image": "54688A6D-47A2-482E-B98C-FD3B43718C2E_1_105_c.jpeg",
-    "available": true,
-    "purchaseUrl": ""
-  },
-  {
-    "id": "good-trouble",
-    "name": "Good Trouble",
-    "price": 58,
-    "image": "1B8EF10D-6CA8-4CE2-84AB-6899F9BDF499_4_5005_c.jpeg",
-    "available": true,
-    "purchaseUrl": ""
-  },
-  {
-    "id": "pinkies-up",
-    "name": "Pinkies Up",
-    "price": 42,
-    "image": "16425611-C32D-47D3-ACA6-71CE5AA4D6B7_1_102_o.jpeg",
-    "available": true,
-    "purchaseUrl": ""
-  },
-  {
-    "id": "soft-launch",
-    "name": "Soft Launch",
-    "price": 32,
-    "image": "47C9AC05-7481-4405-AB4A-DE891C5B4295_1_105_c.jpeg",
     "available": false,
     "purchaseUrl": ""
   },
   {
-    "id": "no-notes",
-    "name": "No Notes",
-    "price": 52,
-    "image": "40854DBC-2EBC-4F73-81D4-3C57A03BAA5C_1_102_o.jpeg",
+    "id": "main-character-energy",
+    "name": "The Volcano Girl",
+    "price": 45,
+    "image": "D8F7D39C-FE51-4FB6-8F05-40789350B935_1_105_c.jpeg",
     "available": true,
-    "purchaseUrl": ""
+    "purchaseUrl": "https://local-blooms.com/product/volcano-girl/"
+  },
+  {
+    "id": "good-trouble",
+    "name": "The Sugar Town",
+    "price": 35,
+    "image": "47C9AC05-7481-4405-AB4A-DE891C5B4295_1_105_c.jpeg",
+    "available": true,
+    "purchaseUrl": "https://local-blooms.com/product/sugar-town/"
+  },
+  {
+    "id": "pinkies-up",
+    "name": "The Candy Says",
+    "price": 25,
+    "image": "D1551071-72E1-4E1C-9334-B8D78D1CEC22_1_105_c.jpeg",
+    "available": true,
+    "purchaseUrl": "https://local-blooms.com/product/candy-says/"
   }
 ]
