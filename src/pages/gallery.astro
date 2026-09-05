@@ -49,19 +49,18 @@ const photos = files.map((file, i) => ({
   .eyebrow { margin-bottom: 1.25rem; color: var(--olive); }
   h1 { font-size: clamp(5rem,13vw,12rem); }
   .intro { max-width: 29rem; margin: 0 0 .9rem; color: #604b54; font-size: clamp(1rem,1.5vw,1.2rem); }
-  .masonry { columns: 3; column-gap: clamp(1rem,2.4vw,2.25rem); }
+  .masonry { columns: 2; column-gap: clamp(1.25rem,3vw,3rem); }
   .tile { break-inside: avoid; margin: 0 0 clamp(2rem,4vw,3.5rem); }
   .image-wrap { overflow: hidden; background: #eadfe3; }
-  img { width: 100%; object-fit: cover; transition: transform .7s cubic-bezier(.22,.8,.3,1); }
+  img { width: 100%; max-height: 78svh; object-fit: cover; transition: transform .7s cubic-bezier(.22,.8,.3,1); }
   .tile:hover img { transform: scale(1.025); }
-  .tile--tall img { aspect-ratio: 4 / 5.4; }
+  .tile--tall img { aspect-ratio: 4 / 5; }
   .tile--square img { aspect-ratio: 1; }
-  .tile--wide img { aspect-ratio: 5 / 4; }
-  .tile--landscape img { aspect-ratio: 4 / 3; }
+  .tile--wide img { aspect-ratio: 4 / 3; }
+  .tile--landscape img { aspect-ratio: 3 / 2; }
   figcaption { display: flex; justify-content: space-between; gap: 1rem; padding-top: .8rem; color: #604b54; font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; }
   .gallery-end { display: flex; justify-content: space-between; gap: 2rem; margin-top: clamp(2rem,5vw,5rem); padding-top: 1.4rem; border-top: 1px solid #d7cbd0; color: #604b54; font-size: .78rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
   .gallery-end a { color: var(--pink); text-decoration: none; }
-  @media (max-width: 900px) { .masonry { columns: 2; } }
-  @media (max-width: 650px) { header { grid-template-columns: 1fr; gap: 1.5rem; } .masonry { columns: 1; } .gallery-end { align-items: flex-start; flex-direction: column; } }
+  @media (max-width: 700px) { header { grid-template-columns: 1fr; gap: 1.5rem; } .masonry { columns: 1; } img { max-height: 68svh; } .gallery-end { align-items: flex-start; flex-direction: column; } }
   @media (prefers-reduced-motion: reduce) { img { transition: none; } }
 </style>
