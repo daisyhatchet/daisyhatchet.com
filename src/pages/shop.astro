@@ -1,0 +1,52 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import items from '@/content/shop-items.json';
+---
+<BaseLayout title="Shop — Daisy Hatchet" description="Shop seasonal flower arrangements grown and designed by Daisy Hatchet in Pacifica, California.">
+  <section class="shop shell">
+    <header>
+      <div>
+        <p class="eyebrow">Flowers, freshly cut</p>
+        <h1 class="display">The shop.</h1>
+      </div>
+      <p>Small-batch arrangements grown and designed in Pacifica. Availability changes with the garden.</p>
+    </header>
+
+    <div class="products">
+      {items.map((item) => (
+        <article class:list={['product', { 'is-sold-out': !item.available }]}>
+          <div class="product-image">
+            <img src={`/images/gallery-web/${item.image}`} alt={item.name} width="768" height="768" loading="lazy" />
+            {!item.available && <span>Sold out</span>}
+          </div>
+          <div class="product-details">
+            <h2>{item.name}</h2>
+            <p>${item.price}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <p class="shop-note">This is a preview shop. Ordering details are coming soon.</p>
+  </section>
+</BaseLayout>
+<style>
+  .shop { --max: 104rem; padding-block: clamp(5rem,9vw,8rem); background: var(--cream); }
+  header { display: grid; grid-template-columns: minmax(0,1fr) minmax(18rem,.4fr); align-items: end; gap: 3rem; margin-bottom: clamp(3rem,7vw,6rem); }
+  .eyebrow { margin-bottom: 1.25rem; color: var(--olive); }
+  h1 { font-size: clamp(5rem,12vw,11rem); }
+  header > p { max-width: 30rem; margin: 0 0 .8rem; color: #604b54; font-size: 1.08rem; }
+  .products { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: clamp(2rem,3.5vw,4rem) clamp(1rem,2.2vw,2.25rem); }
+  .product-image { position: relative; aspect-ratio: 1; overflow: hidden; background: #eadfe3; border-radius: .65rem; }
+  .product-image img { width: 100%; height: 100%; display: block; object-fit: cover; transition: transform .65s cubic-bezier(.22,.8,.3,1); }
+  .product:hover img { transform: scale(1.025); }
+  .product-image span { position: absolute; top: 1rem; right: 1rem; padding: .5rem .75rem; color: white; background: var(--ink); border-radius: 999px; font-size: .7rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+  .is-sold-out img { filter: saturate(.55); opacity: .82; }
+  .product-details { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; padding-top: 1rem; }
+  .product-details h2 { margin: 0; font-size: clamp(1.05rem,1.5vw,1.3rem); font-weight: 600; }
+  .product-details p { margin: 0; color: #604b54; font-size: 1rem; white-space: nowrap; }
+  .shop-note { margin: clamp(4rem,8vw,7rem) 0 0; padding-top: 1.25rem; border-top: 1px solid #d7cbd0; color: #604b54; font-size: .8rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+  @media (max-width: 800px) { header { grid-template-columns: 1fr; gap: 1.5rem; } .products { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+  @media (max-width: 480px) { .products { grid-template-columns: 1fr; } }
+  @media (prefers-reduced-motion: reduce) { .product-image img { transition: none; } }
+</style>
