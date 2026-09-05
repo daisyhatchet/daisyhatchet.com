@@ -47,22 +47,47 @@ const photos = files.map((file, i) => ({
     <div class="gallery-end"><span>Fresh cuts added seasonally</span><a href="https://instagram.com/daisy_hatchet_flowers/" target="_blank" rel="noreferrer">Follow along on Instagram ↗</a></div>
   </main>
 </BaseLayout>
+<script>
+  const masonry = document.querySelector<HTMLElement>('.masonry');
+  let masonryFrame = 0;
+
+  const layoutMasonry = () => {
+    if (!masonry) return;
+    const styles = getComputedStyle(masonry);
+    const row = Number.parseFloat(styles.gridAutoRows);
+    const gap = Number.parseFloat(styles.rowGap);
+    masonry.querySelectorAll<HTMLElement>('.tile').forEach((tile) => {
+      tile.style.gridRowEnd = 'auto';
+      const span = Math.ceil((tile.getBoundingClientRect().height + gap) / (row + gap));
+      tile.style.gridRowEnd = `span ${span}`;
+    });
+  };
+
+  const scheduleMasonry = () => {
+    cancelAnimationFrame(masonryFrame);
+    masonryFrame = requestAnimationFrame(layoutMasonry);
+  };
+
+  masonry?.querySelectorAll('img').forEach((image) => image.addEventListener('load', scheduleMasonry));
+  if (masonry) new ResizeObserver(scheduleMasonry).observe(masonry);
+  requestAnimationFrame(() => requestAnimationFrame(layoutMasonry));
+</script>
 <style>
   .gallery { --max: 104rem; padding-block: clamp(5rem,10vw,9rem); background: var(--cream); }
   header { display: grid; grid-template-columns: minmax(0,1fr) minmax(18rem,.42fr); align-items: end; gap: 3rem; margin-bottom: clamp(4rem,8vw,7rem); }
   .eyebrow { margin-bottom: 1.25rem; color: var(--olive); }
   h1 { font-size: clamp(5rem,13vw,12rem); }
   .intro { max-width: 29rem; margin: 0 0 .9rem; color: #604b54; font-size: clamp(1rem,1.5vw,1.2rem); }
-  .masonry { columns: 4; column-gap: clamp(1rem,2vw,2rem); }
-  .tile { break-inside: avoid; margin: 0 0 clamp(2rem,4vw,3.5rem); }
+  .masonry { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); grid-auto-rows: 8px; gap: clamp(1rem,2vw,2rem); align-items: start; }
+  .tile { margin: 0; }
   .image-wrap { aspect-ratio: var(--crop-ratio); overflow: hidden; background: #eadfe3; }
   img { width: 100%; height: 100%; object-fit: cover; object-position: var(--crop-position); transition: transform .7s cubic-bezier(.22,.8,.3,1); }
   .tile:hover img { transform: scale(1.025); }
   figcaption { display: flex; justify-content: space-between; gap: 1rem; padding-top: .8rem; color: #604b54; font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; }
   .gallery-end { display: flex; justify-content: space-between; gap: 2rem; margin-top: clamp(2rem,5vw,5rem); padding-top: 1.4rem; border-top: 1px solid #d7cbd0; color: #604b54; font-size: .78rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
   .gallery-end a { color: var(--pink); text-decoration: none; }
-  @media (max-width: 1050px) { header { grid-template-columns: 1fr; gap: 1.5rem; } .masonry { columns: 3; } }
-  @media (max-width: 680px) { .masonry { columns: 2; } }
-  @media (max-width: 460px) { header { grid-template-columns: 1fr; gap: 1.5rem; } .masonry { columns: 1; } .gallery-end { align-items: flex-start; flex-direction: column; } }
+  @media (max-width: 1050px) { header { grid-template-columns: 1fr; gap: 1.5rem; } .masonry { grid-template-columns: repeat(3,minmax(0,1fr)); } }
+  @media (max-width: 680px) { .masonry { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+  @media (max-width: 460px) { header { grid-template-columns: 1fr; gap: 1.5rem; } .masonry { grid-template-columns: 1fr; } .gallery-end { align-items: flex-start; flex-direction: column; } }
   @media (prefers-reduced-motion: reduce) { img { transition: none; } }
 </style>
