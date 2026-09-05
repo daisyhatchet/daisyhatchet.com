@@ -2,14 +2,13 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 
 const files = [
-  '0C8DE050-4C61-4E11-A4F5-619A3AAAC557_1_102_o.jpeg', '74A85A2F-193D-4831-85F0-7F36FD48AC65_4_5005_c.jpeg',
-  '16425611-C32D-47D3-ACA6-71CE5AA4D6B7_1_102_o.jpeg',
+  '0C8DE050-4C61-4E11-A4F5-619A3AAAC557_1_102_o.jpeg', '16425611-C32D-47D3-ACA6-71CE5AA4D6B7_1_102_o.jpeg',
   '1B8EF10D-6CA8-4CE2-84AB-6899F9BDF499_4_5005_c.jpeg', '1CAB7A3D-D5A1-4BBD-9692-33895E34B8B4_4_5005_c.jpeg',
   '1E038482-AF7F-4F10-83D9-41FD174CF37F_4_5005_c.jpeg', '40854DBC-2EBC-4F73-81D4-3C57A03BAA5C_1_102_o.jpeg',
   '47C9AC05-7481-4405-AB4A-DE891C5B4295_1_105_c.jpeg', '4D69AD7C-C369-484E-982E-A56C09E1EE53_1_105_c.jpeg',
   '5084153C-20A5-41A0-A0B0-19925F44D69E_4_5005_c.jpeg', '54688A6D-47A2-482E-B98C-FD3B43718C2E_1_105_c.jpeg',
   '5B13D5F1-459F-46C2-875A-A20CA2DE8BD1_4_5005_c.jpeg', '69D321A9-8FB9-4F61-83AE-BE48304804E6_1_105_c.jpeg',
-  '6FE0EDB9-7597-45AD-858C-AB6FD6CB0B54_4_5005_c.jpeg',
+  '6FE0EDB9-7597-45AD-858C-AB6FD6CB0B54_4_5005_c.jpeg', '74A85A2F-193D-4831-85F0-7F36FD48AC65_4_5005_c.jpeg',
   '8897776A-5A57-43D9-9E1B-23C116C2A1F1_1_105_c.jpeg', 'A7BCF4EA-462E-405E-A7B7-B5A7EAEE63B6_4_5005_c.jpeg',
   'A9655376-F121-40B4-B32D-05598228F10A_4_5005_c.jpeg', 'B237D834-728B-43A2-8F9E-34215063122A_4_5005_c.jpeg',
   'BCD07B7C-ACF7-41EB-94A4-4F8D9C4DAC5B_4_5005_c.jpeg', 'C4B23E3D-0BF0-4527-92D5-DD6C62ACCE33_1_105_c.jpeg',
@@ -17,12 +16,16 @@ const files = [
   'D963556E-C248-417E-9ECB-A98A6ECCE769_4_5005_c.jpeg', 'E02AA096-1D97-46F0-BE6B-FE34A53E2BAA_1_105_c.jpeg',
   'E150F5B0-772E-4DBD-A175-E6F433FD74C7_4_5005_c.jpeg', 'FA0F802F-4299-424C-AE2E-CAB30FF21EBD_4_5005_c.jpeg',
 ];
+const cropRatios = ['3 / 4', '4 / 5', '5 / 6', '6 / 7', '7 / 8', '5 / 6', '4 / 5'];
+const cropPositions = ['50% 50%', '50% 44%', '50% 56%', '46% 50%', '54% 48%'];
 const photos = files.map((file, i) => ({
   src: `/images/gallery-web/${file}`,
   alt: `Seasonal flowers from Daisy Hatchet, photograph ${i + 1}`,
   caption: `Field note ${String(i + 1).padStart(2, '0')}`,
   width: file.startsWith('74A85A2F') ? 480 : 768,
   height: file.startsWith('74A85A2F') ? 360 : 1024,
+  cropRatio: file.startsWith('74A85A2F') ? '4 / 3' : cropRatios[(i * 3) % cropRatios.length],
+  cropPosition: cropPositions[(i * 2) % cropPositions.length],
 }));
 ---
 <BaseLayout title="Gallery — Daisy Hatchet" description="A look at the flowers growing at Daisy Hatchet in Pacifica, California.">
@@ -35,7 +38,7 @@ const photos = files.map((file, i) => ({
       {photos.map((photo, i) => (
         <figure class="tile">
           <div class="image-wrap">
-            <img src={photo.src} alt={photo.alt} width={photo.width} height={photo.height} loading={i < 4 ? 'eager' : 'lazy'} />
+            <img src={photo.src} alt={photo.alt} width={photo.width} height={photo.height} loading={i < 4 ? 'eager' : 'lazy'} style={`--crop-ratio: ${photo.cropRatio}; --crop-position: ${photo.cropPosition}`} />
           </div>
           <figcaption><span>{String(i + 1).padStart(2, '0')}</span><span>{photo.caption}</span></figcaption>
         </figure>
@@ -53,7 +56,7 @@ const photos = files.map((file, i) => ({
   .masonry { columns: 4; column-gap: clamp(1rem,2vw,2rem); }
   .tile { break-inside: avoid; margin: 0 0 clamp(2rem,4vw,3.5rem); }
   .image-wrap { overflow: hidden; background: #eadfe3; }
-  img { width: 100%; height: auto; transition: transform .7s cubic-bezier(.22,.8,.3,1); }
+  img { width: 100%; aspect-ratio: var(--crop-ratio); object-fit: cover; object-position: var(--crop-position); transition: transform .7s cubic-bezier(.22,.8,.3,1); }
   .tile:hover img { transform: scale(1.025); }
   figcaption { display: flex; justify-content: space-between; gap: 1rem; padding-top: .8rem; color: #604b54; font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; }
   .gallery-end { display: flex; justify-content: space-between; gap: 2rem; margin-top: clamp(2rem,5vw,5rem); padding-top: 1.4rem; border-top: 1px solid #d7cbd0; color: #604b54; font-size: .78rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
