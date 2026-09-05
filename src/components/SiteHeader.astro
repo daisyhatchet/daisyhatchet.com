@@ -15,7 +15,7 @@ const links = [{ href: '/about', label: 'About' }, { href: '/gallery', label: 'G
       <button class="menu-close" type="button" aria-label="Close menu">×</button>
     </div>
     {links.map(({ href, label }) => <a href={href} aria-current={path === href ? 'page' : undefined}>{label}</a>)}
-    <a class="social-link" href="https://instagram.com/daisy_hatchet_flowers/" target="_blank" rel="noreferrer" aria-label="Daisy Hatchet on Instagram"><InstagramIcon /></a>
+    <a class="social-link" href="https://instagram.com/daisy_hatchet_flowers/" target="_blank" rel="noreferrer" aria-label="Daisy Hatchet on Instagram"><InstagramIcon /><span class="social-label">Instagram</span></a>
   </nav>
 </header>
 <script>
@@ -75,6 +75,7 @@ const links = [{ href: '/about', label: 'About' }, { href: '/gallery', label: 'G
   .main-nav a:hover, .main-nav a[aria-current] { color: var(--chartreuse); }
   .main-nav .social-link { display: grid; width: 2.6rem; height: 2.6rem; place-items: center; padding: 0; }
   .main-nav .social-link :global(svg) { display: block; }
+  .social-label { display: none; }
   .site-header--overlay .main-nav a:hover, .site-header--overlay .main-nav a[aria-current] { color: var(--cream); }
   .menu-toggle, .menu-close, .menu-backdrop, .drawer-heading { display: none; }
   @media (max-width: 650px) {
@@ -91,7 +92,8 @@ const links = [{ href: '/about', label: 'About' }, { href: '/gallery', label: 'G
     .menu-close { width: 3rem; height: 3rem; display: grid; place-items: center; padding: 0; color: var(--ink); background: #fff; border: 1px solid #e8dee2; border-radius: 50%; font-size: 2rem; font-weight: 300; line-height: 1; cursor: pointer; }
     .main-nav a { padding: 1.15rem .25rem; border-bottom: 1px solid #ded2d7; font-size: 1rem; }
     .main-nav a:last-child { margin-top: auto; color: var(--pink); border-bottom: 0; }
-    .main-nav .social-link { width: 3rem; height: 3rem; padding: 0; }
+    .main-nav .social-link { width: auto; height: auto; display: flex; justify-content: flex-start; gap: .75rem; padding: 1.15rem .25rem; }
+    .social-label { display: inline; }
     .site-header--overlay .main-nav a:hover, .site-header--overlay .main-nav a[aria-current], .main-nav a:hover, .main-nav a[aria-current] { color: var(--pink); }
   }
   @media (prefers-reduced-motion: reduce) { .menu-backdrop, .main-nav { transition: none; } }
