@@ -32,8 +32,9 @@ import items from '@/content/shop-items.json';
 <style>
   .shop { --max: 104rem; padding-block: clamp(5rem,9vw,8rem); background: var(--cream); }
   header { display: grid; grid-template-columns: minmax(0,1fr) minmax(18rem,.4fr); align-items: end; gap: 3rem; margin-bottom: clamp(3rem,7vw,6rem); }
+  header > div { min-width: 0; container-type: inline-size; }
   .eyebrow { margin-bottom: 1.25rem; color: var(--olive); }
-  h1 { font-size: clamp(5rem,12vw,11rem); }
+  h1 { font-size: clamp(3.2rem,16cqi,11rem); }
   header > p { max-width: 30rem; margin: 0 0 .8rem; color: #604b54; font-size: 1.08rem; }
   .products { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: clamp(2rem,3.5vw,4rem) clamp(1rem,2.2vw,2.25rem); }
   .product-image { position: relative; aspect-ratio: 1; overflow: hidden; background: #eadfe3; border-radius: .65rem; }

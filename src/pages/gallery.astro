@@ -124,8 +124,9 @@ const photos = files.map((file, i) => ({
   .gallery { --max: 104rem; padding-block: clamp(5rem,10vw,9rem); background: var(--cream); }
   :global(html.lightbox-open) { overflow: hidden; overscroll-behavior: none; }
   header { display: grid; grid-template-columns: minmax(0,1fr) minmax(18rem,.42fr); align-items: end; gap: 3rem; margin-bottom: clamp(4rem,8vw,7rem); }
+  header > div { min-width: 0; container-type: inline-size; }
   .eyebrow { margin-bottom: 1.25rem; color: var(--olive); }
-  h1 { font-size: clamp(5rem,13vw,12rem); }
+  h1 { font-size: clamp(3.2rem,16cqi,12rem); }
   .intro { max-width: 29rem; margin: 0 0 .9rem; color: #604b54; font-size: clamp(1rem,1.5vw,1.2rem); }
   .masonry { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); grid-auto-rows: 8px; gap: clamp(1rem,2vw,2rem); align-items: start; }
   .tile { margin: 0; }
