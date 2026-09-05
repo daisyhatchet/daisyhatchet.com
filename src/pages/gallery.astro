@@ -16,12 +16,12 @@ const files = [
   'D963556E-C248-417E-9ECB-A98A6ECCE769_4_5005_c.jpeg', 'E02AA096-1D97-46F0-BE6B-FE34A53E2BAA_1_105_c.jpeg',
   'E150F5B0-772E-4DBD-A175-E6F433FD74C7_4_5005_c.jpeg', 'FA0F802F-4299-424C-AE2E-CAB30FF21EBD_4_5005_c.jpeg',
 ];
-const shapes = ['tall', 'square', 'landscape', 'tall', 'wide', 'tall', 'square', 'tall', 'landscape', 'wide'];
 const photos = files.map((file, i) => ({
   src: `/images/gallery-web/${file}`,
   alt: `Seasonal flowers from Daisy Hatchet, photograph ${i + 1}`,
   caption: `Field note ${String(i + 1).padStart(2, '0')}`,
-  shape: shapes[i % shapes.length],
+  width: file.startsWith('74A85A2F') ? 480 : 768,
+  height: file.startsWith('74A85A2F') ? 360 : 1024,
 }));
 ---
 <BaseLayout title="Gallery — Daisy Hatchet" description="A look at the flowers growing at Daisy Hatchet in Pacifica, California.">
@@ -32,9 +32,9 @@ const photos = files.map((file, i) => ({
     </header>
     <div class="masonry">
       {photos.map((photo, i) => (
-        <figure class={`tile tile--${photo.shape}`}>
+        <figure class="tile">
           <div class="image-wrap">
-            <img src={photo.src} alt={photo.alt} width="1200" height="1500" loading={i < 3 ? 'eager' : 'lazy'} />
+            <img src={photo.src} alt={photo.alt} width={photo.width} height={photo.height} loading={i < 4 ? 'eager' : 'lazy'} />
           </div>
           <figcaption><span>{String(i + 1).padStart(2, '0')}</span><span>{photo.caption}</span></figcaption>
         </figure>
@@ -49,18 +49,16 @@ const photos = files.map((file, i) => ({
   .eyebrow { margin-bottom: 1.25rem; color: var(--olive); }
   h1 { font-size: clamp(5rem,13vw,12rem); }
   .intro { max-width: 29rem; margin: 0 0 .9rem; color: #604b54; font-size: clamp(1rem,1.5vw,1.2rem); }
-  .masonry { columns: 2; column-gap: clamp(1.25rem,3vw,3rem); }
+  .masonry { columns: 4; column-gap: clamp(1rem,2vw,2rem); }
   .tile { break-inside: avoid; margin: 0 0 clamp(2rem,4vw,3.5rem); }
   .image-wrap { overflow: hidden; background: #eadfe3; }
-  img { width: 100%; max-height: 78svh; object-fit: cover; transition: transform .7s cubic-bezier(.22,.8,.3,1); }
+  img { width: 100%; height: auto; transition: transform .7s cubic-bezier(.22,.8,.3,1); }
   .tile:hover img { transform: scale(1.025); }
-  .tile--tall img { aspect-ratio: 4 / 5; }
-  .tile--square img { aspect-ratio: 1; }
-  .tile--wide img { aspect-ratio: 4 / 3; }
-  .tile--landscape img { aspect-ratio: 3 / 2; }
   figcaption { display: flex; justify-content: space-between; gap: 1rem; padding-top: .8rem; color: #604b54; font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; }
   .gallery-end { display: flex; justify-content: space-between; gap: 2rem; margin-top: clamp(2rem,5vw,5rem); padding-top: 1.4rem; border-top: 1px solid #d7cbd0; color: #604b54; font-size: .78rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
   .gallery-end a { color: var(--pink); text-decoration: none; }
-  @media (max-width: 700px) { header { grid-template-columns: 1fr; gap: 1.5rem; } .masonry { columns: 1; } img { max-height: 68svh; } .gallery-end { align-items: flex-start; flex-direction: column; } }
+  @media (max-width: 1200px) { .masonry { columns: 3; } }
+  @media (max-width: 850px) { .masonry { columns: 2; } }
+  @media (max-width: 560px) { header { grid-template-columns: 1fr; gap: 1.5rem; } .masonry { columns: 1; } .gallery-end { align-items: flex-start; flex-direction: column; } }
   @media (prefers-reduced-motion: reduce) { img { transition: none; } }
 </style>
