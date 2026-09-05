@@ -16,7 +16,7 @@ const files = [
   'D963556E-C248-417E-9ECB-A98A6ECCE769_4_5005_c.jpeg', 'E02AA096-1D97-46F0-BE6B-FE34A53E2BAA_1_105_c.jpeg',
   'E150F5B0-772E-4DBD-A175-E6F433FD74C7_4_5005_c.jpeg', 'FA0F802F-4299-424C-AE2E-CAB30FF21EBD_4_5005_c.jpeg',
 ];
-const cropRatios = ['3 / 4', '1 / 1', '4 / 5', '5 / 6', '4 / 3', '2 / 3', '6 / 7'];
+const cropRatios = ['1 / 1', '6 / 5', '5 / 4', '4 / 3', '3 / 2', '5 / 4', '6 / 5'];
 const cropPositions = ['50% 50%', '50% 38%', '50% 62%', '40% 50%', '60% 46%', '46% 42%'];
 const photos = files.map((file, i) => ({
   src: `/images/gallery-web/${file}`,
@@ -37,8 +37,8 @@ const photos = files.map((file, i) => ({
     <div class="masonry">
       {photos.map((photo, i) => (
         <figure class="tile">
-          <div class="image-wrap">
-            <img src={photo.src} alt={photo.alt} width={photo.width} height={photo.height} loading={i < 4 ? 'eager' : 'lazy'} style={`--crop-ratio: ${photo.cropRatio}; --crop-position: ${photo.cropPosition}`} />
+          <div class="image-wrap" style={`--crop-ratio: ${photo.cropRatio}`}>
+            <img src={photo.src} alt={photo.alt} width={photo.width} height={photo.height} loading={i < 4 ? 'eager' : 'lazy'} style={`--crop-position: ${photo.cropPosition}`} />
           </div>
           <figcaption><span>{String(i + 1).padStart(2, '0')}</span><span>{photo.caption}</span></figcaption>
         </figure>
@@ -55,8 +55,8 @@ const photos = files.map((file, i) => ({
   .intro { max-width: 29rem; margin: 0 0 .9rem; color: #604b54; font-size: clamp(1rem,1.5vw,1.2rem); }
   .masonry { columns: 4; column-gap: clamp(1rem,2vw,2rem); }
   .tile { break-inside: avoid; margin: 0 0 clamp(2rem,4vw,3.5rem); }
-  .image-wrap { overflow: hidden; background: #eadfe3; }
-  img { width: 100%; aspect-ratio: var(--crop-ratio); object-fit: cover; object-position: var(--crop-position); transition: transform .7s cubic-bezier(.22,.8,.3,1); }
+  .image-wrap { aspect-ratio: var(--crop-ratio); overflow: hidden; background: #eadfe3; }
+  img { width: 100%; height: 100%; object-fit: cover; object-position: var(--crop-position); transition: transform .7s cubic-bezier(.22,.8,.3,1); }
   .tile:hover img { transform: scale(1.025); }
   figcaption { display: flex; justify-content: space-between; gap: 1rem; padding-top: .8rem; color: #604b54; font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; }
   .gallery-end { display: flex; justify-content: space-between; gap: 2rem; margin-top: clamp(2rem,5vw,5rem); padding-top: 1.4rem; border-top: 1px solid #d7cbd0; color: #604b54; font-size: .78rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
