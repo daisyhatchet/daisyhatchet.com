@@ -1,0 +1,8 @@
+---
+import { siInstagram } from 'simple-icons';
+interface Props { size?: number; }
+const { size = 22 } = Astro.props;
+---
+<svg viewBox="0 0 24 24" width={size} height={size} aria-hidden="true" focusable="false">
+  <path fill="currentColor" d={siInstagram.path}></path>
+</svg>

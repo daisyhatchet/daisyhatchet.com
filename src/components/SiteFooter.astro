@@ -1,11 +1,16 @@
+---
+import InstagramIcon from '@/components/icons/InstagramIcon.astro';
+---
 <footer class="footer shell">
   <a class="wordmark" href="/">DAISY HATCHET</a>
   <p>Seasonal cut flowers<br />Pacifica, California</p>
-  <a href="https://instagram.com/daisy_hatchet_flowers/" target="_blank" rel="noreferrer">@daisy_hatchet_flowers ↗</a>
+  <a class="social-link" href="https://instagram.com/daisy_hatchet_flowers/" target="_blank" rel="noreferrer" aria-label="Daisy Hatchet on Instagram"><InstagramIcon size={24} /></a>
 </footer>
 <style>
   .footer { display: grid; grid-template-columns: 1fr auto auto; align-items: end; gap: 3rem; padding-block: 3rem; color: var(--cream); background: var(--ink); }
   .wordmark { font: 400 clamp(2rem,4vw,3.7rem)/.9 var(--brand); letter-spacing: .01em; text-decoration: none; }
-  p, .footer > a:last-child { margin: 0; color: #bcaeb4; font-size: .78rem; line-height: 1.6; }
+  p { margin: 0; color: #bcaeb4; font-size: .78rem; line-height: 1.6; }
+  .social-link { display: grid; width: 3rem; height: 3rem; place-items: center; color: #bcaeb4; border: 1px solid #806f77; border-radius: 50%; transition: color .2s ease, border-color .2s ease, transform .2s ease; }
+  .social-link:hover { color: var(--chartreuse); border-color: var(--chartreuse); transform: translateY(-2px); }
   @media (max-width: 700px) { .footer { grid-template-columns: 1fr; gap: 1.5rem; } }
 </style>
