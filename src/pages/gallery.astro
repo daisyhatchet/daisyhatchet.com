@@ -1,30 +1,56 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+
+const photos = [
+  { src: '/images/hero.jpg', alt: 'Dahlias, sunflowers, and celosia arranged on a dark surface', caption: 'Color study', shape: 'tall', position: '68% center' },
+  { src: '/images/field.webp', alt: 'Daisies growing in a sunlit field', caption: 'Late-summer light', shape: 'wide', position: 'center 58%' },
+  { src: '/images/hero.jpg', alt: 'Warm orange and burgundy flowers', caption: 'Blush hour', shape: 'square', position: '42% center' },
+  { src: '/images/hero.jpg', alt: 'A group of vivid dahlias and marigolds', caption: 'The loud bunch', shape: 'tall', position: '84% center' },
+  { src: '/images/field.webp', alt: 'Daisies growing in a sunlit field', caption: 'Fog lifting', shape: 'landscape', position: 'center 42%' },
+  { src: '/images/hero.jpg', alt: 'Sunflowers and green celosia in a floral arrangement', caption: 'Field notes', shape: 'tall', position: '92% center' },
+  { src: '/images/field.webp', alt: 'Daisies and grasses in warm evening light', caption: 'Good stems', shape: 'square', position: '28% center' },
+  { src: '/images/hero.jpg', alt: 'A dramatic seasonal flower arrangement', caption: 'Pacific light', shape: 'wide', position: 'center center' },
+  { src: '/images/field.webp', alt: 'Dense meadow flowers and grasses', caption: 'Between blooms', shape: 'tall', position: '76% center' },
+];
 ---
 <BaseLayout title="Gallery — Daisy Hatchet" description="A look at the flowers growing at Daisy Hatchet in Pacifica, California.">
-  <section class="gallery shell">
-    <header><p class="eyebrow">From the field</p><h1 class="display">Cuttings.</h1></header>
-    <div class="frames">
-      {['Dahlias after the fog', 'The loud bunch', 'Good stems, bad attitude', 'Fresh from Pacifica'].map((caption, i) => (
-        <figure class={`frame frame--${i + 1}`}>
-          <img src="/images/field.webp" alt={caption} width="1200" height="800" loading={i ? 'lazy' : 'eager'} />
-          <figcaption><span>0{i + 1}</span>{caption}</figcaption>
+  <main class="gallery shell">
+    <header>
+      <div><p class="eyebrow">From the field</p><h1 class="display">Cuttings.</h1></div>
+      <p class="intro">A changing collection of flowers, arrangements, and small moments from the growing season.</p>
+    </header>
+    <div class="masonry">
+      {photos.map((photo, i) => (
+        <figure class={`tile tile--${photo.shape}`}>
+          <div class="image-wrap">
+            <img src={photo.src} alt={photo.alt} width="1200" height="1500" loading={i < 3 ? 'eager' : 'lazy'} style={`object-position: ${photo.position}`} />
+          </div>
+          <figcaption><span>{String(i + 1).padStart(2, '0')}</span><span>{photo.caption}</span></figcaption>
         </figure>
       ))}
     </div>
-  </section>
+    <div class="gallery-end"><span>Fresh cuts added seasonally</span><a href="https://instagram.com/daisy_hatchet_flowers/" target="_blank" rel="noreferrer">Follow along on Instagram ↗</a></div>
+  </main>
 </BaseLayout>
 <style>
   .gallery { padding-block: clamp(5rem,10vw,9rem); background: var(--cream); }
-  header { display: flex; justify-content: space-between; align-items: start; gap: 2rem; margin-bottom: 5rem; }
-  .eyebrow { color: var(--olive); }
-  h1 { font-size: clamp(5rem,13vw,13rem); }
-  .frames { display: grid; grid-template-columns: repeat(12,1fr); gap: var(--gutter); }
-  figure { margin: 0; }
-  .frame--1 { grid-column: 1 / 9; } .frame--2 { grid-column: 9 / 13; margin-top: 9rem; } .frame--3 { grid-column: 2 / 7; } .frame--4 { grid-column: 7 / 13; }
-  img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
-  .frame--2 img { object-position: 80% center; aspect-ratio: 3 / 4; } .frame--3 img { object-position: 20% center; } .frame--4 img { object-position: center 70%; aspect-ratio: 1; }
-  figcaption { display: flex; justify-content: space-between; gap: 1rem; padding-top: .8rem; color: #604b54; font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; }
-  @media (max-width: 700px) { header { display: block; } .frames { display: block; } figure { margin: 0 0 3rem; } }
+  header { display: grid; grid-template-columns: minmax(0,1fr) minmax(18rem,.42fr); align-items: end; gap: 3rem; margin-bottom: clamp(4rem,8vw,7rem); }
+  .eyebrow { margin-bottom: 1.25rem; color: var(--olive); }
+  h1 { font-size: clamp(5rem,13vw,12rem); }
+  .intro { max-width: 29rem; margin: 0 0 .9rem; color: #604b54; font-size: clamp(1rem,1.5vw,1.2rem); }
+  .masonry { columns: 3; column-gap: clamp(1rem,2.4vw,2.25rem); }
+  .tile { break-inside: avoid; margin: 0 0 clamp(2rem,4vw,3.5rem); }
+  .image-wrap { overflow: hidden; background: #eadfe3; }
+  img { width: 100%; object-fit: cover; transition: transform .7s cubic-bezier(.22,.8,.3,1); }
+  .tile:hover img { transform: scale(1.025); }
+  .tile--tall img { aspect-ratio: 4 / 5.4; }
+  .tile--square img { aspect-ratio: 1; }
+  .tile--wide img { aspect-ratio: 5 / 4; }
+  .tile--landscape img { aspect-ratio: 4 / 3; }
+  figcaption { display: flex; justify-content: space-between; gap: 1rem; padding-top: .8rem; color: #604b54; font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; }
+  .gallery-end { display: flex; justify-content: space-between; gap: 2rem; margin-top: clamp(2rem,5vw,5rem); padding-top: 1.4rem; border-top: 1px solid #d7cbd0; color: #604b54; font-size: .78rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+  .gallery-end a { color: var(--pink); text-decoration: none; }
+  @media (max-width: 900px) { .masonry { columns: 2; } }
+  @media (max-width: 650px) { header { grid-template-columns: 1fr; gap: 1.5rem; } .masonry { columns: 1; } .gallery-end { align-items: flex-start; flex-direction: column; } }
+  @media (prefers-reduced-motion: reduce) { img { transition: none; } }
 </style>
-
