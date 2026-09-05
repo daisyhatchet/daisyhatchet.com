@@ -44,7 +44,7 @@ const photos = files.map((file, i) => ({
   </main>
 </BaseLayout>
 <style>
-  .gallery { padding-block: clamp(5rem,10vw,9rem); background: var(--cream); }
+  .gallery { --max: 104rem; padding-block: clamp(5rem,10vw,9rem); background: var(--cream); }
   header { display: grid; grid-template-columns: minmax(0,1fr) minmax(18rem,.42fr); align-items: end; gap: 3rem; margin-bottom: clamp(4rem,8vw,7rem); }
   .eyebrow { margin-bottom: 1.25rem; color: var(--olive); }
   h1 { font-size: clamp(5rem,13vw,12rem); }
@@ -57,8 +57,8 @@ const photos = files.map((file, i) => ({
   figcaption { display: flex; justify-content: space-between; gap: 1rem; padding-top: .8rem; color: #604b54; font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; }
   .gallery-end { display: flex; justify-content: space-between; gap: 2rem; margin-top: clamp(2rem,5vw,5rem); padding-top: 1.4rem; border-top: 1px solid #d7cbd0; color: #604b54; font-size: .78rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
   .gallery-end a { color: var(--pink); text-decoration: none; }
-  @media (max-width: 1200px) { .masonry { columns: 3; } }
-  @media (max-width: 850px) { .masonry { columns: 2; } }
-  @media (max-width: 560px) { header { grid-template-columns: 1fr; gap: 1.5rem; } .masonry { columns: 1; } .gallery-end { align-items: flex-start; flex-direction: column; } }
+  @media (max-width: 1050px) { header { grid-template-columns: 1fr; gap: 1.5rem; } .masonry { columns: 3; } }
+  @media (max-width: 680px) { .masonry { columns: 2; } }
+  @media (max-width: 460px) { header { grid-template-columns: 1fr; gap: 1.5rem; } .masonry { columns: 1; } .gallery-end { align-items: flex-start; flex-direction: column; } }
   @media (prefers-reduced-motion: reduce) { img { transition: none; } }
 </style>
