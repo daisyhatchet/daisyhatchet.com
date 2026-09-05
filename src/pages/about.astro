@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import ContactBand from '@/components/sections/ContactBand.astro';
+import Listening from '@/components/sections/Listening.astro';
+import { gardenRadio } from '@/content/home';
 ---
 <BaseLayout title="About — Daisy Hatchet" description="Meet Jeneva, the flower grower and designer behind Daisy Hatchet in Pacifica, California.">
   <section class="about-hero shell">
@@ -36,7 +37,7 @@ import ContactBand from '@/components/sections/ContactBand.astro';
     </div>
   </section>
 
-  <ContactBand title="Say hello." body="For availability, collaborations, and event flowers, drop me a line." email="hello@daisyhatchet.com" />
+  <Listening {...gardenRadio} />
 </BaseLayout>
 <style>
   .about-hero { min-height: min(82vh,52rem); display: flex; align-items: end; padding-block: clamp(7rem,12vw,9rem) clamp(4.5rem,8vw,7rem); color: var(--cream); background: linear-gradient(145deg,rgb(98 22 71 / 20%),rgb(48 23 37 / 70%)), url('/images/field.webp') center / cover no-repeat; }
