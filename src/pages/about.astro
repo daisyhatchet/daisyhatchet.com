@@ -1,17 +1,65 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import Statement from '@/components/sections/Statement.astro';
 import ContactBand from '@/components/sections/ContactBand.astro';
 ---
-<BaseLayout title="About — Daisy Hatchet" description="Meet Daisy Hatchet, a small cut-flower farm in Pacifica, California.">
+<BaseLayout title="About — Daisy Hatchet" description="Meet Jeneva, the flower grower and designer behind Daisy Hatchet in Pacifica, California.">
   <section class="about-hero shell">
-    <div><p class="eyebrow">About the farm</p><h1 class="display">Rooted by<br />the coast.</h1></div>
+    <div class="hero-copy">
+      <p class="eyebrow">About Daisy Hatchet</p>
+      <h1 class="display">Hello. I’m<br />Jeneva,</h1>
+      <p class="hero-line">and I’m a floweraholic.</p>
+    </div>
   </section>
-  <Statement title="Small farm. Big personality." body="Daisy Hatchet grows seasonal cut flowers in Pacifica, California. Working with the rhythm of the coast, we choose character over uniformity and let each harvest be exactly what it is: fleeting, local, and alive." />
-  <ContactBand title="Say hello." body="For availability, collaborations, and event flowers, drop us a line." email="hello@daisyhatchet.com" />
+
+  <section class="story shell wave-edge">
+    <div class="story-heading">
+      <p class="eyebrow">How it started</p>
+      <h2 class="display">Two passions,<br />one backyard.</h2>
+    </div>
+    <div class="story-copy">
+      <p class="lead">I’m a stay-at-home mom of two daughters and the founder of Daisy Hatchet.</p>
+      <p>Daisy Hatchet was born by combining two passions of mine: gardening and floral design. Given my propensity for being a glutton for punishment, why not do both?</p>
+    </div>
+  </section>
+
+  <section class="local">
+    <div class="local-photo" role="img" aria-label="A vivid seasonal bouquet grown by Daisy Hatchet"></div>
+    <div class="local-copy">
+      <p class="eyebrow">Pacifica, California</p>
+      <h2 class="display">Locally grown by a locally grown local.</h2>
+      <div class="details">
+        <p>Every flower I offer is grown in bulb crates in my backyard in good ol’ Pacifica, California.</p>
+        <p><strong>Why bulb crates?</strong> Because I lack in-ground growing options, yet have ample cement.</p>
+        <p>My floral designs have been described as edgy and not pretentious. I don’t take myself too seriously, and my love of pink will definitely shine through.</p>
+        <p>My goal is to provide farm-fresh flowers directly to you and to local businesses.</p>
+      </div>
+    </div>
+  </section>
+
+  <ContactBand title="Say hello." body="For availability, collaborations, and event flowers, drop me a line." email="hello@daisyhatchet.com" />
 </BaseLayout>
 <style>
-  .about-hero { min-height: 82vh; display: flex; align-items: end; padding-block: clamp(4rem,9vw,8rem); color: var(--cream); background: linear-gradient(rgba(41,21,31,.25),rgba(41,21,31,.72)), url('/images/field.webp') center / cover no-repeat; }
+  .about-hero { min-height: min(82vh,52rem); display: flex; align-items: end; padding-block: clamp(7rem,12vw,9rem) clamp(4.5rem,8vw,7rem); color: var(--cream); background: linear-gradient(145deg,rgb(98 22 71 / 20%),rgb(48 23 37 / 70%)), url('/images/field.webp') center / cover no-repeat; }
+  .hero-copy { width: 100%; }
   .eyebrow { margin-bottom: 1.5rem; color: var(--chartreuse); }
-  h1 { font-size: clamp(4.7rem,10vw,9.5rem); }
+  h1 { font-size: clamp(5rem,12vw,11rem); line-height: .78; }
+  .hero-line { margin: clamp(1.5rem,3vw,2.5rem) 0 0 min(17vw,14rem); color: white; font-size: clamp(1.4rem,3vw,2.4rem); font-weight: 600; }
+
+  .story { --wave-color: var(--cream); display: grid; grid-template-columns: minmax(0,1.15fr) minmax(20rem,.85fr); gap: clamp(3rem,9vw,10rem); align-items: end; padding-block: clamp(7rem,12vw,11rem); background: var(--cream); }
+  .story .eyebrow, .local .eyebrow { color: var(--olive); }
+  .story h2 { max-width: 10ch; font-size: clamp(4rem,8vw,8rem); }
+  .story-copy { display: grid; gap: 1.4rem; color: #604b54; font-size: 1.08rem; }
+  .story-copy p { margin: 0; }
+  .story-copy .lead { color: var(--ink); font-size: clamp(1.35rem,2.3vw,2rem); font-weight: 600; line-height: 1.3; }
+
+  .local { display: grid; grid-template-columns: minmax(0,1.05fr) minmax(24rem,.95fr); min-height: 48rem; background: white; }
+  .local-photo { min-height: 42rem; background: url('/images/gallery-web/0C8DE050-4C61-4E11-A4F5-619A3AAAC557_1_102_o.jpeg') center / cover no-repeat; }
+  .local-copy { display: flex; flex-direction: column; justify-content: center; padding: clamp(4rem,8vw,8rem); }
+  .local h2 { max-width: 9ch; font-size: clamp(3.4rem,6vw,6.5rem); }
+  .details { display: grid; gap: 1.15rem; max-width: 37rem; margin-top: 2.5rem; color: #604b54; }
+  .details p { margin: 0; }
+  .details strong { color: var(--ink); }
+
+  @media (max-width: 800px) { .story, .local { grid-template-columns: 1fr; } .story { gap: 3rem; } .local-photo { min-height: 65vw; } .local-copy { padding-inline: var(--gutter); } }
+  @media (max-width: 520px) { .about-hero { min-height: 42rem; } .hero-line { margin-left: 0; } .local-photo { min-height: 90vw; } }
 </style>
