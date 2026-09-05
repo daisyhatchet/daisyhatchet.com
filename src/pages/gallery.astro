@@ -49,9 +49,10 @@ const photos = files.map((file, i) => ({
   const lightboxCaption = lightbox?.querySelector<HTMLElement>('figure figcaption');
   const photoButtons = [...document.querySelectorAll<HTMLButtonElement>('[data-lightbox-index]')];
   let activePhoto = 0;
+  let closeTimer = 0;
   let masonryFrame = 0;
 
-  const showPhoto = (index: number) => {
+  const showPhoto = (index: number, direction?: 'prev' | 'next') => {
     if (!lightboxImage || !lightboxCaption || !photoButtons.length) return;
     activePhoto = (index + photoButtons.length) % photoButtons.length;
     const thumbnail = photoButtons[activePhoto].querySelector<HTMLImageElement>('img');
@@ -59,21 +60,41 @@ const photos = files.map((file, i) => ({
     lightboxImage.src = thumbnail.currentSrc || thumbnail.src;
     lightboxImage.alt = thumbnail.alt;
     lightboxCaption.textContent = `Field note ${String(activePhoto + 1).padStart(2, '0')}`;
+    if (direction) {
+      lightboxImage.classList.remove('arrive-from-left', 'arrive-from-right');
+      void lightboxImage.offsetWidth;
+      lightboxImage.classList.add(direction === 'next' ? 'arrive-from-right' : 'arrive-from-left');
+    }
+  };
+
+  const closeLightbox = () => {
+    if (!lightbox?.open || lightbox.classList.contains('is-closing')) return;
+    lightbox.classList.add('is-closing');
+    window.clearTimeout(closeTimer);
+    closeTimer = window.setTimeout(() => {
+      lightbox.close();
+      lightbox.classList.remove('is-closing');
+    }, 280);
   };
 
   photoButtons.forEach((button, index) => button.addEventListener('click', () => {
     showPhoto(index);
     lightbox?.showModal();
   }));
-  lightbox?.querySelector('.lightbox-close')?.addEventListener('click', () => lightbox.close());
-  lightbox?.querySelector('.lightbox-prev')?.addEventListener('click', () => showPhoto(activePhoto - 1));
-  lightbox?.querySelector('.lightbox-next')?.addEventListener('click', () => showPhoto(activePhoto + 1));
+  lightbox?.querySelector('.lightbox-close')?.addEventListener('click', closeLightbox);
+  lightbox?.querySelector('.lightbox-prev')?.addEventListener('click', () => showPhoto(activePhoto - 1, 'prev'));
+  lightbox?.querySelector('.lightbox-next')?.addEventListener('click', () => showPhoto(activePhoto + 1, 'next'));
   lightbox?.addEventListener('click', (event) => {
-    if (event.target === lightbox) lightbox.close();
+    const target = event.target;
+    if (target instanceof Element && !target.closest('img, button, figcaption')) closeLightbox();
   });
   lightbox?.addEventListener('keydown', (event) => {
-    if (event.key === 'ArrowLeft') showPhoto(activePhoto - 1);
-    if (event.key === 'ArrowRight') showPhoto(activePhoto + 1);
+    if (event.key === 'ArrowLeft') showPhoto(activePhoto - 1, 'prev');
+    if (event.key === 'ArrowRight') showPhoto(activePhoto + 1, 'next');
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      closeLightbox();
+    }
   });
 
   const layoutMasonry = () => {
@@ -112,18 +133,30 @@ const photos = files.map((file, i) => ({
   figcaption { display: flex; justify-content: space-between; gap: 1rem; padding-top: .8rem; color: #604b54; font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; }
   .lightbox { width: 100%; max-width: none; height: 100%; max-height: none; margin: 0; padding: 0; border: 0; background: rgb(47 20 34 / 8%); color: white; }
   .lightbox::backdrop { background: rgb(40 15 29 / 88%); backdrop-filter: blur(8px); }
+  .lightbox[open] { animation: lightbox-in .32s cubic-bezier(.2,.8,.25,1) both; }
+  .lightbox[open]::backdrop { animation: backdrop-in .32s ease-out both; }
+  .lightbox.is-closing { animation: lightbox-out .28s ease-in both; }
+  .lightbox.is-closing::backdrop { animation: backdrop-out .28s ease-in both; }
   .lightbox-frame { position: relative; display: grid; grid-template-columns: 3.5rem minmax(0,1fr) 3.5rem; align-items: center; width: 100%; height: 100%; padding: clamp(1rem,3vw,2.5rem); }
   .lightbox figure { display: flex; min-width: 0; height: 100%; margin: 0; flex-direction: column; align-items: center; justify-content: center; }
   .lightbox figure img { display: block; width: auto; max-width: 100%; height: auto; max-height: calc(100vh - 7rem); border-radius: .65rem; object-fit: contain; box-shadow: 0 1.5rem 5rem rgb(18 5 12 / 42%); }
+  .lightbox figure img.arrive-from-right { animation: image-from-right .38s cubic-bezier(.2,.75,.25,1) both; }
+  .lightbox figure img.arrive-from-left { animation: image-from-left .38s cubic-bezier(.2,.75,.25,1) both; }
   .lightbox figure figcaption { justify-content: center; padding-top: .8rem; color: white; }
   .lightbox button { border: 1px solid rgb(255 255 255 / 38%); background: rgb(35 9 23 / 45%); color: white; cursor: pointer; }
   .lightbox button:hover { background: var(--pink); }
   .lightbox-nav { width: 2.8rem; height: 2.8rem; border-radius: 50%; font-size: 1.25rem; }
   .lightbox-close { position: absolute; z-index: 1; top: clamp(1rem,3vw,2rem); right: clamp(1rem,3vw,2rem); width: 2.8rem; height: 2.8rem; border-radius: 50%; font-size: 1.8rem; line-height: 1; }
+  @keyframes lightbox-in { from { opacity: 0; transform: scale(.985); } to { opacity: 1; transform: scale(1); } }
+  @keyframes lightbox-out { from { opacity: 1; transform: scale(1); } to { opacity: 0; transform: scale(.985); } }
+  @keyframes backdrop-in { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes backdrop-out { from { opacity: 1; } to { opacity: 0; } }
+  @keyframes image-from-right { from { opacity: 0; transform: translateX(2.25rem) scale(.985); } to { opacity: 1; transform: translateX(0) scale(1); } }
+  @keyframes image-from-left { from { opacity: 0; transform: translateX(-2.25rem) scale(.985); } to { opacity: 1; transform: translateX(0) scale(1); } }
   .gallery-end { display: flex; justify-content: space-between; gap: 2rem; margin-top: clamp(2rem,5vw,5rem); padding-top: 1.4rem; border-top: 1px solid #d7cbd0; color: #604b54; font-size: .78rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
   .gallery-end a { color: var(--pink); text-decoration: none; }
   @media (max-width: 1050px) { header { grid-template-columns: 1fr; gap: 1.5rem; } }
   @media (max-width: 680px) { .masonry { grid-template-columns: repeat(2,minmax(0,1fr)); } }
   @media (max-width: 460px) { header { grid-template-columns: 1fr; gap: 1.5rem; } .masonry { grid-template-columns: 1fr; } .gallery-end { align-items: flex-start; flex-direction: column; } .lightbox-frame { grid-template-columns: 2.8rem minmax(0,1fr) 2.8rem; padding-inline: .5rem; } .lightbox figure img { max-height: calc(100vh - 8rem); } }
-  @media (prefers-reduced-motion: reduce) { .image-wrap img { transition: none; } }
+  @media (prefers-reduced-motion: reduce) { .image-wrap img { transition: none; } .lightbox[open], .lightbox[open]::backdrop, .lightbox.is-closing, .lightbox.is-closing::backdrop, .lightbox figure img.arrive-from-right, .lightbox figure img.arrive-from-left { animation-duration: .01ms; } }
 </style>
