@@ -4,7 +4,7 @@ const path = Astro.url.pathname;
 const links = [{ href: '/about', label: 'About' }, { href: '/gallery', label: 'Gallery' }, { href: '/shop', label: 'Shop' }];
 ---
 <header class:list={['site-header', 'shell', { 'site-header--overlay': path === '/' }]}>
-  <a class="wordmark" href="/" aria-label="Daisy Hatchet home">DAISY HATCHET</a>
+  <a class="wordmark" href="/" aria-label="Daisy Hatchet home"><span class="wordmark-mark" aria-hidden="true"></span><span>DAISY HATCHET</span></a>
   <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-navigation" aria-label="Open menu">
     <span></span><span></span><span></span>
   </button>
@@ -69,7 +69,8 @@ const links = [{ href: '/about', label: 'About' }, { href: '/gallery', label: 'G
   .site-header { position: relative; z-index: 10; min-height: 88px; display: flex; align-items: center; justify-content: space-between; gap: 2rem; color: var(--cream); background: var(--ink); }
   .site-header--overlay { position: fixed; inset: 0 0 auto; color: var(--cream); background: rgba(41,21,31,.14); backdrop-filter: blur(2px); transition: color .65s ease, background-color .65s ease, box-shadow .65s ease, backdrop-filter .65s ease; }
   .site-header--overlay.is-scrolled { color: var(--ink); background: rgba(245,47,151,.92); box-shadow: 0 1px 0 rgba(41,21,31,.16); backdrop-filter: blur(12px); }
-  .wordmark { font-family: var(--brand); font-size: clamp(1.9rem, 3.5vw, 3rem); line-height: .9; letter-spacing: .01em; text-decoration: none; white-space: nowrap; }
+  .wordmark { display: inline-flex; align-items: center; gap: .65rem; font-family: var(--brand); font-size: clamp(1.9rem, 3.5vw, 3rem); line-height: .9; letter-spacing: .01em; text-decoration: none; white-space: nowrap; }
+  .wordmark-mark { width: 2.8rem; height: 2.8rem; flex: 0 0 auto; background: currentColor; -webkit-mask: url('/images/daisy-hatchet-mark.webp') center / contain no-repeat; mask: url('/images/daisy-hatchet-mark.webp') center / contain no-repeat; }
   .main-nav { display: flex; gap: clamp(1rem, 2.5vw, 2.2rem); align-items: center; }
   .main-nav a { font-size: .75rem; font-weight: 600; letter-spacing: .12em; text-decoration: none; text-transform: uppercase; }
   .main-nav a:hover, .main-nav a[aria-current] { color: var(--chartreuse); }
@@ -81,7 +82,8 @@ const links = [{ href: '/about', label: 'About' }, { href: '/gallery', label: 'G
   @media (max-width: 650px) {
     :global(body.menu-open) { overflow: hidden; }
     .site-header { min-height: 76px; padding-block: 1rem; flex-direction: row; align-items: center; gap: 1rem; }
-    .wordmark { font-size: clamp(1.8rem,9vw,2.4rem); }
+    .wordmark { gap: .45rem; font-size: clamp(1.5rem,7.2vw,2.15rem); }
+    .wordmark-mark { width: 2.35rem; height: 2.35rem; }
     .menu-toggle { width: 3rem; height: 3rem; display: grid; place-content: center; gap: .32rem; padding: 0; color: inherit; background: transparent; border: 0; border-radius: 50%; cursor: pointer; }
     .menu-toggle span { width: 1.55rem; height: 2px; display: block; background: currentColor; border-radius: 1rem; }
     .menu-backdrop { position: fixed; z-index: 11; inset: 0; display: block; visibility: hidden; opacity: 0; background: rgba(41,21,31,.42); border: 0; backdrop-filter: blur(2px); transition: opacity .38s ease, visibility .38s ease; }
