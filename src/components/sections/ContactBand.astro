@@ -1,15 +1,25 @@
 ---
-interface Props { title: string; body: string; email: string; }
-const { title, body, email } = Astro.props;
+interface Props { title: string; body: string; }
+const { title, body } = Astro.props;
+const web3FormsAccessKey = '2a4cff99-1609-4c88-bf44-91aac7c55fb9';
 ---
 <section class="contact shell wave-edge wave-edge--reverse">
   <div class="contact__intro"><h2 class="display">{title}</h2><p>{body}</p></div>
-  <form action={`mailto:${email}`} method="post" enctype="text/plain">
+  <form action="https://api.web3forms.com/submit" method="POST" data-contact-form>
+    <input type="hidden" name="access_key" value={web3FormsAccessKey} />
+    <input type="hidden" name="subject" value="New message from the Daisy Hatchet website" />
+    <input type="hidden" name="from_name" value="Daisy Hatchet website" />
+    <input type="checkbox" name="botcheck" class="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true" />
     <div class="names"><label>First name<input name="first-name" autocomplete="given-name" /></label><label>Last name<input name="last-name" autocomplete="family-name" /></label></div>
     <label>Email<input type="email" name="email" autocomplete="email" required /></label>
     <label>What do you have in mind?<textarea name="message" rows="5" required></textarea></label>
     <button class="button" type="submit">Send a note</button>
   </form>
+  <dialog class="contact__confirmation" data-contact-confirmation aria-labelledby="contact-confirmation-title">
+    <p class="eyebrow">Message sent</p>
+    <p id="contact-confirmation-title">Thanks for reaching out. Your note is on its way, and we’ll be in touch soon.</p>
+    <form method="dialog"><button class="button" type="submit">Close</button></form>
+  </dialog>
 </section>
 <style>
   .contact { --wave-color: var(--ink); display: grid; grid-template-columns: 1fr minmax(22rem,.85fr); gap: clamp(3rem,9vw,10rem); padding-block: clamp(6rem,11vw,10rem); color: var(--cream); background: var(--ink); }
@@ -21,6 +31,52 @@ const { title, body, email } = Astro.props;
   input, textarea { width: 100%; padding: .9rem 1rem; color: var(--cream); background: transparent; border: 0; border-bottom: 1px solid #806f77; border-radius: 0; outline: 0; }
   textarea { resize: vertical; border: 1px solid #806f77; border-radius: .7rem; }
   input:focus, textarea:focus { border-color: var(--chartreuse); }
+  .botcheck { display: none; }
   button { justify-self: start; color: var(--ink); background: var(--chartreuse); border-color: var(--chartreuse); }
+  .contact__confirmation { width: min(calc(100% - 2rem), 31rem); padding: clamp(2rem,5vw,3.5rem); color: var(--cream); background: var(--ink); border: 1px solid #806f77; border-radius: 1rem; box-shadow: 0 1.5rem 4rem rgb(41 21 31 / 40%); text-align: center; }
+  .contact__confirmation::backdrop { background: rgb(41 21 31 / 62%); backdrop-filter: blur(3px); }
+  .contact__confirmation .eyebrow { color: var(--chartreuse); }
+  .contact__confirmation p:last-child { margin: .7rem 0 0; font-size: 1.05rem; line-height: 1.55; }
+  .contact__confirmation form { display: block; margin-top: 1.75rem; }
+  .contact__confirmation button { justify-self: center; }
   @media (max-width: 760px) { .contact { grid-template-columns: 1fr; } .names { grid-template-columns: 1fr; } }
 </style>
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
+  const confirmation = document.querySelector<HTMLDialogElement>('[data-contact-confirmation]');
+
+  form?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const submitButton = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+    const buttonLabel = submitButton?.textContent;
+
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = 'Sending…';
+    }
+
+    try {
+      const response = await fetch(form.action, { method: 'POST', body: new FormData(form) });
+      const result = await response.json();
+
+      if (!response.ok || !result.success) throw new Error('Submission failed');
+
+      form.reset();
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = buttonLabel ?? 'Send a note';
+      }
+      confirmation?.showModal();
+    } catch {
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = buttonLabel ?? 'Send a note';
+      }
+      window.alert('Sorry, there was a problem sending your note. Please try again.');
+    }
+  });
+
+  confirmation?.addEventListener('click', (event) => {
+    if (event.target === confirmation) confirmation.close();
+  });
+</script>

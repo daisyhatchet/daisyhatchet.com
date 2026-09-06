@@ -8,5 +8,5 @@ export const homeSections = [
 export const gardenRadio = {
   title: 'What the flowers are listening to',
   body: 'The songs keeping us company in the garden lately. Press play and grow along.',
-  playlistId: '37i9dQZF1DXcBWIGoYBM5M',
+  playlistId: '0Scv2njcunjMjeiL0gFAcn',
 } as const;
