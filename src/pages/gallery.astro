@@ -39,7 +39,6 @@ const photos = files.map((file, i) => ({
         <button class="lightbox-nav lightbox-next" type="button" aria-label="View next image">→</button>
       </div>
     </dialog>
-    <div class="gallery-end"><span>Fresh cuts added seasonally</span><a href="https://instagram.com/daisy_hatchet_flowers/" target="_blank" rel="noreferrer">Follow along on Instagram ↗</a></div>
   </main>
 </BaseLayout>
 <script>
@@ -157,10 +156,8 @@ const photos = files.map((file, i) => ({
   @keyframes backdrop-out { from { opacity: 1; } to { opacity: 0; } }
   @keyframes image-from-right { from { opacity: 0; transform: translateX(2.25rem) scale(.985); } to { opacity: 1; transform: translateX(0) scale(1); } }
   @keyframes image-from-left { from { opacity: 0; transform: translateX(-2.25rem) scale(.985); } to { opacity: 1; transform: translateX(0) scale(1); } }
-  .gallery-end { display: flex; justify-content: space-between; gap: 2rem; margin-top: clamp(2rem,5vw,5rem); padding-top: 1.4rem; border-top: 1px solid #d7cbd0; color: #604b54; font-size: .78rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
-  .gallery-end a { color: var(--pink); text-decoration: none; }
   @media (max-width: 1050px) { header { grid-template-columns: 1fr; gap: 1.5rem; } }
   @media (max-width: 680px) { .masonry { grid-template-columns: repeat(2,minmax(0,1fr)); } }
-  @media (max-width: 460px) { header { grid-template-columns: 1fr; gap: 1.5rem; } .masonry { grid-template-columns: 1fr; } .gallery-end { align-items: flex-start; flex-direction: column; } .lightbox-frame { grid-template-columns: 2.8rem minmax(0,1fr) 2.8rem; padding-inline: .5rem; } .lightbox figure img { max-height: calc(100vh - 8rem); } }
+  @media (max-width: 460px) { header { grid-template-columns: 1fr; gap: 1.5rem; } .masonry { grid-template-columns: 1fr; } .lightbox-frame { grid-template-columns: 2.8rem minmax(0,1fr) 2.8rem; padding-inline: .5rem; } .lightbox figure img { max-height: calc(100vh - 8rem); } }
   @media (prefers-reduced-motion: reduce) { .image-wrap img { transition: none; } .lightbox[open], .lightbox[open]::backdrop, .lightbox.is-closing, .lightbox.is-closing::backdrop, .lightbox figure img.arrive-from-right, .lightbox figure img.arrive-from-left { animation-duration: .01ms; } }
 </style>

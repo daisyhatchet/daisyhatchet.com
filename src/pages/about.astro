@@ -4,7 +4,10 @@ import Listening from '@/components/sections/Listening.astro';
 import { gardenRadio } from '@/content/home';
 ---
 <BaseLayout title="About — Daisy Hatchet" description="Meet Jeneva, the flower grower and designer behind Daisy Hatchet in Pacifica, California.">
-  <section class="about-hero shell">
+  <section class="about-hero shell" data-about-hero role="button" tabindex="0" aria-label="Show the next About hero image">
+    <div class="about-hero__image is-active" aria-hidden="true"></div>
+    <div class="about-hero__image about-hero__image--3136" aria-hidden="true"></div>
+    <div class="about-hero__image about-hero__image--3170" aria-hidden="true"></div>
     <div class="hero-copy">
       <p class="eyebrow">About Daisy Hatchet</p>
       <h1 class="display">Hello. I’m<br />Jeneva,</h1>
@@ -39,9 +42,46 @@ import { gardenRadio } from '@/content/home';
 
   <Listening {...gardenRadio} />
 </BaseLayout>
+<script>
+  const hero = document.querySelector<HTMLElement>('[data-about-hero]');
+  const heroImages = [...document.querySelectorAll<HTMLElement>('.about-hero__image')];
+  let currentHeroImage = 0;
+  let rotationTimer: number | undefined;
+  const showNextHeroImage = () => {
+    heroImages[currentHeroImage]?.classList.remove('is-active');
+    currentHeroImage = (currentHeroImage + 1) % heroImages.length;
+    heroImages[currentHeroImage]?.classList.add('is-active');
+  };
+  const startRotation = () => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (rotationTimer !== undefined) window.clearInterval(rotationTimer);
+    rotationTimer = window.setInterval(showNextHeroImage, 7000);
+  };
+
+  startRotation();
+
+  hero?.addEventListener('click', () => {
+    showNextHeroImage();
+    startRotation();
+  });
+  hero?.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      showNextHeroImage();
+      startRotation();
+    }
+  });
+  window.addEventListener('pagehide', () => {
+    if (rotationTimer !== undefined) window.clearInterval(rotationTimer);
+  });
+</script>
 <style>
-  .about-hero { min-height: min(82vh,52rem); display: flex; align-items: end; padding-block: clamp(7rem,12vw,9rem) clamp(4.5rem,8vw,7rem); color: var(--cream); background: url('/images/about-hero.jpg') right center / cover no-repeat; }
-  .hero-copy { width: 100%; }
+  .about-hero { position: relative; isolation: isolate; min-height: min(82vh,52rem); display: flex; align-items: end; padding-block: clamp(7rem,12vw,9rem) clamp(4.5rem,8vw,7rem); color: var(--cream); background: #29151f; cursor: pointer; overflow: hidden; }
+  .about-hero__image { position: absolute; z-index: 0; inset: 0; background: url('/images/about-hero.jpg') right center / cover no-repeat; opacity: 0; transition: opacity 1.2s ease-in-out; }
+  .about-hero__image--3136 { background-image: url('/images/gallery-web/IMG_3136.jpg'); }
+  .about-hero__image--3170 { background-image: url('/images/about-hero-3170.jpg'); }
+  .about-hero__image.is-active { opacity: 1; }
+  .hero-copy { position: relative; z-index: 1; width: 100%; }
   .eyebrow { margin-bottom: 1.5rem; color: var(--chartreuse); }
   h1 { font-size: clamp(5rem,12vw,11rem); line-height: .78; }
   .hero-line { margin: clamp(1.5rem,3vw,2.5rem) 0 0 min(17vw,14rem); color: white; font-size: clamp(1.4rem,3vw,2.4rem); font-weight: 600; }
