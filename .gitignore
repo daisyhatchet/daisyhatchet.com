@@ -3,3 +3,4 @@ dist/
 .astro/
 .pnpm-store/
 .DS_Store
+source-images/
