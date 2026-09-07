@@ -1,7 +1,7 @@
 export {};
 const $=selector=>document.querySelector(selector);
 const kind=location.pathname.includes('/gallery')?'gallery':'shop';
-let data=[],photos=[],sha='',dirty=false,busy=false,selection=null,uploads=new Map(),dragged=-1;
+let data=[],photos=[],sha='',dirty=false,busy=false,selection=null,uploads=new Map();
 const grid=$('#grid'),statusEl=$('#status');
 const photoURL=name=>uploads.has(name)?`data:image/jpeg;base64,${uploads.get(name)}`:`https://raw.githubusercontent.com/daisyhatchet/daisyhatchet.com/main/public/images/gallery-web/${encodeURIComponent(name)}`;
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
@@ -20,14 +20,61 @@ function render(){
     const image=kind==='gallery'?item:item.image;
     const content=kind==='gallery'?`<img src="${photoURL(image)}" alt="Gallery photo ${index+1}"><p>Photo ${index+1}</p>`:
       `<button class="image-picker" data-action="photo" aria-label="Choose photo for ${esc(item.name)}"><img src="${photoURL(image)}" alt=""><span>Change photo</span></button><div class="fields"><label class="field">Arrangement name<input data-field="name" value="${esc(item.name)}" maxlength="150"></label><label class="field">Price<input data-field="price" type="number" min="0" max="100000" step="0.01" value="${item.price}"></label><label class="field url-field">Purchase website (optional)<input data-field="purchaseUrl" type="url" value="${esc(item.purchaseUrl||'')}" placeholder="https://…"></label></div><label class="available"><input data-field="available" type="checkbox" ${item.available?'checked':''}>Available</label>`;
-    return `<article class="card ${kind==='gallery'?'gallery-card':''}" draggable="true" data-index="${index}">${content}<div class="reorder"><button data-action="up" aria-label="Move earlier" ${index===0?'disabled':''}>←</button><button data-action="down" aria-label="Move later" ${index===data.length-1?'disabled':''}>→</button><button class="remove" data-action="remove">Remove</button></div></article>`;
+    return `<article class="card ${kind==='gallery'?'gallery-card':''}"  data-index="${index}">${content}<div class="reorder"><button class="drag-handle" aria-label="Drag to reorder" title="Drag to reorder">⠿</button><button data-action="up" aria-label="Move earlier" ${index===0?'disabled':''}>←</button><button data-action="down" aria-label="Move later" ${index===data.length-1?'disabled':''}>→</button><button class="remove" data-action="remove">Remove</button></div></article>`;
   }).join('');
 }
 function move(from,to){if(to<0||to>=data.length||from===to)return;data.splice(to,0,data.splice(from,1)[0]);render();changed();}
 grid.addEventListener('input',event=>{const card=event.target.closest('[data-index]'),field=event.target.dataset.field;if(!card||!field)return;data[Number(card.dataset.index)][field]=field==='available'?event.target.checked:field==='price'?Number(event.target.value):event.target.value;changed();});
 grid.addEventListener('click',event=>{const card=event.target.closest('[data-index]'),button=event.target.closest('[data-action]');if(!card||!button)return;const i=Number(card.dataset.index);switch(button.dataset.action){case 'up':move(i,i-1);break;case 'down':move(i,i+1);break;case 'remove':data.splice(i,1);render();changed();break;case 'photo':openPicker(i);}});
-grid.addEventListener('dragstart',event=>{if(event.target.closest('input'))return event.preventDefault();const card=event.target.closest('[data-index]');if(card)dragged=Number(card.dataset.index);});
-grid.addEventListener('dragover',event=>event.preventDefault());grid.addEventListener('drop',event=>{event.preventDefault();const card=event.target.closest('[data-index]');if(card&&dragged>=0)move(dragged,Number(card.dataset.index));dragged=-1;});grid.addEventListener('dragend',()=>dragged=-1);
+// Use a handle so swiping anywhere else still scrolls normally on touchscreens.
+let reorderDrag=null,dragFrame=0;
+function finishDrag(commit){
+  if(!reorderDrag)return;
+  const {from,to,handle,pointer,ghost}=reorderDrag;
+  ghost.remove();
+  reorderDrag=null;cancelAnimationFrame(dragFrame);
+  if(handle.hasPointerCapture(pointer))handle.releasePointerCapture(pointer);
+  grid.querySelectorAll('.dragging,.drop-target').forEach(card=>{card.classList.remove('dragging','drop-target');delete card.dataset.dropLabel;});
+  if(commit&&from!==to){move(from,to);statusEl.textContent=`Moved to position ${to+1}. Unpublished changes`;}
+}
+function dragTick(){
+  if(!reorderDrag)return;
+  const d=reorderDrag;
+  d.ghost.style.left=Math.max(8,Math.min(innerWidth-148,d.x-70))+'px';
+  d.ghost.style.top=Math.max(8,Math.min(innerHeight-150,d.y-130))+'px';
+  const top=$('.bar').getBoundingClientRect().bottom,edge=85;
+  const speed=d.y<top+edge?-Math.min(16,(top+edge-d.y)/5):d.y>innerHeight-edge?Math.min(16,(d.y-innerHeight+edge)/5):0;
+  if(speed)window.scrollBy(0,speed);
+  const target=document.elementFromPoint(d.x,Math.max(top+1,Math.min(innerHeight-1,d.y)))?.closest('#grid [data-index]');
+  if(target){
+    d.to=Number(target.dataset.index);
+    grid.querySelectorAll('.drop-target').forEach(card=>{card.classList.remove('drop-target');delete card.dataset.dropLabel;});
+    if(d.to!==d.from){target.classList.add('drop-target');target.dataset.dropLabel=`Drop ${d.to>d.from?'after':'before'} · position ${d.to+1}`;}
+    d.ghost.querySelector('span').textContent=`Position ${d.to+1} of ${data.length}`;
+  }
+  dragFrame=requestAnimationFrame(dragTick);
+}
+grid.addEventListener('pointerdown',event=>{
+  const handle=event.target.closest('.drag-handle');if(!handle||busy||event.button!==0||reorderDrag)return;
+  event.preventDefault();const card=handle.closest('[data-index]');
+  const ghost=document.createElement('div');ghost.className='drag-preview';ghost.setAttribute('aria-hidden','true');
+  const thumbnail=card.querySelector('img').cloneNode();thumbnail.alt='';
+  const caption=document.createElement('span');caption.textContent=`Position ${Number(card.dataset.index)+1} of ${data.length}`;
+  ghost.append(thumbnail,caption);document.body.append(ghost);
+  reorderDrag={ghost,from:Number(card.dataset.index),to:Number(card.dataset.index),x:event.clientX,y:event.clientY,handle,pointer:event.pointerId};
+  handle.setPointerCapture(event.pointerId);card.classList.add('dragging');dragFrame=requestAnimationFrame(dragTick);
+});
+grid.addEventListener('pointermove',event=>{if(reorderDrag&&event.pointerId===reorderDrag.pointer){reorderDrag.x=event.clientX;reorderDrag.y=event.clientY;}});
+grid.addEventListener('pointerup',()=>finishDrag(true));
+grid.addEventListener('pointercancel',()=>finishDrag(false));
+grid.addEventListener('lostpointercapture',()=>finishDrag(false));
+window.addEventListener('keydown',event=>{if(event.key==='Escape')finishDrag(false);});
+window.addEventListener('blur',()=>finishDrag(false));
+grid.addEventListener('dragstart',event=>event.preventDefault());
+const view=$('#view');
+try{view.value=localStorage.getItem('editor-view')==='compact'?'compact':'comfortable';}catch{}
+function applyView(){grid.classList.toggle('compact',view.value==='compact');try{localStorage.setItem('editor-view',view.value);}catch{}}
+view.onchange=applyView;applyView();
 function openPicker(index=null){selection=index;const available=kind==='gallery'?photos.filter(p=>!data.includes(p)):photos;$('#picker-grid').innerHTML=available.map(p=>`<button class="picker-option" data-photo="${esc(p)}"><img src="${photoURL(p)}" alt="Choose photo" loading="lazy"></button>`).join('')||'<p>No unused photos. Use Upload photo to add one.</p>';$('#picker').showModal();}
 $('#close-picker').onclick=()=>$('#picker').close();
 $('#picker-grid').onclick=event=>{const button=event.target.closest('[data-photo]');if(!button)return;if(kind==='gallery')data.push(button.dataset.photo);else data[selection].image=button.dataset.photo;$('#picker').close();render();changed();};

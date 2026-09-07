@@ -27,3 +27,30 @@
  body.editor-menu-open{overflow:hidden}
 }
 @media(prefers-reduced-motion:reduce){.actions,#menu-backdrop{transition:none}}
+
+/* Keep page controls above the content and modal scrolling inside the dialog. */
+.content-tools{padding:0 clamp(1rem,4vw,3rem)}
+.content-tools .help{margin-bottom:0}
+html:has(dialog[open]),body:has(dialog[open]){overflow:hidden;overscroll-behavior:none}
+html{scrollbar-gutter:stable}
+dialog{max-height:calc(100dvh - 2rem);overflow-y:auto;overscroll-behavior:contain}
+.picker[open]{display:flex;flex-direction:column;overflow:hidden}
+.picker-head{flex-shrink:0}
+.picker-grid{min-height:0;overflow-y:auto;overscroll-behavior:contain}
+.auth-dialog{width:min(28rem,calc(100% - 2rem))}
+.view-setting{display:inline-flex;align-items:center;gap:.5rem;margin:.75rem 0 .25rem .75rem;font-size:.85rem}
+.view-setting select{padding:.6rem;border:1px solid #d9ccd2;border-radius:.5rem;background:#fff;color:var(--ink);font:inherit}
+.card{cursor:default}.drag-handle{touch-action:none;cursor:grab;font-size:1.3rem;user-select:none}.drag-handle:active{cursor:grabbing}
+.reorder{flex-wrap:wrap}.reorder button{min-width:2.75rem;min-height:2.75rem}
+.grid.compact{grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:.75rem}
+.grid.compact .image-picker img,.grid.compact .gallery-card img{height:100px;aspect-ratio:auto;object-fit:cover}
+.grid.compact .card{padding:.5rem}.grid.compact .fields{gap:.4rem;margin-top:.4rem}
+.grid.compact .field{font-size:.7rem}.grid.compact input{min-height:2.25rem;padding:.35rem .5rem;font-size:.85rem}
+.grid.compact .gallery-card p{margin:.4rem 0}.grid.compact .reorder{gap:.25rem;margin-top:.4rem}
+@media(max-width:700px){.grid.compact{grid-template-columns:repeat(2,minmax(0,1fr));padding-inline:.75rem}.grid.compact .fields{grid-template-columns:1fr}.grid.compact .reorder .remove{font-size:.65rem;padding:.4rem}.view-setting{display:flex;margin-left:0}}
+.drag-preview{position:fixed;z-index:30;width:140px;padding:6px;pointer-events:none;background:var(--cream);border:2px solid var(--pink);border-radius:12px;box-shadow:0 12px 32px #29151f66;transform:rotate(-3deg)}
+.drag-preview img{width:100%;height:100px;object-fit:cover;border-radius:6px}
+.drag-preview span{display:block;padding:6px 0 2px;text-align:center;font-size:.75rem;font-weight:600;color:var(--ink)}
+.card.dragging{opacity:.3;border:2px dashed var(--pink)}
+.card.drop-target{position:relative;outline:3px solid var(--pink);outline-offset:3px}
+.card.drop-target::after{content:attr(data-drop-label);position:absolute;inset:0 0 auto;padding:.5rem;background:var(--pink);color:var(--ink);font-size:.8rem;font-weight:700;text-align:center;border-radius:.5rem .5rem 0 0;pointer-events:none}
