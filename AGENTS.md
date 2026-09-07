@@ -4,9 +4,11 @@ This website is maintained conversationally by a nontechnical owner. Explain cho
 
 ## Publishing and hosting
 
-- While the Site has no custom production domain and remains private, a private preview deployment may be created when it materially helps review. Tell the user clearly that it is a cloud-hosted private deployment.
-- Once `daisyhatchet.com`, `www.daisyhatchet.com`, or any other production domain is connected—or once the Site is public—never deploy or publish a version unless the user explicitly asks to **publish to production** in the current conversation.
-- In that production state, a request to build, edit, revise, preview, test, save, finish, or make the site ready does not authorize deployment.
+- Production hosting is now Netlify for `daisyhatchet.com`. Netlify automatically publishes from the GitHub repository's `main` branch (`https://github.com/daisyhatchet/daisyhatchet.com.git`).
+- When the owner says "publish", "publish it", or "publish to production", they mean commit the reviewed changes and push to GitHub `main`, triggering Netlify publication. This is explicit production authorization; do not ask for a second confirmation.
+- Do not publish through OpenAI Sites, push to its source repository, or obtain Sites Git credentials. The existing `.openai/hosting.json` is legacy metadata, not the current publishing destination.
+- If publication fails or does not appear, diagnose the GitHub trigger and Netlify deployment using available tools and logs. Do not switch hosting providers or change domains as a workaround.
+- A request to build, edit, revise, preview, test, save, finish, or make the site ready does not authorize pushing to `main` or deploying.
 - Default production iteration flow: make the requested changes, run local checks, and open a local preview for review.
 - If the user asks for a saved version, save it without deploying it unless they also explicitly request production publication.
 - Before any deployment that affects a public Site or production domain, state which saved version will replace the live site and which audience/domain will be affected.
