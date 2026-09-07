@@ -4,7 +4,7 @@ import files from '@/content/gallery-order.json';
 const cropPositions = ['50% 50%', '50% 38%', '50% 62%', '40% 50%', '60% 46%', '46% 42%'];
 const photos = files.map((file, i) => ({
   src: `/images/gallery-web/${file}`,
-  alt: `Seasonal flowers from Daisy Hatchet, photograph ${i + 1}`,
+  alt: file === 'IMG_3189.jpeg' ? 'A yellow sunflower with orange and magenta flowers in a brown paper-wrapped bouquet' : `Seasonal flowers from Daisy Hatchet, photograph ${i + 1}`,
   caption: `Field note ${String(i + 1).padStart(2, '0')}`,
   width: file.startsWith('74A85A2F') ? 480 : 768,
   height: file.startsWith('74A85A2F') ? 360 : 1024,
