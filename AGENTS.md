@@ -8,6 +8,7 @@ This website is maintained conversationally by a nontechnical owner. Explain cho
 - When the owner says "publish", "publish it", or "publish to production", they mean commit the reviewed changes and push to GitHub `main`, triggering Netlify publication. This is explicit production authorization; do not ask for a second confirmation.
 - Do not publish through OpenAI Sites, push to its source repository, or obtain Sites Git credentials. The existing `.openai/hosting.json` is legacy metadata, not the current publishing destination.
 - If publication fails or does not appear, diagnose the GitHub trigger and Netlify deployment using available tools and logs. Do not switch hosting providers or change domains as a workaround.
+- GitHub Desktop on this machine has an existing GitHub sign-in. If command-line Git cannot authenticate, use GitHub Desktop through the available computer-use tools to pull and push this repository. Do not ask the owner to push manually or supply a token when the existing Desktop sign-in works.
 - A request to build, edit, revise, preview, test, save, finish, or make the site ready does not authorize pushing to `main` or deploying.
 - Default production iteration flow: make the requested changes, run local checks, and open a local preview for review.
 - If the user asks for a saved version, save it without deploying it unless they also explicitly request production publication.
