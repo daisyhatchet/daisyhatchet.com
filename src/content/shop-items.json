@@ -4,8 +4,8 @@
     "name": "The First Date",
     "price": 50,
     "image": "54688A6D-47A2-482E-B98C-FD3B43718C2E_1_105_c.jpeg",
-    "available": false,
-    "purchaseUrl": ""
+    "available": true,
+    "purchaseUrl": "https://local-blooms.com/product/the-first-date/"
   },
   {
     "id": "main-character-energy",
@@ -30,5 +30,13 @@
     "image": "D1551071-72E1-4E1C-9334-B8D78D1CEC22_1_105_c.jpeg",
     "available": true,
     "purchaseUrl": "https://local-blooms.com/product/candy-says/"
+  },
+  {
+    "id": "arrangement-1788746931277",
+    "name": "The Sorry My Dog Bit You",
+    "price": 30,
+    "image": "IMG_3189.jpeg",
+    "available": true,
+    "purchaseUrl": "https://local-blooms.com/product/the-sorry-my-dog-bit-you/"
   }
 ]
