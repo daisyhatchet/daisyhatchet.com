@@ -3,6 +3,7 @@ import {createServer} from 'node:http';
 import {readFile} from 'node:fs/promises';
 import {resolve,extname} from 'node:path';
 import {createHash,scryptSync,randomBytes} from 'node:crypto';
+import {editorHTML} from '../netlify/lib/pages.mjs';
 import photo from '../netlify/functions/editor-photo.mjs';
 import {sessionCookie} from '../netlify/lib/auth.mjs';
 const root=resolve(import.meta.dirname,'..');
@@ -46,7 +47,7 @@ const server=createServer(async(req,res)=>{
  else if(url.pathname.startsWith('/editor'))file=root+'/netlify/lib/editor.html';
  else{res.writeHead(404);return res.end('Not found');}
  if(!resolve(file).startsWith(root+'/'))throw Error('Invalid path');
- let content=await readFile(file);if(extname(file)==='.html')content=content.toString().replace('Loading your latest content…','Local preview — nothing here publishes.').replace('<h1>Daisy Hatchet Editor</h1>','<h1>Editor preview</h1>').replace('<button class="save" id="publish" disabled>Save and publish</button>','<button class="save" id="publish" disabled>Save and publish (preview)</button>');
+ let content=file.endsWith('/netlify/lib/editor.html')?editorHTML:await readFile(file);if(extname(file)==='.html')content=content.toString().replace('Loading your latest content…','Local preview — nothing here publishes.').replace('<h1>Daisy Hatchet Editor</h1>','<h1>Editor preview</h1>').replace('<button class="save" id="publish" disabled>Save and publish</button>','<button class="save" id="publish" disabled>Save and publish (preview)</button>');
  res.setHeader('content-type',extname(file)==='.js'?'text/javascript':extname(file)==='.css'?'text/css':'text/html');res.end(content);
  }catch{res.writeHead(400);res.end('Could not complete request.');}
 });
