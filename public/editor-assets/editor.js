@@ -38,10 +38,10 @@ async function smallJPEG(file){
   let image;try{image=await createImageBitmap(file,{imageOrientation:'from-image'});}catch{throw new Error('Your browser cannot open this photo. Export it as JPEG or choose a JPEG, PNG, or WebP photo.');}
   const scale=Math.min(1,1600/Math.max(image.width,image.height));const canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(image.width*scale));canvas.height=Math.max(1,Math.round(image.height*scale));const context=canvas.getContext('2d');context.fillStyle='#fff';context.fillRect(0,0,canvas.width,canvas.height);context.drawImage(image,0,0,canvas.width,canvas.height);image.close();return canvas.toDataURL('image/jpeg',.88).split(',')[1];
 }
-$('#file').onchange=async()=>{const file=$('#file').files[0];if(!file)return;lock(true);statusEl.textContent='Preparing photo…';try{const image=await smallJPEG(file);const result=await post('photo',{image});uploads.set(result.name,result.content);if(!photos.includes(result.name))photos.push(result.name);if(kind==='gallery'){if(!data.includes(result.name))data.push(result.name);}else{data.push({id:'arrangement-'+crypto.randomUUID(),name:'New arrangement',price:40,image:result.name,available:true,purchaseUrl:''});}render();changed();statusEl.textContent='Photo ready. Save and publish when you’re finished.';}catch(error){statusEl.textContent=error.message;}finally{$('#file').value='';lock(false);}};
+$('#file').onchange=async()=>{const file=$('#file').files[0];if(!file)return;lock(true);statusEl.textContent='Preparing photo…';try{const image=await smallJPEG(file);const result=await post('photo',{image});uploads.set(result.name,result.content);if(!photos.includes(result.name))photos.push(result.name);if(kind==='gallery'){if(!data.includes(result.name))data.push(result.name);}else{data.push({id:'arrangement-'+crypto.randomUUID(),name:'New arrangement',price:40,image:result.name,available:true,purchaseUrl:''});}render();changed();statusEl.textContent='Photo ready. Publish when you’re finished.';}catch(error){statusEl.textContent=error.message;}finally{$('#file').value='';lock(false);}};
 $('#publish').onclick=async()=>{
   if([...grid.querySelectorAll('input')].some(input=>!input.reportValidity()))return;
-  lock(true);statusEl.textContent='Saving and publishing…';
+  lock(true);statusEl.textContent='Publishing…';
   try{const used=new Set(kind==='gallery'?data:data.map(i=>i.image));const payload={kind,sha,data,uploads:[...uploads].filter(([name])=>used.has(name)).map(([name,content])=>({name,content}))};if(JSON.stringify(payload).length>3_900_000)throw new Error('Too many new photos at once. Remove some and publish a smaller batch.');const result=await post('publish',payload);sha=result.sha;dirty=false;statusEl.textContent=result.message;$('#reload').hidden=true;}catch(error){statusEl.textContent=error.message;}finally{lock(false);}
 };
 async function load(){lock(true);statusEl.textContent='Loading latest content…';try{const result=await api('data?kind='+kind);data=result.data;sha=result.sha;photos=result.photos;uploads.clear();dirty=false;render();statusEl.textContent='Up to date';$('#reload').hidden=true;}catch(error){statusEl.textContent=error.message;$('#reload').hidden=false;}finally{lock(false);if(!sha){$('#publish').disabled=$('#add').disabled=$('#upload').disabled=true;}}}
@@ -51,5 +51,30 @@ $('#auth-form').onsubmit=async event=>{event.preventDefault();try{await post('lo
 $('#cancel-auth').onclick=()=>$('#auth').close();
 window.addEventListener('beforeunload',event=>{if(dirty||busy){event.preventDefault();}});
 for(const link of document.querySelectorAll('[data-editor]')){if(link.dataset.editor===kind)link.setAttribute('aria-current','page');link.onclick=event=>{if(busy||(dirty&&!confirm('Leave this editor and discard unpublished changes?')))event.preventDefault();else dirty=false;};}
-$('#add').textContent=kind==='gallery'?'+ Add photo':'+ Add arrangement';$('#live-link').href=kind==='gallery'?'/gallery/':'/shop/';$('#intro').textContent=kind==='gallery'?'Add photos and drag them into order. Save and publish updates the live gallery.':'Edit arrangements, upload photos, and drag cards into order. Save and publish updates the live shop.';
+$('#add').textContent=kind==='gallery'?'+ Add photo':'+ Add arrangement';$('#live-link').href=kind==='gallery'?'/gallery/':'/shop/';$('#intro').textContent=kind==='gallery'?'Add photos and drag them into order. Publish updates the live gallery.':'Edit arrangements, upload photos, and drag cards into order. Publish updates the live shop.';
+const menuButton=$('#menu-toggle'),navigation=$('#editor-navigation'),mobile=matchMedia('(max-width: 900px)');
+function setMenu(open,restoreFocus=false){
+  const expanded=mobile.matches&&open;
+  navigation.classList.toggle('is-open',expanded);
+  $('#menu-backdrop').classList.toggle('is-open',expanded);
+  document.body.classList.toggle('editor-menu-open',expanded);
+  menuButton.setAttribute('aria-expanded',String(expanded));
+  navigation.inert=mobile.matches&&!expanded;
+  if(expanded)$('#menu-close').focus();else if(restoreFocus)menuButton.focus();
+}
+menuButton.onclick=()=>setMenu(true);
+$('#menu-close').onclick=()=>setMenu(false,true);
+$('#menu-backdrop').onclick=()=>setMenu(false,true);
+window.addEventListener('keydown',event=>{
+  if(!navigation.classList.contains('is-open'))return;
+  if(event.key==='Escape')setMenu(false,true);
+  if(event.key==='Tab'){
+    const items=[...navigation.querySelectorAll('a,button:not(:disabled)')],first=items[0],last=items.at(-1);
+    if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}
+    else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}
+  }
+});
+mobile.addEventListener('change',()=>setMenu(false));
+navigation.addEventListener('click',event=>{if(event.target.closest('a'))setMenu(false);});
+setMenu(false);
 load();
