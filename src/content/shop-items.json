@@ -1,7 +1,7 @@
 [
   {
     "id": "hot-gossip",
-    "name": "The First Date",
+    "name": "First Date",
     "price": 50,
     "image": "54688A6D-47A2-482E-B98C-FD3B43718C2E_1_105_c.jpeg",
     "available": true,
@@ -9,7 +9,7 @@
   },
   {
     "id": "main-character-energy",
-    "name": "The Volcano Girl",
+    "name": "Volcano Girl",
     "price": 45,
     "image": "D8F7D39C-FE51-4FB6-8F05-40789350B935_1_105_c.jpeg",
     "available": true,
@@ -17,7 +17,7 @@
   },
   {
     "id": "good-trouble",
-    "name": "The Sugar Town",
+    "name": "Sugar Town",
     "price": 35,
     "image": "47C9AC05-7481-4405-AB4A-DE891C5B4295_1_105_c.jpeg",
     "available": true,
@@ -25,7 +25,7 @@
   },
   {
     "id": "arrangement-1788746931277",
-    "name": "The Sorry My Dog Bit You",
+    "name": "Sorry My Dog Bit You",
     "price": 30,
     "image": "IMG_3189.jpeg",
     "available": true,
@@ -33,7 +33,7 @@
   },
   {
     "id": "pinkies-up",
-    "name": "The Candy Says",
+    "name": "Candy Says",
     "price": 25,
     "image": "D1551071-72E1-4E1C-9334-B8D78D1CEC22_1_105_c.jpeg",
     "available": true,
