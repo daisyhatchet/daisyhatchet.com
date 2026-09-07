@@ -24,19 +24,19 @@
     "purchaseUrl": "https://local-blooms.com/product/sugar-town/"
   },
   {
-    "id": "pinkies-up",
-    "name": "The Candy Says",
-    "price": 25,
-    "image": "D1551071-72E1-4E1C-9334-B8D78D1CEC22_1_105_c.jpeg",
-    "available": true,
-    "purchaseUrl": "https://local-blooms.com/product/candy-says/"
-  },
-  {
     "id": "arrangement-1788746931277",
     "name": "The Sorry My Dog Bit You",
     "price": 30,
     "image": "IMG_3189.jpeg",
     "available": true,
     "purchaseUrl": "https://local-blooms.com/product/the-sorry-my-dog-bit-you/"
+  },
+  {
+    "id": "pinkies-up",
+    "name": "The Candy Says",
+    "price": 25,
+    "image": "D1551071-72E1-4E1C-9334-B8D78D1CEC22_1_105_c.jpeg",
+    "available": true,
+    "purchaseUrl": "https://local-blooms.com/product/candy-says/"
   }
 ]
