@@ -7,4 +7,4 @@ export default async request => {
   if(!Object.hasOwn(files,kind))return json({error:'Unknown editor'},400);
   try {const state=await snapshot();return json({...await readData(state,kind),photos:photos(state)});}catch{return json({error:'Could not load the latest content from GitHub. Please try again.'},502);}
 };
-export const config={path:'/api/editor/data',rateLimit:{windowLimit:60,windowSize:60,aggregateBy:['ip','domain']}};
+export const config={path:'/api/editor/data'};

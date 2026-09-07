@@ -13,4 +13,4 @@ export default async request=>{
     return json({name,content:result.toString('base64')});
   }catch{return json({error:'This photo could not be opened. Try a JPEG, PNG, or WebP photo.'},400);}
 };
-export const config={path:'/api/editor/photo',rateLimit:{windowLimit:20,windowSize:60,aggregateBy:['ip','domain']}};
+export const config={path:'/api/editor/photo'};
