@@ -38,5 +38,13 @@
     "image": "D1551071-72E1-4E1C-9334-B8D78D1CEC22_1_105_c.jpeg",
     "available": true,
     "purchaseUrl": "https://local-blooms.com/product/candy-says/"
+  },
+  {
+    "id": "arrangement-fd532944-4ae0-4ec0-8190-3ef59f05bc18",
+    "name": "Here Comes the Sun",
+    "price": 30,
+    "image": "upload-b60bce1cec351ef88fc83e2a44f04c39a710d749744fb28c39ac43263b425e4c.jpg",
+    "available": true,
+    "purchaseUrl": "https://local-blooms.com/product/the-sorry-my-dog-bit-you/"
   }
 ]
