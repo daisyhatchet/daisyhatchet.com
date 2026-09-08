@@ -45,6 +45,14 @@
     "price": 30,
     "image": "upload-b60bce1cec351ef88fc83e2a44f04c39a710d749744fb28c39ac43263b425e4c.jpg",
     "available": true,
-    "purchaseUrl": "https://local-blooms.com/product/the-sorry-my-dog-bit-you/"
+    "purchaseUrl": "https://local-blooms.com/product/here-comes-the-sun/"
+  },
+  {
+    "id": "arrangement-1bd50f18-94c2-4e58-a6ff-f7fe9528e2e0",
+    "name": "Sex and Candy",
+    "price": 50,
+    "image": "upload-373fa54bad9258f1dcb86cb598589fb733673cc0176b79d8dea79a33205e8673.jpg",
+    "available": true,
+    "purchaseUrl": "https://local-blooms.com/product/sex-and-candy/"
   }
 ]
