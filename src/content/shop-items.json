@@ -8,6 +8,14 @@
     "purchaseUrl": "https://local-blooms.com/product/the-first-date/"
   },
   {
+    "id": "arrangement-1bd50f18-94c2-4e58-a6ff-f7fe9528e2e0",
+    "name": "Sex and Candy",
+    "price": 50,
+    "image": "upload-373fa54bad9258f1dcb86cb598589fb733673cc0176b79d8dea79a33205e8673.jpg",
+    "available": true,
+    "purchaseUrl": "https://local-blooms.com/product/sex-and-candy/"
+  },
+  {
     "id": "main-character-energy",
     "name": "Volcano Girl",
     "price": 45,
@@ -32,14 +40,6 @@
     "purchaseUrl": "https://local-blooms.com/product/the-sorry-my-dog-bit-you/"
   },
   {
-    "id": "pinkies-up",
-    "name": "Candy Says",
-    "price": 25,
-    "image": "D1551071-72E1-4E1C-9334-B8D78D1CEC22_1_105_c.jpeg",
-    "available": true,
-    "purchaseUrl": "https://local-blooms.com/product/candy-says/"
-  },
-  {
     "id": "arrangement-fd532944-4ae0-4ec0-8190-3ef59f05bc18",
     "name": "Here Comes the Sun",
     "price": 30,
@@ -48,11 +48,11 @@
     "purchaseUrl": "https://local-blooms.com/product/here-comes-the-sun/"
   },
   {
-    "id": "arrangement-1bd50f18-94c2-4e58-a6ff-f7fe9528e2e0",
-    "name": "Sex and Candy",
-    "price": 50,
-    "image": "upload-373fa54bad9258f1dcb86cb598589fb733673cc0176b79d8dea79a33205e8673.jpg",
+    "id": "pinkies-up",
+    "name": "Candy Says",
+    "price": 25,
+    "image": "D1551071-72E1-4E1C-9334-B8D78D1CEC22_1_105_c.jpeg",
     "available": true,
-    "purchaseUrl": "https://local-blooms.com/product/sex-and-candy/"
+    "purchaseUrl": "https://local-blooms.com/product/candy-says/"
   }
 ]
