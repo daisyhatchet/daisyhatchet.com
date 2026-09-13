@@ -1,0 +1,11 @@
+{% comment %}
+  Add inside the Shopify theme's head, before storefront content renders.
+  Sends storefront return links to the existing Daisy Hatchet shop.
+  Shopify checkout, order status, account flows, and app proxies are excluded.
+{% endcomment %}
+{% if request.page_type == 'index' or request.page_type == 'cart' or request.page_type == 'product' or request.page_type == 'collection' or request.page_type == 'list-collections' %}
+  {% unless request.design_mode %}
+    <script>window.location.replace('https://daisyhatchet.com/shop/');</script>
+    <noscript><meta http-equiv="refresh" content="0;url=https://daisyhatchet.com/shop/"></noscript>
+  {% endunless %}
+{% endif %}

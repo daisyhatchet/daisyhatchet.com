@@ -1,6 +1,6 @@
 export {};
 const $=selector=>document.querySelector(selector);
-const kind=location.pathname.includes('/gallery')?'gallery':'shop';
+const kind='gallery';
 let data=[],photos=[],sha='',dirty=false,busy=false,selection=null,uploads=new Map();
 const grid=$('#grid'),statusEl=$('#status');
 const photoURL=name=>uploads.has(name)?`data:image/jpeg;base64,${uploads.get(name)}`:`https://raw.githubusercontent.com/daisyhatchet/daisyhatchet.com/main/public/images/gallery-web/${encodeURIComponent(name)}`;

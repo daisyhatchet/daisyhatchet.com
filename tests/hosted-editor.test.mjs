@@ -21,8 +21,8 @@ function mockGit({stale=false,race=false}={}){
   let result;
   if(path==='git/ref/heads/main')result={object:{sha:'head'}};
   else if(path==='git/commits/head')result={tree:{sha:'tree'}};
-  else if(path==='git/trees/tree?recursive=1')result={tree:[{path:'src/content/shop-items.json',type:'blob',sha:stale?'newer':'data-sha'},{path:'public/images/gallery-web/existing.jpg',type:'blob',sha:'image-sha'},{path:'unrelated.txt',type:'blob',sha:'untouched'}]};
-  else if(path==='git/blobs/data-sha'||path==='git/blobs/newer')result={content:Buffer.from(JSON.stringify([item])).toString('base64')};
+  else if(path==='git/trees/tree?recursive=1')result={tree:[{path:'src/content/gallery-order.json',type:'blob',sha:stale?'newer':'data-sha'},{path:'public/images/gallery-web/existing.jpg',type:'blob',sha:'image-sha'},{path:'unrelated.txt',type:'blob',sha:'untouched'}]};
+  else if(path==='git/blobs/data-sha'||path==='git/blobs/newer')result={content:Buffer.from(JSON.stringify(['existing.jpg'])).toString('base64')};
   else if(path==='git/blobs')result={sha:'uploaded-image'};
   else if(path==='git/trees')result={sha:'new-tree'};
   else if(path==='git/commits')result={sha:'new-commit'};
@@ -58,14 +58,21 @@ test('uploads are decoded, resized, stripped and normalized',async()=>{
 });
 test('publish commits only selected data and referenced new photos',async()=>{
  const calls=mockGit();const bytes=await sharp({create:{width:10,height:10,channels:3,background:'orange'}}).jpeg().toBuffer();const name=`upload-${createHash('sha256').update(bytes).digest('hex')}.jpg`;
- const response=await publish(request('/api/editor/publish',{kind:'shop',sha:'data-sha',data:[{...item,image:name}],uploads:[{name,content:bytes.toString('base64')}]}));assert.equal(response.status,200);
- const tree=calls.find(c=>c.path==='git/trees').body;assert.equal(tree.base_tree,'tree');assert.deepEqual(tree.tree.map(e=>e.path),['public/images/gallery-web/'+name,'src/content/shop-items.json']);
+ const response=await publish(request('/api/editor/publish',{kind:'gallery',sha:'data-sha',data:[name],uploads:[{name,content:bytes.toString('base64')}]}));assert.equal(response.status,200);
+ const tree=calls.find(c=>c.path==='git/trees').body;assert.equal(tree.base_tree,'tree');assert.deepEqual(tree.tree.map(e=>e.path),['public/images/gallery-web/'+name,'src/content/gallery-order.json']);
  assert.deepEqual(calls.find(c=>c.path==='git/commits').body.parents,['head']);assert.equal(calls.at(-1).body.force,false);
 });
 test('stale data and concurrent branch update do not overwrite',async()=>{
- let calls=mockGit({stale:true});let response=await publish(request('/api/editor/publish',{kind:'shop',sha:'data-sha',data:[{...item,price:41}]}));assert.equal(response.status,409);assert(!calls.some(c=>c.method==='POST'||c.method==='PATCH'));
- calls=mockGit({race:true});response=await publish(request('/api/editor/publish',{kind:'shop',sha:'data-sha',data:[{...item,price:41}]}));assert.equal(response.status,409);assert.equal(calls.at(-1).body.force,false);
+ let calls=mockGit({stale:true});let response=await publish(request('/api/editor/publish',{kind:'gallery',sha:'data-sha',data:[]}));assert.equal(response.status,409);assert(!calls.some(c=>c.method==='POST'||c.method==='PATCH'));
+ calls=mockGit({race:true});response=await publish(request('/api/editor/publish',{kind:'gallery',sha:'data-sha',data:[]}));assert.equal(response.status,409);assert.equal(calls.at(-1).body.force,false);
 });
 test('no-op publish creates no commit',async()=>{
- const calls=mockGit();const response=await publish(request('/api/editor/publish',{kind:'shop',sha:'data-sha',data:[item]}));assert.equal(response.status,200);assert(!calls.some(c=>c.method==='POST'||c.method==='PATCH'));
+ const calls=mockGit();const response=await publish(request('/api/editor/publish',{kind:'gallery',sha:'data-sha',data:['existing.jpg']}));assert.equal(response.status,200);assert(!calls.some(c=>c.method==='POST'||c.method==='PATCH'));
+});
+
+test('retired shop writes cannot publish or call GitHub',async()=>{
+ const calls=mockGit();
+ assert.equal((await publish(request('/api/editor/publish',{kind:'shop',sha:'data-sha',data:[item]}))).status,410);
+ assert.equal((await dataHandler(request('/api/editor/data?kind=shop'))).status,410);
+ assert.equal(calls.length,0);
 });

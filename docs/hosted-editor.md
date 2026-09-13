@@ -1,4 +1,9 @@
-# Hosted shop and gallery editor
+# Hosted gallery editor
+
+Products are now managed in [Shopify](https://admin.shopify.com/store/daisy-hatchet/products).
+The old `/editor/shop` address redirects there, and old shop write requests are
+rejected. `/editor` opens the gallery editor. See `docs/shopify-migration.md` for
+the migration records and remaining launch prerequisites.
 
 Production address: `https://daisyhatchet.com/editor`.
 

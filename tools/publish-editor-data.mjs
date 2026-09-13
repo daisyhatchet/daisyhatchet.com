@@ -1,7 +1,7 @@
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 const exec = promisify(execFile);
-const allowedFiles = new Set(['src/content/shop-items.json', 'src/content/gallery-order.json']);
+const allowedFiles = new Set(['src/content/gallery-order.json']);
 
 // Path-scoped commits preserve unrelated staged and unstaged work.
 export async function publishEditorData(root, file) {

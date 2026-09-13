@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import items from '@/content/shop-items.json';
+import previewProducts from '@/content/shopify-preview.json';
+const previewJSON = import.meta.env.DEV ? JSON.stringify(previewProducts).replaceAll('<', '\u003c') : null;
 ---
 <BaseLayout title="Shop — Daisy Hatchet" description="Shop seasonal flower arrangements grown and designed by Daisy Hatchet in Pacifica, California.">
   <section class="shop shell">
@@ -12,23 +13,167 @@ import items from '@/content/shop-items.json';
       <p>Small-batch arrangements grown and designed in Pacifica. Availability changes with the seasons.</p>
     </header>
 
-    <div class="products">
-      {items.map((item) => (
-        <article class:list={['product', { 'is-sold-out': !item.available }]}>
-          <div class="product-image">
-            <img src={`/images/gallery-web/${item.image}`} alt={item.name} width="768" height="768" loading="lazy" />
-            {!item.available && <span>Sold out</span>}
+    <p id="shop-status" role="status" aria-live="polite">Loading arrangements…</p>
+    <button id="shop-retry" type="button" hidden>Try again</button>
+    <noscript><p>Please enable JavaScript to see current arrangements and purchase through Shopify.</p></noscript>
+    <div class="products" id="products" aria-busy="true"></div>
+    <template id="product-template">
+      <article class="product">
+        <button class="product-image" type="button" aria-haspopup="dialog"><img width="768" height="768" loading="lazy" alt="" /><span hidden>Sold out</span><span class="view-detail" aria-hidden="true">View arrangement ↗</span></button>
+        <div class="product-details"><div><h2></h2><p></p></div></div>
+        <label class="variant-picker" hidden>Arrangement option <select></select></label>
+        <button class="purchase" type="button">Purchase ↗</button>
+        <p class="purchase-error" role="alert" hidden></p>
+      </article>
+    </template>
+    <dialog id="product-modal" aria-labelledby="modal-title">
+      <button class="modal-close" type="button" aria-label="Close product details" autofocus>×</button>
+      <div class="modal-layout">
+        <div class="modal-image"><img alt="" /><span hidden>Image coming soon</span></div>
+        <div class="modal-details">
+          <p class="eyebrow">Grown &amp; arranged in Pacifica</p>
+          <h2 id="modal-title"></h2>
+          <div class="modal-price-line"><p class="modal-price"></p><span class="modal-availability"></span></div>
+          <div class="modal-description"></div>
+          <label class="variant-picker" hidden>Arrangement option <select></select></label>
+          <button class="purchase" type="button">Buy now ↗</button>
+          <p class="purchase-error" role="alert" hidden></p>
+          <p class="checkout-note">Secure checkout with Shopify</p>
+          <div class="fulfillment-notes">
+            <p><strong>Porch pickup</strong>Usually ready the next day. We’ll email when your flowers are ready to collect.</p>
+            <p><strong>Local delivery</strong>Free in Pacifica (94044). $10 to Daly City, Montara, Moss Beach, El Granada, and Half Moon Bay. No nationwide shipping.</p>
           </div>
-          <div class="product-details">
-            <div><h2>{item.name}</h2><p>${item.price}</p></div>
-            {item.purchaseUrl && item.available && <a href={item.purchaseUrl} target="_blank" rel="noopener noreferrer">Purchase ↗</a>}
-          </div>
-        </article>
-      ))}
-    </div>
+        </div>
+      </div>
+    </dialog>
+    {previewJSON && <script is:inline type="application/json" id="imported-preview" set:html={previewJSON} />}
 
   </section>
 </BaseLayout>
+<script>
+  import {loadProducts, orderProducts, formatPrice, checkout, SHOP_DOMAIN} from '@/lib/shopify.mjs';
+  import order from '@/content/shopify-order.json';
+  const grid = document.querySelector<HTMLDivElement>('#products')!;
+  const status = document.querySelector<HTMLParagraphElement>('#shop-status')!;
+  const retry = document.querySelector<HTMLButtonElement>('#shop-retry')!;
+  const template = document.querySelector<HTMLTemplateElement>('#product-template')!;
+  const previewData = document.querySelector('#imported-preview');
+  const preview = import.meta.env.DEV && new URLSearchParams(location.search).get('preview') === 'imported' && previewData;
+  type Product = {id: string; title: string; handle: string; descriptionHtml?: string; availableForSale: boolean; featuredImage: {url: string; altText: string | null} | null; variants: {nodes: {id: string; title: string; availableForSale: boolean; price: {amount: string; currencyCode: string}}[]; pageInfo: {hasNextPage: boolean}}};
+  const modal = document.querySelector<HTMLDialogElement>('#product-modal')!;
+  const modalDetails = modal.querySelector<HTMLElement>('.modal-details')!;
+  const close = modal.querySelector<HTMLButtonElement>('.modal-close')!;
+  let opener: HTMLElement | null = null;
+  let previousOverflow = '';
+  function closeProduct() {
+    if (!modal.open || modal.classList.contains('is-closing')) return;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) { modal.close(); return; }
+    modal.classList.add('is-closing');
+    window.setTimeout(() => { modal.close(); modal.classList.remove('is-closing'); }, 180);
+  }
+  close.onclick = closeProduct;
+  modal.addEventListener('cancel', event => { event.preventDefault(); closeProduct(); });
+  let backdropDown = false;
+  const outside = (event: PointerEvent | MouseEvent) => {
+    const r = modal.getBoundingClientRect();
+    return event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom;
+  };
+  modal.addEventListener('pointerdown', event => { backdropDown = event.target === modal && outside(event); });
+  modal.addEventListener('click', event => { if (backdropDown && event.target === modal && outside(event)) closeProduct(); backdropDown = false; });
+  modal.addEventListener('close', () => { document.body.style.overflow = previousOverflow; opener?.focus({preventScroll: true}); });
+
+  // Preserve simple description formatting without executing HTML or copying external attributes.
+  function descriptionFragment(html: string) {
+    const source = new DOMParser().parseFromString(html, 'text/html');
+    const fragment = document.createDocumentFragment();
+    function copy(node: Node, parent: Node) {
+      if (node.nodeType === Node.TEXT_NODE) { parent.appendChild(document.createTextNode(node.textContent || '')); return; }
+      if (!(node instanceof Element) || ['SCRIPT','STYLE','IFRAME','OBJECT','SVG','FORM'].includes(node.tagName)) return;
+      const target = ['P','BR','STRONG','EM','B','I','UL','OL','LI'].includes(node.tagName) ? document.createElement(node.tagName.toLowerCase()) : parent;
+      if (target !== parent) parent.appendChild(target);
+      for (const child of node.childNodes) copy(child, target);
+    }
+    for (const node of source.body.childNodes) copy(node, fragment);
+    return fragment;
+  }
+
+  function bindPurchase(root: HTMLElement, product: Product, price: HTMLElement, availability: HTMLElement, modalView = false) {
+    const button = root.querySelector<HTMLButtonElement>('.purchase')!;
+    const error = root.querySelector<HTMLParagraphElement>('.purchase-error')!;
+    const select = root.querySelector('select')!;
+    select.replaceChildren(); select.disabled = false; error.hidden = true; error.textContent = '';
+    let variant = product.variants.nodes.find(v => v.availableForSale) || product.variants.nodes[0];
+    for (const v of product.variants.nodes) {
+      const option = document.createElement('option'); option.value = v.id; option.textContent = v.title + (v.availableForSale ? '' : ' — Sold out'); select.append(option);
+    }
+    root.querySelector<HTMLElement>('.variant-picker')!.hidden = product.variants.nodes.length <= 1;
+    const update = () => {
+      if (variant) select.value = variant.id;
+      const available = product.availableForSale && !!variant?.availableForSale;
+      root.classList.toggle('is-sold-out', !available);
+      availability.hidden = modalView ? false : available;
+      availability.textContent = available ? 'Available' : 'Sold out';
+      price.textContent = variant ? formatPrice(variant.price) : '';
+      button.disabled = !available;
+      button.textContent = available ? (modalView ? 'Buy now ↗' : 'Purchase ↗') : 'Sold out';
+    };
+    select.onchange = () => { variant = product.variants.nodes.find(v => v.id === select.value)!; error.hidden = true; update(); };
+    button.onclick = async () => {
+      error.hidden = true;
+      if (preview) { error.textContent = 'Preview only — checkout will be available after launch.'; error.hidden = false; return; }
+      if (product.variants.pageInfo.hasNextPage) { location.assign(`https://${SHOP_DOMAIN}/products/${encodeURIComponent(product.handle)}`); return; }
+      button.disabled = true; select.disabled = true; button.textContent = 'Opening checkout…';
+      try { location.assign(await checkout(variant.id)); }
+      catch (e) { if (button.onclick !== handler) return; error.textContent = e instanceof Error ? e.message : 'Checkout could not be opened. Please try again.'; error.hidden = false; select.disabled = false; update(); }
+    };
+    const handler = button.onclick;
+    update();
+  }
+
+  function openProduct(product: Product, trigger: HTMLElement) {
+    opener = trigger;
+    modal.querySelector('#modal-title')!.textContent = product.title;
+    const image = modal.querySelector<HTMLImageElement>('.modal-image img')!;
+    image.hidden = !product.featuredImage;
+    modal.querySelector<HTMLElement>('.modal-image span')!.hidden = !!product.featuredImage;
+    if (product.featuredImage) { image.src = product.featuredImage.url; image.alt = product.featuredImage.altText || product.title; }
+    else { image.removeAttribute('src'); image.alt = ''; }
+    const description = modal.querySelector<HTMLElement>('.modal-description')!;
+    description.replaceChildren(descriptionFragment(product.descriptionHtml || ''));
+    description.hidden = !description.textContent?.trim();
+    bindPurchase(modalDetails, product, modal.querySelector('.modal-price')!, modal.querySelector('.modal-availability')!, true);
+    previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    modal.showModal(); modal.scrollTop = 0; modalDetails.scrollTop = 0;
+  }
+
+  function render(products: Product[]) {
+    grid.replaceChildren();
+    for (const product of orderProducts(products, order) as Product[]) {
+      const card = template.content.firstElementChild!.cloneNode(true) as HTMLElement;
+      card.querySelector('h2')!.textContent = product.title;
+      const image = card.querySelector('img')!;
+      if (product.featuredImage) { image.src = product.featuredImage.url; image.alt = product.featuredImage.altText || product.title; }
+      else image.hidden = true;
+      const trigger = card.querySelector<HTMLButtonElement>('.product-image')!;
+      trigger.setAttribute('aria-label', `View ${product.title} details`);
+      trigger.onclick = () => openProduct(product, trigger);
+      bindPurchase(card, product, card.querySelector('.product-details p')!, card.querySelector('.product-image span')!);
+      grid.append(card);
+    }
+  }
+  async function load() {
+    retry.hidden = true; status.textContent = 'Loading arrangements…'; grid.setAttribute('aria-busy', 'true');
+    try {
+      const products = preview ? JSON.parse(previewData!.textContent!) : await loadProducts();
+      render(products);
+      status.textContent = preview ? 'Local preview of the seven imported drafts. Checkout will be available after launch.' : products.length ? '' : 'No arrangements are available right now. Please check back soon.';
+    } catch { grid.replaceChildren(); status.textContent = 'We couldn’t load the arrangements. Please try again in a moment.'; retry.hidden = false; }
+    finally { grid.setAttribute('aria-busy', 'false'); }
+  }
+  retry.addEventListener('click', load);
+  load();
+</script>
 <style>
   .shop { padding-block: clamp(5rem,9vw,8rem); background: var(--cream); }
   header { display: grid; grid-template-columns: minmax(0,1fr) minmax(18rem,.4fr); align-items: end; gap: 3rem; margin-bottom: clamp(3rem,7vw,6rem); }
@@ -37,7 +182,7 @@ import items from '@/content/shop-items.json';
   h1 { font-size: clamp(3.2rem,16cqi,11rem); }
   header > p { max-width: 30rem; margin: 0 0 .8rem; color: #604b54; font-size: 1.08rem; }
   .products { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: clamp(2rem,3.5vw,4rem) clamp(1rem,2.2vw,2.25rem); }
-  .product-image { position: relative; aspect-ratio: 1; overflow: hidden; background: #eadfe3; border-radius: .65rem; }
+  .product-image { display: block; width: 100%; padding: 0; border: 0; cursor: zoom-in; text-align: left; position: relative; aspect-ratio: 1; overflow: hidden; background: #eadfe3; border-radius: .65rem; }
   .product-image img { width: 100%; height: 100%; display: block; object-fit: cover; transition: transform .65s cubic-bezier(.22,.8,.3,1); }
   .product:hover img { transform: scale(1.025); }
   .product-image span { position: absolute; top: 1rem; right: 1rem; padding: .5rem .75rem; color: white; background: var(--ink); border-radius: 999px; font-size: .7rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
@@ -45,10 +190,61 @@ import items from '@/content/shop-items.json';
   .product-details > div { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; flex: 1; }
   .product-details h2 { margin: 0; font-size: clamp(1.05rem,1.5vw,1.3rem); font-weight: 600; }
   .product-details p { margin: 0; color: #604b54; font-size: 1rem; white-space: nowrap; }
-  .product-details a { display: inline-flex; min-height: 2.75rem; align-items: center; justify-content: center; padding: .7rem 1rem; color: white; background: var(--ink); border: 2px solid var(--ink); border-radius: 999px; box-shadow: 0 .35rem .8rem rgb(41 21 31 / 16%); font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-decoration: none; text-transform: uppercase; white-space: nowrap; transition: color .2s ease, background-color .2s ease, border-color .2s ease, transform .2s ease, box-shadow .2s ease; }
-  .product-details a:hover { color: white; background: var(--pink); border-color: var(--pink); box-shadow: 0 .5rem 1rem rgb(245 47 151 / 24%); transform: translateY(-2px); }
-  .product-details a:focus-visible { outline: 3px solid var(--chartreuse); outline-offset: 3px; }
+  .purchase { display: inline-flex; min-height: 2.75rem; align-items: center; justify-content: center; padding: .7rem 1rem; color: white; background: var(--ink); border: 2px solid var(--ink); border-radius: 999px; box-shadow: 0 .35rem .8rem rgb(41 21 31 / 16%); font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-decoration: none; text-transform: uppercase; white-space: nowrap; transition: color .2s ease, background-color .2s ease, border-color .2s ease, transform .2s ease, box-shadow .2s ease; }
+  .purchase:hover { color: white; background: var(--pink); border-color: var(--pink); box-shadow: 0 .5rem 1rem rgb(245 47 151 / 24%); transform: translateY(-2px); }
+  .purchase:focus-visible { outline: 3px solid var(--chartreuse); outline-offset: 3px; }
+  [hidden] { display: none !important; }
+  #shop-status { color: #604b54; }
+  #shop-status:empty { display: none; }
+  .purchase { margin-top: 1rem; cursor: pointer; }
+  .purchase:disabled { opacity: .6; cursor: default; transform: none; }
+  .purchase-error { color: #8b2344; font-size: .9rem; }
+  .variant-picker { display: grid; gap: .5rem; margin-top: 1rem; }
+  select, #shop-retry { padding: .7rem; font: inherit; }
+  .product-image:focus-visible { outline: 3px solid var(--pink); outline-offset: 5px; }
+  .product-image .view-detail { top: auto; bottom: 1rem; left: 1rem; right: auto; opacity: 0; transform: translateY(.3rem); transition: opacity .2s, transform .2s; }
+  .product-image:hover .view-detail, .product-image:focus-visible .view-detail { opacity: 1; transform: none; }
+  #product-modal { width: min(1080px, calc(100vw - 3rem)); max-width: none; max-height: calc(100dvh - 3rem); padding: 0; border: 0; border-radius: 1rem; background: var(--cream); color: var(--ink); overflow: auto; box-shadow: 0 2rem 6rem rgb(0 0 0 / 30%); }
+  #product-modal::backdrop { background: rgb(30 14 23 / 75%); backdrop-filter: blur(5px); }
+  #product-modal[open] { animation: modal-in 240ms cubic-bezier(.2,.8,.2,1) both; }
+  #product-modal[open]::backdrop { animation: backdrop-in 240ms ease-out both; }
+  #product-modal.is-closing { animation: modal-out 180ms ease-in both; }
+  #product-modal.is-closing::backdrop { animation: backdrop-out 180ms ease-in both; }
+  @keyframes modal-in { from { opacity: 0; transform: translateY(10px) scale(.98); } to { opacity: 1; transform: none; } }
+  @keyframes modal-out { from { opacity: 1; transform: none; } to { opacity: 0; transform: translateY(6px) scale(.985); } }
+  @keyframes backdrop-in { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes backdrop-out { from { opacity: 1; } to { opacity: 0; } }
+  .modal-layout { display: grid; grid-template-columns: 1.1fr 1fr; }
+  .modal-image { display: flex; align-items: center; justify-content: center; background: #e9e0df; min-height: 540px; }
+  .modal-image img { display: block; width: 100%; height: min(730px, calc(100dvh - 3rem)); object-fit: cover; }
+  .modal-details { padding: 3.5rem 2.5rem 2.5rem; max-height: calc(100dvh - 3rem); overflow: auto; }
+  .modal-details .eyebrow { font-size: .68rem; margin-bottom: 1rem; }
+  #modal-title { font-size: clamp(2rem, 3.8vw, 3.4rem); line-height: 1.08; letter-spacing: -.04em; margin: 0 0 1.2rem; }
+  .modal-price-line { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1.6rem; }
+  .modal-price { font-size: 1.5rem; margin: 0; }
+  .modal-availability { font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; color: var(--olive); }
+  .modal-description { color: #604b54; font-size: 1.04rem; line-height: 1.7; }
+  .modal-description :global(p) { margin: 0 0 1rem; }
+  .modal-details .purchase { width: 100%; min-height: 3.2rem; margin-top: 1.5rem; font-size: .8rem; }
+  .checkout-note { text-align: center; color: #604b54; font-size: .75rem; margin: .8rem 0 1.5rem; }
+  .fulfillment-notes { border-top: 1px solid #d9ced1; padding-top: 1.25rem; color: #604b54; font-size: .83rem; line-height: 1.6; }
+  .fulfillment-notes p { margin: 0 0 1rem; }
+  .fulfillment-notes strong { display: block; color: var(--ink); margin-bottom: .25rem; }
+  .modal-close { position: sticky; float: right; top: .75rem; margin: .75rem .75rem -3.5rem 0; z-index: 1; width: 2.75rem; height: 2.75rem; border: 1px solid #d9ced1; border-radius: 50%; background: var(--cream); color: var(--ink); font-size: 1.8rem; cursor: pointer; line-height: 1; }
+  .modal-close:hover { background: var(--ink); color: var(--cream); }
+  .modal-close:focus-visible { outline: 3px solid var(--pink); outline-offset: 2px; }
+  @media (max-width: 700px) {
+    #product-modal { width: calc(100vw - 1.5rem); max-height: calc(100dvh - 1.5rem); }
+    .modal-layout { grid-template-columns: 1fr; }
+    .modal-image { min-height: 0; }
+    .modal-image img { height: min(46dvh, 440px); }
+    .modal-details { max-height: none; overflow: visible; padding: 1.75rem 1.5rem; }
+    #modal-title { font-size: 2.25rem; }
+  }
   @media (max-width: 800px) { header { grid-template-columns: 1fr; gap: 1.5rem; } .products { grid-template-columns: repeat(2,minmax(0,1fr)); } }
   @media (max-width: 480px) { .products { grid-template-columns: 1fr; } .product-details { align-items: flex-start; } }
-  @media (prefers-reduced-motion: reduce) { .product-image img { transition: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    .product-image img { transition: none; }
+    #product-modal[open], #product-modal[open]::backdrop { animation: none; }
+  }
 </style>

@@ -8,6 +8,7 @@ export default async request=>{
   try{
     const {kind,sha,data,uploads=[]}=await body(request);
     if(!Object.hasOwn(files,kind)||!Array.isArray(uploads)||uploads.length>10)throw new Error('Invalid publish request.');
+    if(kind==='shop')return json({error:'Products are now managed in Shopify. Open Shopify to edit products.'},410);
     const state=await snapshot(),current=await readData(state,kind);
     if(current.sha!==sha)throw new Conflict('This content changed since you opened it. Copy any unsaved text, then reload the latest version.');
     const pending=[];
