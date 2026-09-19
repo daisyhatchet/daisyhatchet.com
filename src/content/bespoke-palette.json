@@ -1,0 +1,53 @@
+{
+  "enabled": false,
+  "colors": [
+    {
+      "id": "cream",
+      "name": "Buttercream",
+      "hex": "#f4e9c9",
+      "available": true
+    },
+    {
+      "id": "peach",
+      "name": "Apricot",
+      "hex": "#efa274",
+      "available": true
+    },
+    {
+      "id": "pink",
+      "name": "Ballet pink",
+      "hex": "#e9a4bc",
+      "available": true
+    },
+    {
+      "id": "coral",
+      "name": "Coral",
+      "hex": "#ed6958",
+      "available": true
+    },
+    {
+      "id": "raspberry",
+      "name": "Raspberry",
+      "hex": "#b72e62",
+      "available": true
+    },
+    {
+      "id": "lavender",
+      "name": "Lilac",
+      "hex": "#b39aca",
+      "available": true
+    },
+    {
+      "id": "yellow",
+      "name": "Marigold",
+      "hex": "#e9b636",
+      "available": true
+    },
+    {
+      "id": "burgundy",
+      "name": "Burgundy",
+      "hex": "#71384e",
+      "available": true
+    }
+  ]
+}

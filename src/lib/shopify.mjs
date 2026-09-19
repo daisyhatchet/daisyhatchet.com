@@ -16,8 +16,8 @@ export const PRODUCTS_QUERY = `query ShopProducts($after: String) {
   }
 }`;
 
-export const CHECKOUT_MUTATION = `mutation ShopCheckout($variantId: ID!) {
-  cartCreate(input: {lines: [{merchandiseId: $variantId, quantity: 1}]}) {
+export const CHECKOUT_MUTATION = `mutation ShopCheckout($variantId: ID!, $attributes: [AttributeInput!]!) {
+  cartCreate(input: {lines: [{merchandiseId: $variantId, quantity: 1, attributes: $attributes}]}) {
     cart { checkoutUrl totalQuantity }
     userErrors { field message }
   }
@@ -59,8 +59,8 @@ export function formatPrice(price) {
   return new Intl.NumberFormat('en-US', {style: 'currency', currency: price.currencyCode, minimumFractionDigits: Number(price.amount) % 1 ? 2 : 0}).format(Number(price.amount));
 }
 
-export async function checkout(variantId, fetcher = fetch) {
-  const data = await storefront(CHECKOUT_MUTATION, {variantId}, fetcher);
+export async function checkout(variantId, fetcher = fetch, attributes = []) {
+  const data = await storefront(CHECKOUT_MUTATION, {variantId, attributes}, fetcher);
   const result = data.cartCreate;
   if (result.userErrors.length) throw new Error(result.userErrors.map(error => error.message).join(' '));
   if (!result.cart || result.cart.totalQuantity !== 1) throw new Error('This arrangement is no longer available. Please refresh the shop.');

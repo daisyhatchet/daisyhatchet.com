@@ -11,6 +11,7 @@ export default async request=>{
     if(kind==='shop')return json({error:'Products are now managed in Shopify. Open Shopify to edit products.'},410);
     const state=await snapshot(),current=await readData(state,kind);
     if(current.sha!==sha)throw new Conflict('This content changed since you opened it. Copy any unsaved text, then reload the latest version.');
+    if(kind==='palette'&&uploads.length)throw new Error('Palette updates cannot include photos.');
     const pending=[];
     for(const upload of uploads){
       if(typeof upload.content!=='string'||upload.content.length>2_000_000)throw new Error('Photo is too large.');
@@ -21,7 +22,7 @@ export default async request=>{
       pending.push({name:upload.name,content:upload.content});
     }
     const clean=validateData(kind,data,[...photos(state),...pending.map(u=>u.name)]);
-    const used=new Set(kind==='gallery'?clean:clean.map(i=>i.image));
+    const used=new Set(kind==='palette'?[]:kind==='gallery'?clean:clean.map(i=>i.image));
     const tree=[];
     for(const upload of pending.filter(u=>used.has(u.name)&&!photos(state).includes(u.name))){
       const blob=await github('git/blobs','POST',{content:upload.content,encoding:'base64'});

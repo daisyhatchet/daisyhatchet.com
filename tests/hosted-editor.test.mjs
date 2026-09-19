@@ -14,15 +14,15 @@ process.env.EDITOR_GITHUB_TOKEN='test-token-not-for-production';
 const origin='https://daisyhatchet.com';
 function request(path,body,auth=true){return new Request(origin+path,{method:body===undefined?'GET':'POST',headers:{origin,'content-type':'application/json',...(auth?{cookie:sessionCookie().split(';')[0]}:{})},body:body===undefined?undefined:JSON.stringify(body)});}
 const item={id:'bouquet',name:'First Date',price:40,image:'existing.jpg',available:true,purchaseUrl:''};
-function mockGit({stale=false,race=false}={}){
+function mockGit({stale=false,race=false,palette=false}={}){
  const calls=[];
  globalThis.fetch=async(url,options)=>{
   const path=url.split('daisyhatchet.com/')[1],body=options.body&&JSON.parse(options.body);calls.push({path,method:options.method,body});
   let result;
   if(path==='git/ref/heads/main')result={object:{sha:'head'}};
   else if(path==='git/commits/head')result={tree:{sha:'tree'}};
-  else if(path==='git/trees/tree?recursive=1')result={tree:[{path:'src/content/gallery-order.json',type:'blob',sha:stale?'newer':'data-sha'},{path:'public/images/gallery-web/existing.jpg',type:'blob',sha:'image-sha'},{path:'unrelated.txt',type:'blob',sha:'untouched'}]};
-  else if(path==='git/blobs/data-sha'||path==='git/blobs/newer')result={content:Buffer.from(JSON.stringify(['existing.jpg'])).toString('base64')};
+  else if(path==='git/trees/tree?recursive=1')result={tree:[{path:palette?'src/content/bespoke-palette.json':'src/content/gallery-order.json',type:'blob',sha:stale?'newer':'data-sha'},{path:'public/images/gallery-web/existing.jpg',type:'blob',sha:'image-sha'},{path:'unrelated.txt',type:'blob',sha:'untouched'}]};
+  else if(path==='git/blobs/data-sha'||path==='git/blobs/newer')result={content:Buffer.from(JSON.stringify(palette?{enabled:false,colors:[]}:['existing.jpg'])).toString('base64')};
   else if(path==='git/blobs')result={sha:'uploaded-image'};
   else if(path==='git/trees')result={sha:'new-tree'};
   else if(path==='git/commits')result={sha:'new-commit'};
@@ -75,4 +75,21 @@ test('retired shop writes cannot publish or call GitHub',async()=>{
  assert.equal((await publish(request('/api/editor/publish',{kind:'shop',sha:'data-sha',data:[item]}))).status,410);
  assert.equal((await dataHandler(request('/api/editor/data?kind=shop'))).status,410);
  assert.equal(calls.length,0);
+});
+
+
+test('palette publication writes only palette data and protects stale edits',async()=>{
+ const palette={enabled:true,colors:[{id:'cream',name:'Cream',hex:'#fffaf4',available:true}]};
+ let calls=mockGit({palette:true});
+ let response=await publish(request('/api/editor/publish',{kind:'palette',sha:'data-sha',data:palette}));
+ assert.equal(response.status,200);
+ const entries=calls.find(c=>c.path==='git/trees').body.tree;
+ assert.deepEqual(entries.map(e=>e.path),['src/content/bespoke-palette.json']);
+ assert.deepEqual(JSON.parse(entries[0].content),palette);
+ calls=mockGit({palette:true,stale:true});
+ response=await publish(request('/api/editor/publish',{kind:'palette',sha:'data-sha',data:palette}));
+ assert.equal(response.status,409);assert(!calls.some(c=>c.method==='POST'));
+ calls=mockGit({palette:true});
+ response=await publish(request('/api/editor/publish',{kind:'palette',sha:'data-sha',data:{enabled:true,colors:[]}}));
+ assert.equal(response.status,400);assert(!calls.some(c=>c.method==='POST'));
 });

@@ -13,6 +13,7 @@ const previewJSON = import.meta.env.DEV ? JSON.stringify(previewProducts).replac
       <p>Small-batch arrangements grown and designed in Pacifica. Availability changes with the seasons.</p>
     </header>
 
+    <a class="bespoke-feature" href="/shop/bespoke/"><div><p class="eyebrow">Your colors. Our flowers.</p><h2>Bespoke Bouquet</h2><p>A little you. A little wild. Choose your size, compose your palette, and leave the flower magic to us.</p><span>Make it yours ↗</span></div><div class="feature-art" aria-hidden="true"><span>✿</span><span>✿</span><span>✿</span></div><p class="feature-prices">Petite $35 · Classic $50 · Abundant $65</p></a>
     <p id="shop-status" role="status" aria-live="polite">Loading arrangements…</p>
     <button id="shop-retry" type="button" hidden>Try again</button>
     <noscript><p>Please enable JavaScript to see current arrangements and purchase through Shopify.</p></noscript>
@@ -149,7 +150,7 @@ const previewJSON = import.meta.env.DEV ? JSON.stringify(previewProducts).replac
 
   function render(products: Product[]) {
     grid.replaceChildren();
-    for (const product of orderProducts(products, order) as Product[]) {
+    for (const product of orderProducts(products.filter(p=>p.handle!=='bespoke-bouquet'), order) as Product[]) {
       const card = template.content.firstElementChild!.cloneNode(true) as HTMLElement;
       card.querySelector('h2')!.textContent = product.title;
       const image = card.querySelector('img')!;
@@ -175,6 +176,11 @@ const previewJSON = import.meta.env.DEV ? JSON.stringify(previewProducts).replac
   load();
 </script>
 <style>
+  .bespoke-feature {display:grid;grid-template-columns:1.5fr 1fr;position:relative;overflow:hidden;padding:clamp(1.5rem,4vw,3.5rem);background:#e7ebdb;border-radius:1rem;margin-bottom:3rem;text-decoration:none;gap:1rem;}
+  .bespoke-feature h2{font-family:var(--heading);font-weight:400;font-size:clamp(2rem,4vw,4rem);line-height:1.05;margin:.7rem 0 1rem;}
+  .bespoke-feature p{max-width:32rem;font-size:.9rem;} .bespoke-feature .eyebrow{font-size:.68rem;margin:0;} .bespoke-feature div>span:not(.feature-art span){display:inline-block;margin-top:.5rem;border-bottom:1px solid;font-size:.85rem;}
+  .feature-art{display:flex;align-items:center;justify-content:center;gap:0;transform:rotate(-12deg);}.feature-art span{font-size:clamp(4rem,9vw,9rem);color:#b43862;line-height:1;}.feature-art span:nth-child(2){color:#efa274;transform:translateY(-1rem);margin-left:-1rem}.feature-art span:nth-child(3){color:#b39aca;margin-left:-1rem}.feature-prices{grid-column:1/-1;color:#526044;margin:0;font-size:.75rem!important;}
+  @media(max-width:600px){.bespoke-feature{grid-template-columns:1fr}.feature-art{display:none;}}
   .shop { padding-block: clamp(5rem,9vw,8rem); background: var(--cream); }
   header { display: grid; grid-template-columns: minmax(0,1fr) minmax(18rem,.4fr); align-items: end; gap: 3rem; margin-bottom: clamp(3rem,7vw,6rem); }
   header > div { min-width: 0; container-type: inline-size; }

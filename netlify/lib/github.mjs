@@ -1,4 +1,5 @@
-export const files = {shop:'src/content/shop-items.json',gallery:'src/content/gallery-order.json'};
+import {validatePalette} from '../../public/editor-assets/bespoke-model.js';
+export const files = {palette:'src/content/bespoke-palette.json',shop:'src/content/shop-items.json',gallery:'src/content/gallery-order.json'};
 const repo = 'daisyhatchet/daisyhatchet.com';
 export class Conflict extends Error {}
 export async function github(path, method = 'GET', data) {
@@ -27,6 +28,7 @@ export async function readData(state, kind) {
 }
 export function photos(state) {return state.entries.filter(e=>e.type==='blob'&&/^public\/images\/gallery-web\/[^/]+\.(jpe?g|png|webp)$/i.test(e.path)).map(e=>e.path.split('/').pop());}
 export function validateData(kind,data,available) {
+  if(kind==='palette')return validatePalette(data);
   if(!Array.isArray(data)||data.length>200)throw new Error('Invalid editor data.');
   if(kind==='gallery') {
     if(new Set(data).size!==data.length||!data.every(v=>typeof v==='string'&&available.includes(v)))throw new Error('Choose valid gallery photos.');
