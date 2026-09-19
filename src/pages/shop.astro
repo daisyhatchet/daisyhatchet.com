@@ -182,12 +182,12 @@ const previewJSON = import.meta.env.DEV ? JSON.stringify(previewProducts).replac
   .bespoke-feature p{max-width:32rem;font-size:.9rem;} .bespoke-feature .eyebrow{font-size:.68rem;margin:0;} .bespoke-feature > div > span{display:inline-block;margin-top:.5rem;border-bottom:1px solid;font-size:.85rem;}
   .feature-photo { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
   .feature-photo::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, #e7ebdb 0%, rgb(231 235 219 / 98%) 24%, rgb(231 235 219 / 88%) 40%, rgb(231 235 219 / 38%) 59%, transparent 77%); }
-  .feature-photo img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 65% 48%; }
+  .feature-photo img { display: block; width: 100%; height: 100%; object-fit: contain; object-position: right center; }
   .feature-prices { position: relative; z-index: 1; grid-column: 1; color: #526044; margin: 0; font-size: .75rem!important; align-self: end; }
   @media(max-width:600px) {
     .bespoke-feature { grid-template-columns: 1fr; min-height: 30rem; }
     .feature-copy { max-width: 27rem; }
-    .feature-photo img { object-position: 62% 50%; }
+    .feature-photo img { object-position: right center; }
     .feature-photo::after { background: linear-gradient(90deg, rgb(231 235 219 / 98%) 0%, rgb(231 235 219 / 90%) 44%, rgb(231 235 219 / 48%) 100%); }
   }
   .shop { padding-block: clamp(5rem,9vw,8rem); background: var(--cream); }
