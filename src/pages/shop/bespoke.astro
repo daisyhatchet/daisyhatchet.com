@@ -18,7 +18,10 @@ const arrangements = [
 <aside class="composition" aria-label="Your bouquet palette preview"><div class="paper"><div class="paper-top"><span>DAISY HATCHET</span><span>MADE FOR YOU</span></div>
 <div class="flower-art" aria-hidden="true"><svg viewBox="0 0 400 420"><defs><path id="petal" d="M0 -7 C-36 -23 -27 -55 0 -43 C27 -55 36 -23 0 -7Z"/></defs>
 {arrangements.map(arrangement=><g data-arrangement={arrangement.id} display={arrangement.id==='classic'?'inline':'none'}>
-  <g stroke="#72774d" stroke-width="2" fill="none">{arrangement.flowers.map(f=><path d={`M${f.x} ${f.y} Q${f.x} ${Math.max(f.y+55,270)} 210 355`}/>)}</g>
+  <g stroke="#72774d" stroke-width="2" fill="none">{arrangement.flowers.map((f,i)=>{
+    const bundleX = 211 + (i-(arrangement.flowers.length-1)/2)*.8;
+    return <path d={`M${f.x} ${f.y} C${f.x+(bundleX-f.x)*.45} ${f.y+(321-f.y)*.3} ${bundleX} 295 ${bundleX} 321 L${211+(bundleX-211)*2} 355`}/>;
+  })}</g>
   <g fill="#8c9568">{arrangement.leaves.map(leaf=><ellipse cx={leaf.x} cy={leaf.y} rx="11" ry="31" transform={`rotate(${leaf.r} ${leaf.x} ${leaf.y})`}/>)}</g>
   {arrangement.flowers.map((f,i)=><g class="bloom" data-bloom={i} transform={`translate(${f.x} ${f.y}) rotate(${f.r})`} fill="#e3d8cd">{[0,60,120,180,240,300].map(r=><use href="#petal" transform={`rotate(${r})`}/>)}<circle r="10" fill="#fffaf4"/><circle r="4" fill="#a49065"/></g>)}
 </g>)}
