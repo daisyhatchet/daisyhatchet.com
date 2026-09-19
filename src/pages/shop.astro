@@ -183,10 +183,15 @@ const previewJSON = import.meta.env.DEV ? JSON.stringify(previewProducts).replac
   .feature-photo { position: absolute; inset: 0; z-index: -1; pointer-events: none; display: flex; align-items: center; justify-content: flex-end; }
   .feature-photo img { display: block; flex: 0 1 auto; width: auto; height: auto; max-width: 100%; max-height: 100%; object-fit: contain; --photo-fade: linear-gradient(90deg, transparent 0%, rgb(0 0 0 / 12%) 12%, rgb(0 0 0 / 65%) 30%, #000 48%); -webkit-mask-image: var(--photo-fade); mask-image: var(--photo-fade); }
   .feature-prices { position: relative; z-index: 1; grid-column: 1; color: #526044; margin: 0; font-size: .75rem!important; align-self: end; }
-  @media(max-width:600px) {
-    .bespoke-feature { grid-template-columns: 1fr; min-height: 30rem; }
-    .feature-copy { max-width: 27rem; }
-    .feature-photo img { --photo-fade: linear-gradient(90deg, transparent 0%, rgb(0 0 0 / 10%) 44%, rgb(0 0 0 / 52%) 100%); }
+  @media(max-width:760px) {
+    .bespoke-feature { grid-template-columns: minmax(0,1fr); min-height: 0; padding: 0; gap: 0; }
+    .feature-copy { grid-row: 1; padding: 1.75rem 1.5rem 0; max-width: none; }
+    .bespoke-feature h2 { max-width: 12ch; font-size: clamp(2.2rem,7vw,3.3rem); }
+    .bespoke-feature .feature-copy > p:not(.eyebrow) { margin-block: 1rem; line-height: 1.65; }
+    .bespoke-feature .feature-copy > span { display: inline-flex; align-items: center; min-height: 2.75rem; margin-top: .25rem; padding: .6rem 1rem; border: 0; border-radius: 999px; background: var(--ink); color: var(--cream); }
+    .feature-prices { grid-row: 2; padding: 1rem 1.5rem 1.25rem; line-height: 1.8; }
+    .feature-photo { position: relative; inset: auto; grid-row: 3; grid-column: 1; z-index: 0; display: block; }
+    .feature-photo img { width: 100%; height: auto; max-height: none; --photo-fade: linear-gradient(180deg, transparent 0%, rgb(0 0 0 / 70%) 12%, #000 25%); }
   }
   .shop { padding-block: clamp(5rem,9vw,8rem); background: var(--cream); }
   header { display: grid; grid-template-columns: minmax(0,1fr) minmax(18rem,.4fr); align-items: end; gap: 3rem; margin-bottom: clamp(3rem,7vw,6rem); }
