@@ -13,7 +13,7 @@ const previewJSON = import.meta.env.DEV ? JSON.stringify(previewProducts).replac
       <p>Small-batch arrangements grown and designed in Pacifica. Availability changes with the seasons.</p>
     </header>
 
-    <a class="bespoke-feature" href="/shop/bespoke/"><div><p class="eyebrow">Your colors. Our flowers.</p><h2>Bespoke Bouquet</h2><p>A little you. A little wild. Choose your size, compose your palette, and leave the flower magic to us.</p><span>Make it yours ↗</span></div><div class="feature-photo"><img src="/images/gallery-web/IMG_3160.jpg" alt="Arranging colorful seasonal bouquets while wearing a bright pink sun hat" width="2000" height="1500" /></div><p class="feature-prices">Petite $35 · Classic $50 · Abundant $65</p></a>
+    <a class="bespoke-feature" href="/shop/bespoke/"><div class="feature-copy"><p class="eyebrow">Your colors. Our flowers.</p><h2>Bespoke Bouquet</h2><p>A little you. A little wild. Choose your size, compose your palette, and leave the flower magic to us.</p><span>Make it yours ↗</span></div><div class="feature-photo"><img src="/images/gallery-web/IMG_3160.jpg" alt="Arranging colorful seasonal bouquets while wearing a bright pink sun hat" width="2000" height="1500" /></div><p class="feature-prices">Petite $35 · Classic $50 · Abundant $65</p></a>
     <p id="shop-status" role="status" aria-live="polite">Loading arrangements…</p>
     <button id="shop-retry" type="button" hidden>Try again</button>
     <noscript><p>Please enable JavaScript to see current arrangements and purchase through Shopify.</p></noscript>
@@ -176,15 +176,19 @@ const previewJSON = import.meta.env.DEV ? JSON.stringify(previewProducts).replac
   load();
 </script>
 <style>
-  .bespoke-feature {display:grid;grid-template-columns:1.2fr 1fr;position:relative;overflow:hidden;padding:clamp(1.5rem,4vw,3.5rem);background:#e7ebdb;border-radius:1rem;margin-bottom:3rem;text-decoration:none;gap:1rem;}
+  .bespoke-feature {display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);position:relative;isolation:isolate;overflow:hidden;min-height:26rem;padding:clamp(1.5rem,4vw,3.5rem);background:#e7ebdb;border-radius:1rem;margin-bottom:3rem;text-decoration:none;gap:1.5rem;}
+  .feature-copy { position: relative; z-index: 1; align-self: center; }
   .bespoke-feature h2{font-family:var(--heading);font-weight:400;font-size:clamp(2rem,4vw,4rem);line-height:1.05;margin:.7rem 0 1rem;}
   .bespoke-feature p{max-width:32rem;font-size:.9rem;} .bespoke-feature .eyebrow{font-size:.68rem;margin:0;} .bespoke-feature > div > span{display:inline-block;margin-top:.5rem;border-bottom:1px solid;font-size:.85rem;}
-  .feature-photo { grid-column: 2; grid-row: 1 / 3; align-self: stretch; min-height: 20rem; overflow: hidden; border-radius: .65rem; }
-  .feature-photo img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 55% 50%; }
-  .feature-prices { grid-column: 1; color: #526044; margin: 0; font-size: .75rem!important; align-self: end; }
+  .feature-photo { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
+  .feature-photo::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, #e7ebdb 0%, rgb(231 235 219 / 98%) 24%, rgb(231 235 219 / 88%) 40%, rgb(231 235 219 / 38%) 59%, transparent 77%); }
+  .feature-photo img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 65% 48%; }
+  .feature-prices { position: relative; z-index: 1; grid-column: 1; color: #526044; margin: 0; font-size: .75rem!important; align-self: end; }
   @media(max-width:600px) {
-    .bespoke-feature { grid-template-columns: 1fr; }
-    .feature-photo { grid-column: 1; grid-row: 3; min-height: 0; aspect-ratio: 4 / 3; margin-top: .5rem; }
+    .bespoke-feature { grid-template-columns: 1fr; min-height: 30rem; }
+    .feature-copy { max-width: 27rem; }
+    .feature-photo img { object-position: 62% 50%; }
+    .feature-photo::after { background: linear-gradient(90deg, rgb(231 235 219 / 98%) 0%, rgb(231 235 219 / 90%) 44%, rgb(231 235 219 / 48%) 100%); }
   }
   .shop { padding-block: clamp(5rem,9vw,8rem); background: var(--cream); }
   header { display: grid; grid-template-columns: minmax(0,1fr) minmax(18rem,.4fr); align-items: end; gap: 3rem; margin-bottom: clamp(3rem,7vw,6rem); }
