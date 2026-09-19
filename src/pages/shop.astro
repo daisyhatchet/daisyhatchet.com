@@ -180,15 +180,13 @@ const previewJSON = import.meta.env.DEV ? JSON.stringify(previewProducts).replac
   .feature-copy { position: relative; z-index: 1; align-self: center; }
   .bespoke-feature h2{font-family:var(--heading);font-weight:400;font-size:clamp(2rem,4vw,4rem);line-height:1.05;margin:.7rem 0 1rem;}
   .bespoke-feature p{max-width:32rem;font-size:.9rem;} .bespoke-feature .eyebrow{font-size:.68rem;margin:0;} .bespoke-feature > div > span{display:inline-block;margin-top:.5rem;border-bottom:1px solid;font-size:.85rem;}
-  .feature-photo { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
-  .feature-photo::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, #e7ebdb 0%, rgb(231 235 219 / 98%) 24%, rgb(231 235 219 / 88%) 40%, rgb(231 235 219 / 38%) 59%, transparent 77%); }
-  .feature-photo img { display: block; width: 100%; height: 100%; object-fit: contain; object-position: right center; }
+  .feature-photo { position: absolute; inset: 0; z-index: -1; pointer-events: none; display: flex; align-items: center; justify-content: flex-end; }
+  .feature-photo img { display: block; flex: 0 1 auto; width: auto; height: auto; max-width: 100%; max-height: 100%; object-fit: contain; --photo-fade: linear-gradient(90deg, transparent 0%, rgb(0 0 0 / 12%) 12%, rgb(0 0 0 / 65%) 30%, #000 48%); -webkit-mask-image: var(--photo-fade); mask-image: var(--photo-fade); }
   .feature-prices { position: relative; z-index: 1; grid-column: 1; color: #526044; margin: 0; font-size: .75rem!important; align-self: end; }
   @media(max-width:600px) {
     .bespoke-feature { grid-template-columns: 1fr; min-height: 30rem; }
     .feature-copy { max-width: 27rem; }
-    .feature-photo img { object-position: right center; }
-    .feature-photo::after { background: linear-gradient(90deg, rgb(231 235 219 / 98%) 0%, rgb(231 235 219 / 90%) 44%, rgb(231 235 219 / 48%) 100%); }
+    .feature-photo img { --photo-fade: linear-gradient(90deg, transparent 0%, rgb(0 0 0 / 10%) 44%, rgb(0 0 0 / 52%) 100%); }
   }
   .shop { padding-block: clamp(5rem,9vw,8rem); background: var(--cream); }
   header { display: grid; grid-template-columns: minmax(0,1fr) minmax(18rem,.4fr); align-items: end; gap: 3rem; margin-bottom: clamp(3rem,7vw,6rem); }
