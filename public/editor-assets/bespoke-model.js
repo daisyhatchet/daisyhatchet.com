@@ -1,7 +1,7 @@
 export const SIZES = [
-  {id:'petite',name:'Petite',price:35,min:1,max:2,description:'A little moment of lovely.'},
-  {id:'classic',name:'Classic',price:50,min:2,max:3,description:'An everyday extraordinary.'},
-  {id:'abundant',name:'Abundant',price:65,min:3,max:5,description:'For taking up beautiful space.'},
+  {id:'petite',name:'Petite',price:35,min:1,max:2,description:"love them a little"},
+  {id:'classic',name:'Classic',price:50,min:2,max:3,description:"¯\\_(ツ)_/¯"},
+  {id:'abundant',name:'Abundant',price:65,min:3,max:4,description:"love them a lot"},
 ];
 export function validatePalette(value) {
   if (!value || typeof value.enabled !== 'boolean' || !Array.isArray(value.colors) || value.colors.length > 24) throw Error('Use up to 24 colors.');

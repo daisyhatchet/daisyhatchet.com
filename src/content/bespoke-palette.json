@@ -1,52 +1,46 @@
 {
-  "enabled": false,
+  "enabled": true,
   "colors": [
     {
       "id": "cream",
-      "name": "Buttercream",
-      "hex": "#f4e9c9",
+      "name": "Hot Gossip",
+      "hex": "#ec0eb9",
       "available": true
     },
     {
-      "id": "peach",
-      "name": "Apricot",
-      "hex": "#efa274",
+      "id": "3ce432f1-2675-47b1-86e7-b381418f1756",
+      "name": "Pinky Promise",
+      "hex": "#fba2c4",
       "available": true
     },
     {
-      "id": "pink",
-      "name": "Ballet pink",
-      "hex": "#e9a4bc",
+      "id": "c79407f2-4771-4d7d-8725-6d69e7ad50a2",
+      "name": "Cherry Bomb",
+      "hex": "#c81453",
       "available": true
     },
     {
-      "id": "coral",
-      "name": "Coral",
-      "hex": "#ed6958",
+      "id": "70c2b48e-6371-4653-bc9b-3489aea69dd5",
+      "name": "Orange Crush",
+      "hex": "#fd8a00",
       "available": true
     },
     {
-      "id": "raspberry",
-      "name": "Raspberry",
-      "hex": "#b72e62",
+      "id": "15b5797c-c887-42d3-9dda-1a02b3e1d89c",
+      "name": "Mellow Yellow",
+      "hex": "#f2d778",
       "available": true
     },
     {
-      "id": "lavender",
-      "name": "Lilac",
-      "hex": "#b39aca",
+      "id": "609728cb-6d0a-4add-9115-e78a367e5e34",
+      "name": "Vanilla Haze",
+      "hex": "#fff8e5",
       "available": true
     },
     {
-      "id": "yellow",
-      "name": "Marigold",
-      "hex": "#e9b636",
-      "available": true
-    },
-    {
-      "id": "burgundy",
-      "name": "Burgundy",
-      "hex": "#71384e",
+      "id": "df28345b-5ae4-4e51-8fba-f652b9db0daa",
+      "name": "Sour Apple",
+      "hex": "#a1bc57",
       "available": true
     }
   ]
