@@ -25,7 +25,12 @@ function render() {
   $<HTMLButtonElement>('#clear-colors').disabled=busy;
   $('#art-title').textContent=`Your ${size.name}`;
   $('#art-caption').textContent=colors.length?colors.map(c=>c.name).join(' + '):'A blank canvas. Make it yours.';
-  document.querySelectorAll<SVGElement>('[data-bloom]').forEach((b,i)=>{b.style.fill=colors.length?colors[i%colors.length].hex:'#e3d8cd';b.style.opacity=sizeId==='petite'&&i>3?'.2':'1';});
+  document.querySelectorAll<SVGElement>('[data-arrangement]').forEach(arrangement=>{
+    arrangement.setAttribute('display',arrangement.dataset.arrangement===sizeId?'inline':'none');
+    arrangement.querySelectorAll<SVGElement>('[data-bloom]').forEach((b,i)=>{
+      b.style.fill=colors.length?colors[i%colors.length].hex:'#e3d8cd';
+    });
+  });
   $('#palette-ribbon').replaceChildren(...colors.map(c=>{const el=document.createElement('span');el.style.background=c.hex;return el;}));
   $('#summary-size').textContent=`${size.name} · Bespoke Bouquet`;
   $('#summary-price').textContent=`$${size.price}`;
