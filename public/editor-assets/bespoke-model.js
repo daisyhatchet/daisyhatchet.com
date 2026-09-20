@@ -3,6 +3,10 @@ export const SIZES = [
   {id:'classic',name:'Classic',price:50,min:2,max:3,description:"¯\\_(ツ)_/¯"},
   {id:'abundant',name:'Abundant',price:65,min:3,max:4,description:"love them a lot"},
 ];
+export function defaultSize(colors) {
+  const count=colors.filter(color=>color.available).length;
+  return [...SIZES].reverse().find(size=>count>=size.min) || SIZES[0];
+}
 export function validatePalette(value) {
   if (!value || typeof value.enabled !== 'boolean' || !Array.isArray(value.colors) || value.colors.length > 24) throw Error('Use up to 24 colors.');
   const ids = new Set(), names = new Set();
