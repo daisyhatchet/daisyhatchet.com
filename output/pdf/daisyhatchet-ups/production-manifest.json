@@ -1,0 +1,542 @@
+[
+  {
+    "file": "17-caught-looking-back.pdf",
+    "option": "17",
+    "name": "caught-looking",
+    "side": "back",
+    "source_sha256": "2db36c00603857bf85fa56009cff0fa5263b3cb3e5568df4ac69e9e08c130dcd",
+    "page_points": [
+      259.994,
+      151.994
+    ],
+    "trim_points": [
+      3.997,
+      3.997,
+      255.997,
+      147.997
+    ],
+    "safety_points": [
+      8.249,
+      8.249,
+      251.745,
+      143.745
+    ],
+    "background_ppi": 600,
+    "vector_text_icons_qr": true,
+    "cmyk_profile": "Apple Generic CMYK",
+    "pink_percent": [
+      0,
+      100,
+      0,
+      0
+    ],
+    "lime_percent": [
+      30,
+      0,
+      100,
+      0
+    ],
+    "watermark_opacity": 0.35,
+    "qr_percent": [
+      0,
+      0,
+      0,
+      100
+    ]
+  },
+  {
+    "file": "17-caught-looking-front.pdf",
+    "option": "17",
+    "name": "caught-looking",
+    "side": "front",
+    "source_sha256": "01651bcec051380e4bb0c71af3297577acbdc10f1529abc53bb371614b2c563b",
+    "page_points": [
+      259.994,
+      151.994
+    ],
+    "trim_points": [
+      3.997,
+      3.997,
+      255.997,
+      147.997
+    ],
+    "safety_points": [
+      8.249,
+      8.249,
+      251.745,
+      143.745
+    ],
+    "background_ppi": 600,
+    "vector_text_icons_qr": true,
+    "cmyk_profile": "Apple Generic CMYK",
+    "pink_percent": [
+      0,
+      100,
+      0,
+      0
+    ],
+    "lime_percent": [
+      30,
+      0,
+      100,
+      0
+    ],
+    "watermark_opacity": 0.35,
+    "qr_percent": [
+      0,
+      0,
+      0,
+      100
+    ]
+  },
+  {
+    "file": "18-mutual-attraction-back.pdf",
+    "option": "18",
+    "name": "mutual-attraction",
+    "side": "back",
+    "source_sha256": "5229118ac5105c886f4ce0d29fd27f5c09c22cf3cbdf4ef79854c2e26543ab78",
+    "page_points": [
+      259.994,
+      151.994
+    ],
+    "trim_points": [
+      3.997,
+      3.997,
+      255.997,
+      147.997
+    ],
+    "safety_points": [
+      8.249,
+      8.249,
+      251.745,
+      143.745
+    ],
+    "background_ppi": 600,
+    "vector_text_icons_qr": true,
+    "cmyk_profile": "Apple Generic CMYK",
+    "pink_percent": [
+      0,
+      100,
+      0,
+      0
+    ],
+    "lime_percent": [
+      30,
+      0,
+      100,
+      0
+    ],
+    "watermark_opacity": 0.35,
+    "qr_percent": [
+      0,
+      0,
+      0,
+      100
+    ]
+  },
+  {
+    "file": "18-mutual-attraction-front.pdf",
+    "option": "18",
+    "name": "mutual-attraction",
+    "side": "front",
+    "source_sha256": "9979251d556ede8389fbd7f2ef871d456a0b31e17a115222093b3e18aabd1eba",
+    "page_points": [
+      259.994,
+      151.994
+    ],
+    "trim_points": [
+      3.997,
+      3.997,
+      255.997,
+      147.997
+    ],
+    "safety_points": [
+      8.249,
+      8.249,
+      251.745,
+      143.745
+    ],
+    "background_ppi": 600,
+    "vector_text_icons_qr": true,
+    "cmyk_profile": "Apple Generic CMYK",
+    "pink_percent": [
+      0,
+      100,
+      0,
+      0
+    ],
+    "lime_percent": [
+      30,
+      0,
+      100,
+      0
+    ],
+    "watermark_opacity": 0.35,
+    "qr_percent": [
+      0,
+      0,
+      0,
+      100
+    ]
+  },
+  {
+    "file": "19-take-me-home-back.pdf",
+    "option": "19",
+    "name": "take-me-home",
+    "side": "back",
+    "source_sha256": "9851985917f68f9a4e7ac15095f0788c76e52d891e1bef873235dd7ff55c338d",
+    "page_points": [
+      259.994,
+      151.994
+    ],
+    "trim_points": [
+      3.997,
+      3.997,
+      255.997,
+      147.997
+    ],
+    "safety_points": [
+      8.249,
+      8.249,
+      251.745,
+      143.745
+    ],
+    "background_ppi": 600,
+    "vector_text_icons_qr": true,
+    "cmyk_profile": "Apple Generic CMYK",
+    "pink_percent": [
+      0,
+      100,
+      0,
+      0
+    ],
+    "lime_percent": [
+      30,
+      0,
+      100,
+      0
+    ],
+    "watermark_opacity": 0.35,
+    "qr_percent": [
+      0,
+      0,
+      0,
+      100
+    ]
+  },
+  {
+    "file": "19-take-me-home-front.pdf",
+    "option": "19",
+    "name": "take-me-home",
+    "side": "front",
+    "source_sha256": "a4f1a399fe52347a61fd3c1b176b9aa442ba9393ed6cc0bb8a09c16fa44d6f0d",
+    "page_points": [
+      259.994,
+      151.994
+    ],
+    "trim_points": [
+      3.997,
+      3.997,
+      255.997,
+      147.997
+    ],
+    "safety_points": [
+      8.249,
+      8.249,
+      251.745,
+      143.745
+    ],
+    "background_ppi": 600,
+    "vector_text_icons_qr": true,
+    "cmyk_profile": "Apple Generic CMYK",
+    "pink_percent": [
+      0,
+      100,
+      0,
+      0
+    ],
+    "lime_percent": [
+      30,
+      0,
+      100,
+      0
+    ],
+    "watermark_opacity": 0.35,
+    "qr_percent": [
+      0,
+      0,
+      0,
+      100
+    ]
+  },
+  {
+    "file": "20-second-date-back.pdf",
+    "option": "20",
+    "name": "second-date",
+    "side": "back",
+    "source_sha256": "22a60919e04a0dc12b1e07f6b457b2089402fb083c314496c9f891d65f586060",
+    "page_points": [
+      259.994,
+      151.994
+    ],
+    "trim_points": [
+      3.997,
+      3.997,
+      255.997,
+      147.997
+    ],
+    "safety_points": [
+      8.249,
+      8.249,
+      251.745,
+      143.745
+    ],
+    "background_ppi": 600,
+    "vector_text_icons_qr": true,
+    "cmyk_profile": "Apple Generic CMYK",
+    "pink_percent": [
+      0,
+      100,
+      0,
+      0
+    ],
+    "lime_percent": [
+      30,
+      0,
+      100,
+      0
+    ],
+    "watermark_opacity": 0.35,
+    "qr_percent": [
+      0,
+      0,
+      0,
+      100
+    ]
+  },
+  {
+    "file": "20-second-date-front.pdf",
+    "option": "20",
+    "name": "second-date",
+    "side": "front",
+    "source_sha256": "a07cc200376a66f1aaab96ec4abd7b9f66f88623d31e7ccba89ae74e325f85b5",
+    "page_points": [
+      259.994,
+      151.994
+    ],
+    "trim_points": [
+      3.997,
+      3.997,
+      255.997,
+      147.997
+    ],
+    "safety_points": [
+      8.249,
+      8.249,
+      251.745,
+      143.745
+    ],
+    "background_ppi": 600,
+    "vector_text_icons_qr": true,
+    "cmyk_profile": "Apple Generic CMYK",
+    "pink_percent": [
+      0,
+      100,
+      0,
+      0
+    ],
+    "lime_percent": [
+      30,
+      0,
+      100,
+      0
+    ],
+    "watermark_opacity": 0.35,
+    "qr_percent": [
+      0,
+      0,
+      0,
+      100
+    ]
+  },
+  {
+    "file": "21-little-reveal-back.pdf",
+    "option": "21",
+    "name": "little-reveal",
+    "side": "back",
+    "source_sha256": "f6b3b92e89da9fd26feb57272d6710c6a248490881deaa3e6b9919b34691b070",
+    "page_points": [
+      259.994,
+      151.994
+    ],
+    "trim_points": [
+      3.997,
+      3.997,
+      255.997,
+      147.997
+    ],
+    "safety_points": [
+      8.249,
+      8.249,
+      251.745,
+      143.745
+    ],
+    "background_ppi": 600,
+    "vector_text_icons_qr": true,
+    "cmyk_profile": "Apple Generic CMYK",
+    "pink_percent": [
+      0,
+      100,
+      0,
+      0
+    ],
+    "lime_percent": [
+      30,
+      0,
+      100,
+      0
+    ],
+    "watermark_opacity": 0.35,
+    "qr_percent": [
+      0,
+      0,
+      0,
+      100
+    ]
+  },
+  {
+    "file": "21-little-reveal-front.pdf",
+    "option": "21",
+    "name": "little-reveal",
+    "side": "front",
+    "source_sha256": "c74e490283bb4735c3a42a8b4a3bfde67cfaf7b1f519436cf1d166756fbe5c0e",
+    "page_points": [
+      259.994,
+      151.994
+    ],
+    "trim_points": [
+      3.997,
+      3.997,
+      255.997,
+      147.997
+    ],
+    "safety_points": [
+      8.249,
+      8.249,
+      251.745,
+      143.745
+    ],
+    "background_ppi": 600,
+    "vector_text_icons_qr": true,
+    "cmyk_profile": "Apple Generic CMYK",
+    "pink_percent": [
+      0,
+      100,
+      0,
+      0
+    ],
+    "lime_percent": [
+      30,
+      0,
+      100,
+      0
+    ],
+    "watermark_opacity": 0.35,
+    "qr_percent": [
+      0,
+      0,
+      0,
+      100
+    ]
+  },
+  {
+    "file": "22-made-you-look-back.pdf",
+    "option": "22",
+    "name": "made-you-look",
+    "side": "back",
+    "source_sha256": "8e8fb284ddccab589af2ee637781944c4c8e8964a03653d99d69e4ddec33f885",
+    "page_points": [
+      259.994,
+      151.994
+    ],
+    "trim_points": [
+      3.997,
+      3.997,
+      255.997,
+      147.997
+    ],
+    "safety_points": [
+      8.249,
+      8.249,
+      251.745,
+      143.745
+    ],
+    "background_ppi": 600,
+    "vector_text_icons_qr": true,
+    "cmyk_profile": "Apple Generic CMYK",
+    "pink_percent": [
+      0,
+      100,
+      0,
+      0
+    ],
+    "lime_percent": [
+      30,
+      0,
+      100,
+      0
+    ],
+    "watermark_opacity": 0.35,
+    "qr_percent": [
+      0,
+      0,
+      0,
+      100
+    ]
+  },
+  {
+    "file": "22-made-you-look-front.pdf",
+    "option": "22",
+    "name": "made-you-look",
+    "side": "front",
+    "source_sha256": "1f623fb7ad06b865c83a90de08fe4a113e2c5eade43783a2c8f26a39f8c63a72",
+    "page_points": [
+      259.994,
+      151.994
+    ],
+    "trim_points": [
+      3.997,
+      3.997,
+      255.997,
+      147.997
+    ],
+    "safety_points": [
+      8.249,
+      8.249,
+      251.745,
+      143.745
+    ],
+    "background_ppi": 600,
+    "vector_text_icons_qr": true,
+    "cmyk_profile": "Apple Generic CMYK",
+    "pink_percent": [
+      0,
+      100,
+      0,
+      0
+    ],
+    "lime_percent": [
+      30,
+      0,
+      100,
+      0
+    ],
+    "watermark_opacity": 0.35,
+    "qr_percent": [
+      0,
+      0,
+      0,
+      100
+    ]
+  }
+]

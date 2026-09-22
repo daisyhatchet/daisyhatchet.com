@@ -1,0 +1,23 @@
+{
+  "profile": "Generic CMYK Profile",
+  "profile_sha256": "0c8a584b288a306eac9e1d3f1e68bc1b64331c717ceb051420e6257f17b3509a",
+  "method": "sRGB \u2192 CMYK \u2192 sRGB; relative colorimetric; black-point compensation; no paper-white simulation",
+  "scope": "Refined flirty set, both sides. Screen comparison only; not production artwork.",
+  "adjusted_variant": {
+    "method": "Change brand-color CMYK separations before converting back to sRGB; interpolate changes through existing antialiased edges and watermark blends. Plum and cream retain the automatic conversion.",
+    "pink_CMYK_percent": [
+      0,
+      100,
+      0,
+      0
+    ],
+    "lime_CMYK_percent": [
+      30,
+      0,
+      100,
+      0
+    ],
+    "note": "Exploratory process-color palette. Applies to both supplied logo and layout colors. Not UPS-approved or a fluorescent-ink simulation.",
+    "watermark_source_opacity": 0.35
+  }
+}

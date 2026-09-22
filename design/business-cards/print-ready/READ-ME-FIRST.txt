@@ -1,0 +1,52 @@
+DAISY HATCHET - UPS STORE PRINT BUSINESS CARDS
+
+Six refined designs. Each design has a separate FRONT PDF and BACK PDF.
+The supplier template is one card, not an imposed sheet. Do not combine the designs on a sheet for upload.
+
+FILES
+17 Caught Looking
+18 Mutual Attraction
+19 Take Me Home
+20 Second Date
+21 Little Reveal
+22 Made You Look (Field Note 02 photograph)
+
+UPLOAD
+Choose the 3.5 x 2 inch double-sided business card product.
+For the chosen design, upload its front PDF for the front and matching back PDF for the back.
+Both sides are upright landscape, with matching top edges.
+Use the supplier's bleed-aware placement; the finished trim is 3.5 x 2 inches.
+The PDF page includes the extra bleed and must not be shrunk to make that entire page the finished card size.
+Check the site's front/back proof before ordering. Files have not been uploaded and no order has been placed.
+
+TEMPLATE MATCH
+Source: https://upsstoreprint.com/business-cards
+Template: https://buildasign-nopcommerce-images-live.s3.us-east-1.amazonaws.com/BusinessCards.zip
+The downloaded file is Business Cards/2x3.5.pdf. Its guide layer is hidden by default.
+PDF page / bleed: 259.994 x 151.994 points (approximately 3.611028 x 2.111028 inches).
+Trim: 252 x 144 points (3.5 x 2 inches), inset 3.997 points from each page edge.
+Safety boundary: (8.249, 8.249) to (251.745, 143.745) points in PDF coordinates.
+All text and contact details are inside the safety boundary.
+Background artwork extends through the bleed. No template guides or crop marks are printed.
+
+COLOR AND SHARPNESS
+Approved adjusted palette: pink C0 M100 Y0 K0; lime C30 M0 Y100 K0.
+Crossed emblem: stronger 35% source-opacity version, flattened before CMYK conversion.
+Apple Generic CMYK output profile is embedded. UPS/BuildASign has not supplied a specific profile.
+These files use the agreed best-guess CMYK preparation; they are not a printer-certified color proof or a claimed PDF/X certification.
+Text, icons and QR codes remain vector paths. Background/logo artwork is embedded at approximately 600 ppi.
+QR codes use only 100% black ink to avoid colored registration fringes.
+No live fonts, RGB artwork or live transparency. All six QR codes decoded correctly from the final PDF renders.
+
+CORNERS
+The supplier's template and listed product specify a rectangular card; rounded cutting was not confirmed.
+The artwork therefore fills the corners and bleed. This avoids printed white corner shapes.
+If rounded cards are desired, confirm the printer offers physical corner rounding. Rounded corners cannot be created by the artwork alone.
+
+ORDERING
+Use the twelve PDFs, not the proof PNGs or earlier SVGs, for this printer.
+The local preview page shows renders of these PDFs, including bleed. It is not an imposed print sheet.
+A physical sample/proof is still the reliable check for the bright pink and lime.
+
+MADE YOU LOOK
+The photograph uses normal ICC conversion. Brand-color ink substitutions are restricted to the logo and vector lettering, preserving the natural photographic colors. The photo edge continues through the bleed.

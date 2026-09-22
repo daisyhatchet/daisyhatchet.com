@@ -4,3 +4,11 @@ dist/
 .pnpm-store/
 .DS_Store
 source-images/
+
+# Local design review exports; source designs and final print PDFs are tracked.
+/design/*.zip
+/design/business-cards/previews/
+/design/business-cards/overview.png
+/output/pdf/*.zip
+/tmp/
+__pycache__/

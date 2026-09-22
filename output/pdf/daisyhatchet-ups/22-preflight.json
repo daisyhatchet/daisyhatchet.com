@@ -1,0 +1,24 @@
+[
+  {
+    "file": "22-made-you-look-back.pdf",
+    "pages": 1,
+    "trim_inches": [
+      3.5,
+      2
+    ],
+    "CMYK_only": true,
+    "text_outlined": true,
+    "output_profile": true
+  },
+  {
+    "file": "22-made-you-look-front.pdf",
+    "pages": 1,
+    "trim_inches": [
+      3.5,
+      2
+    ],
+    "CMYK_only": true,
+    "text_outlined": true,
+    "output_profile": true
+  }
+]

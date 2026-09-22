@@ -1,0 +1,142 @@
+[
+  {
+    "file": "17-caught-looking-back.pdf",
+    "pages": 1,
+    "CMYK_only": true,
+    "vector_path_commands": 4042,
+    "images": [
+      [
+        2167,
+        1267,
+        "/DeviceCMYK"
+      ]
+    ],
+    "bytes": 346096
+  },
+  {
+    "file": "17-caught-looking-front.pdf",
+    "pages": 1,
+    "CMYK_only": true,
+    "vector_path_commands": 1540,
+    "images": [
+      [
+        2167,
+        1267,
+        "/DeviceCMYK"
+      ]
+    ],
+    "bytes": 245266
+  },
+  {
+    "file": "18-mutual-attraction-back.pdf",
+    "pages": 1,
+    "CMYK_only": true,
+    "vector_path_commands": 4666,
+    "images": [
+      [
+        2167,
+        1267,
+        "/DeviceCMYK"
+      ]
+    ],
+    "bytes": 347188
+  },
+  {
+    "file": "18-mutual-attraction-front.pdf",
+    "pages": 1,
+    "CMYK_only": true,
+    "vector_path_commands": 1391,
+    "images": [
+      [
+        2167,
+        1267,
+        "/DeviceCMYK"
+      ]
+    ],
+    "bytes": 242190
+  },
+  {
+    "file": "19-take-me-home-back.pdf",
+    "pages": 1,
+    "CMYK_only": true,
+    "vector_path_commands": 4844,
+    "images": [
+      [
+        2167,
+        1267,
+        "/DeviceCMYK"
+      ]
+    ],
+    "bytes": 347156
+  },
+  {
+    "file": "19-take-me-home-front.pdf",
+    "pages": 1,
+    "CMYK_only": true,
+    "vector_path_commands": 1302,
+    "images": [
+      [
+        2167,
+        1267,
+        "/DeviceCMYK"
+      ]
+    ],
+    "bytes": 242074
+  },
+  {
+    "file": "20-second-date-back.pdf",
+    "pages": 1,
+    "CMYK_only": true,
+    "vector_path_commands": 4639,
+    "images": [
+      [
+        2167,
+        1267,
+        "/DeviceCMYK"
+      ]
+    ],
+    "bytes": 345646
+  },
+  {
+    "file": "20-second-date-front.pdf",
+    "pages": 1,
+    "CMYK_only": true,
+    "vector_path_commands": 1920,
+    "images": [
+      [
+        2167,
+        1267,
+        "/DeviceCMYK"
+      ]
+    ],
+    "bytes": 244497
+  },
+  {
+    "file": "21-little-reveal-back.pdf",
+    "pages": 1,
+    "CMYK_only": true,
+    "vector_path_commands": 3802,
+    "images": [
+      [
+        2167,
+        1267,
+        "/DeviceCMYK"
+      ]
+    ],
+    "bytes": 343524
+  },
+  {
+    "file": "21-little-reveal-front.pdf",
+    "pages": 1,
+    "CMYK_only": true,
+    "vector_path_commands": 1302,
+    "images": [
+      [
+        2167,
+        1267,
+        "/DeviceCMYK"
+      ]
+    ],
+    "bytes": 242109
+  }
+]
