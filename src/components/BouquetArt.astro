@@ -1,0 +1,141 @@
+---
+import {stemTie, stemPath} from '@/lib/bouquet-geometry';
+// A groovy, 1960s–70s flower-power bouquet drawn in flat, layered color.
+// Each bloom is built like the era's screen prints: an outer petal ring, a smaller
+// ring turned half a step, then a disc and a dot, all in tones of one color.
+interface Props { initial: string }
+const {initial} = Astro.props;
+
+// A wavy, melting ray for the groovy sun bloom: it wiggles more toward the tip.
+const wavyRay = (length: number, sway: number, waves: number, base: number, belly: number) => {
+  const left: string[] = [], right: string[] = [];
+  for (let i = 0; i <= 20; i++) {
+    const t = i / 20, y = -8 - t * length, center = sway * Math.sin(t * Math.PI * waves) * t;
+    const half = base + (belly - base) * Math.sin(t * Math.PI * .6);
+    left.push(`${(center - half).toFixed(1)} ${y.toFixed(1)}`);
+    right.unshift(`${(center + half).toFixed(1)} ${y.toFixed(1)}`);
+  }
+  const tipRadius = (base + (belly - base) * Math.sin(Math.PI * .6)).toFixed(1);
+  return `M${left.join(' L')} A${tipRadius} ${tipRadius} 0 0 1 ${right.join(' L')}Z`;
+};
+// Petal outlines point up from the bloom's center (0,0), so they unfurl outward.
+const PETAL = {
+  // Mary Quant's round lobe.
+  lobe: 'M0 -2 C-21 -2 -22 -38 0 -38 C22 -38 21 -2 0 -2Z',
+  // The flower-power flare: pinched at the heart, fat and round at the tip.
+  flare: 'M0 0 C-3 -12 -21 -24 -20 -38 C-19 -49 19 -49 20 -38 C21 -24 3 -12 0 0Z',
+  // A long daisy tongue.
+  tongue: 'M0 -5 C-8 -6 -9 -42 0 -43 C9 -42 8 -6 0 -5Z',
+  // A leaning pinwheel petal.
+  swirl: 'M0 0 C-18 -10 -30 -32 -17 -46 C-8 -55 12 -50 9 -37 C7 -28 -4 -26 -2 -17 C-1 -9 2 -5 0 0Z',
+  // A wavy ray, like a groovy sun.
+  ray: wavyRay(34, 5, 1.6, 4, 6.5),
+  // Round beads that make a scalloped button bloom.
+  bead: 'M-11 -26 a11 11 0 1 0 22 0 a11 11 0 1 0 -22 0Z',
+  seed: 'M-6.5 -15 a6.5 6.5 0 1 0 13 0 a6.5 6.5 0 1 0 -13 0Z',
+};
+type Tone = 'base' | 'light' | 'deep' | 'cream';
+type Layer = {ring: keyof typeof PETAL, count: number, tone: Tone, scale?: number, turn?: number, knock?: boolean} | {disc: number, tone: Tone};
+const BLOOMS: Record<string, Layer[]> = {
+  quant: [{ring: 'lobe', count: 5, tone: 'base', knock: true}, {disc: 10, tone: 'cream'}, {disc: 4.5, tone: 'deep'}],
+  power: [{ring: 'flare', count: 5, tone: 'base', knock: true}, {ring: 'flare', count: 5, tone: 'light', scale: .5, turn: 36}, {disc: 8, tone: 'cream'}, {disc: 3.5, tone: 'deep'}],
+  daisy: [{ring: 'tongue', count: 12, tone: 'base', knock: true}, {disc: 15, tone: 'deep'}, {disc: 8, tone: 'light'}],
+  button: [{ring: 'bead', count: 10, tone: 'base', knock: true}, {disc: 27, tone: 'base'}, {ring: 'seed', count: 8, tone: 'light', turn: 22.5}, {disc: 15, tone: 'light'}, {disc: 7, tone: 'deep'}, {disc: 2.5, tone: 'cream'}],
+  sun: [{ring: 'ray', count: 11, tone: 'base', knock: true}, {disc: 15, tone: 'deep'}, {disc: 10, tone: 'light'}, {disc: 4, tone: 'deep'}],
+  swirl: [{ring: 'swirl', count: 7, tone: 'base', knock: true}, {ring: 'swirl', count: 7, tone: 'light', scale: .5, turn: 26}, {disc: 8, tone: 'deep'}, {disc: 3, tone: 'cream'}],
+};
+const LEAF = {
+  long: 'M0 0 C-15 -12 -17 -42 0 -62 C17 -42 15 -12 0 0Z',
+  round: 'M0 0 C-21 -8 -23 -38 0 -48 C23 -38 21 -8 0 0Z',
+};
+
+type Flower = {t: keyof typeof BLOOMS, x: number, y: number, s: number, r: number};
+type Leaf = {x: number, y: number, r: number, v: keyof typeof LEAF, g: 'olive' | 'sage'};
+type Sprig = {x: number, y: number, r: number};
+// Flowers are listed back to front; the biggest flare is each bouquet's focal bloom.
+const arrangements: {id: string, flowers: Flower[], leaves: Leaf[], sprigs: Sprig[]}[] = [
+  {id: 'petite',
+    flowers: [{t: 'daisy', x: 146, y: 152, s: 1.05, r: -8}, {t: 'swirl', x: 270, y: 160, s: 1, r: 22}, {t: 'power', x: 205, y: 214, s: 1.42, r: 4}],
+    leaves: [{x: 192, y: 296, r: -62, v: 'long', g: 'olive'}, {x: 230, y: 296, r: 62, v: 'long', g: 'sage'}, {x: 207, y: 168, r: 2, v: 'round', g: 'sage'}, {x: 150, y: 226, r: -84, v: 'long', g: 'olive'}, {x: 262, y: 222, r: 86, v: 'round', g: 'sage'}],
+    sprigs: [{x: 92, y: 222, r: -58}]},
+  {id: 'classic',
+    flowers: [{t: 'button', x: 150, y: 112, s: 1, r: 0}, {t: 'sun', x: 262, y: 104, s: 1, r: 8}, {t: 'swirl', x: 104, y: 192, s: .95, r: -20}, {t: 'daisy', x: 306, y: 188, s: 1, r: 14}, {t: 'quant', x: 246, y: 258, s: .88, r: -10}, {t: 'power', x: 205, y: 180, s: 1.36, r: -6}],
+    leaves: [{x: 190, y: 294, r: -64, v: 'long', g: 'olive'}, {x: 232, y: 296, r: 62, v: 'long', g: 'sage'}, {x: 203, y: 118, r: -6, v: 'round', g: 'sage'}, {x: 150, y: 250, r: -112, v: 'round', g: 'olive'}, {x: 296, y: 150, r: 82, v: 'long', g: 'sage'}, {x: 118, y: 158, r: -78, v: 'round', g: 'olive'}],
+    sprigs: [{x: 70, y: 128, r: -38}, {x: 344, y: 120, r: 36}]},
+  {id: 'abundant',
+    flowers: [{t: 'sun', x: 120, y: 106, s: .9, r: 0}, {t: 'button', x: 214, y: 80, s: .95, r: 0}, {t: 'swirl', x: 304, y: 110, s: .95, r: 20}, {t: 'daisy', x: 68, y: 188, s: .85, r: -10}, {t: 'quant', x: 342, y: 198, s: .92, r: 12}, {t: 'swirl', x: 152, y: 172, s: 1, r: -30}, {t: 'button', x: 114, y: 258, s: .8, r: 0}, {t: 'daisy', x: 300, y: 264, s: .86, r: 18}, {t: 'power', x: 252, y: 166, s: 1.3, r: 8}, {t: 'sun', x: 206, y: 252, s: .95, r: 10}],
+    leaves: [{x: 186, y: 292, r: -66, v: 'long', g: 'olive'}, {x: 236, y: 294, r: 66, v: 'long', g: 'sage'}, {x: 150, y: 222, r: -98, v: 'round', g: 'sage'}, {x: 268, y: 214, r: 100, v: 'round', g: 'olive'}, {x: 172, y: 118, r: -34, v: 'round', g: 'olive'}, {x: 258, y: 118, r: 26, v: 'long', g: 'sage'}, {x: 112, y: 168, r: -80, v: 'long', g: 'olive'}, {x: 304, y: 160, r: 84, v: 'long', g: 'sage'}],
+    sprigs: [{x: 50, y: 128, r: -44}, {x: 364, y: 142, r: 42}]},
+];
+
+// Every flower sways from the ribbon at its own pace; stems, leaves, and blooms share a flower's rhythm.
+const sway = (i: number, amount = 1) => `--sway-time:${(4.2 + (i * 1.37) % 2.4).toFixed(2)}s;--sway-delay:-${((i * 2.71) % 5).toFixed(2)}s;--sway:${(amount * (1 + (i * .53) % .8)).toFixed(2)}deg`;
+const ringTurns = (count: number, turn = 0) => Array.from({length: count}, (_, k) => turn + k * 360 / count);
+---
+<svg viewBox="0 0 400 420">
+<g class="bouquet">
+{arrangements.map(arrangement => {
+  const stems = [...arrangement.flowers, ...arrangement.sprigs];
+  return <g data-arrangement={arrangement.id} display={arrangement.id === initial ? 'inline' : 'none'}>
+    <g class="stems">
+      {stems.map((f, i) => {
+        const {tie, end} = stemTie(i, stems.length);
+        return <g class="sway" style={sway(i)}><path class="stem" data-stalk={i} data-tie={tie} data-end-x={end.x} data-end-y={end.y} d={stemPath(f.x, f.y, tie, end)}/></g>;
+      })}
+    </g>
+    {arrangement.sprigs.map((sprig, i) => <g class="sway" style={sway(arrangement.flowers.length + i)}><g class="head" data-stalk={arrangement.flowers.length + i} data-x={sprig.x} data-y={sprig.y} data-r={sprig.r} data-s="1" transform={`translate(${sprig.x} ${sprig.y}) rotate(${sprig.r}) scale(1)`}>
+      {[[0, 0, 5], [-8, 9, 4.2], [8, 7, 4.5], [-2, 18, 3.6], [6, -9, 3.4]].map(([x, y, r]) => <circle class="berry" cx={x} cy={y} r={r}/>)}
+    </g></g>)}
+    {arrangement.leaves.map((leaf, i) => <g class="sway" style={sway(i + 7, .6)}><g transform={`translate(${leaf.x} ${leaf.y}) rotate(${leaf.r}) scale(1.22)`}>
+      <g class={`leaf leaf-${leaf.g}`}><path d={LEAF[leaf.v]}/><path class="vein" d={leaf.v === 'long' ? 'M0 -6 Q-3 -30 0 -52' : 'M0 -5 Q-3 -22 0 -38'}/></g>
+    </g></g>)}
+    {arrangement.flowers.map((f, i) => <g class="sway" style={sway(i)}><g class="head" data-stalk={i} data-x={f.x} data-y={f.y} data-r={f.r} data-s={f.s} transform={`translate(${f.x} ${f.y}) rotate(${f.r}) scale(${f.s})`}>
+      <g class="bloom" data-bloom={i} data-x={f.x} data-y={f.y} data-s={f.s}>
+        {BLOOMS[f.t].map(layer => 'disc' in layer
+          ? <circle class={`bloom-eye tone-${layer.tone}`} r={layer.disc}/>
+          : ringTurns(layer.count, layer.turn).map(turn => <g transform={`rotate(${turn.toFixed(1)})${layer.scale ? ` scale(${layer.scale})` : ''}`}><path class={`petal tone-${layer.tone}${layer.knock ? ' knock' : ''}`} d={PETAL[layer.ring]}/></g>))}
+      </g>
+    </g></g>)}
+  </g>;
+})}
+<g class="bow">
+  <path class="ribbon-deep" d="M195 314 Q211 309 227 314 L227 328 Q211 323 195 328Z"/>
+  <path class="ribbon-tail" d="M208 324 C203 336 196 341 194 352 C193 359 188 363 183 366"/>
+  <path class="ribbon-tail" d="M214 324 C221 334 227 342 227 354 C227 361 231 365 237 368"/>
+  <path class="ribbon" d="M211 321 C192 299 166 304 170 320 C174 336 196 331 211 321Z"/>
+  <path class="ribbon" d="M211 321 C230 299 256 304 252 320 C248 336 226 331 211 321Z"/>
+  <path class="ribbon-fold" d="M183 316 C188 313 196 315 203 320 M239 316 C234 313 226 315 219 320"/>
+  <ellipse class="ribbon-deep" cx="211" cy="321" rx="7" ry="8"/>
+</g>
+</g>
+</svg>
+
+<style>
+/* Registered so a bloom can melt smoothly from one color to the next. */
+@property --base { syntax: '<color>'; inherits: true; initial-value: #e3d8cd; }
+@property --light { syntax: '<color>'; inherits: true; initial-value: #d8c7b4; }
+@property --deep { syntax: '<color>'; inherits: true; initial-value: #90807f; }
+svg { width: 100%; height: auto; display: block; overflow: visible; }
+.tone-base { fill: var(--base); }
+.tone-light { fill: var(--light); }
+.tone-deep { fill: var(--deep); }
+.tone-cream { fill: #fffaf0; }
+/* A paper-colored gap between overlapping petals, like a screen print knockout. */
+.knock { stroke: var(--paper, #fffdf5); stroke-width: 2.4; stroke-linejoin: round; }
+.bloom { filter: drop-shadow(0 2.4px 0 rgb(42 20 32 / .2)); }
+.stems { fill: none; stroke: #6c7642; stroke-width: 4.2; stroke-linecap: round; }
+.leaf-olive { fill: #6f7d3f; }
+.leaf-sage { fill: #98a46a; }
+.vein { fill: none; stroke: #5d6935; stroke-width: 1.6; stroke-linecap: round; opacity: .55; }
+.leaf { transform-box: view-box; transform-origin: 0 0; }
+.berry { fill: #c4ae78; transform-box: fill-box; transform-origin: center; }
+.sway { transform-box: view-box; transform-origin: 211px 321px; animation: sway var(--sway-time, 5s) ease-in-out var(--sway-delay, 0s) infinite alternate; }
+@keyframes sway { from { transform: rotate(calc(var(--sway, 1deg) * -1)); } to { transform: rotate(var(--sway, 1deg)); } }
+.bouquet { transform-box: view-box; transform-origin: 211px 350px; }
+.bow { transform-box: view-box; transform-origin: 211px 321px; }
+.ribbon { fill: #d97c98; }
+.ribbon-deep { fill: #a94f6b; }
+.ribbon-fold { fill: none; stroke: #a94f6b; stroke-width: 2.4; stroke-linecap: round; }
+.ribbon-tail { fill: none; stroke: #d97c98; stroke-width: 5; stroke-linecap: round; }
+@media (prefers-reduced-motion: reduce) { .sway { animation: none; } }
+</style>

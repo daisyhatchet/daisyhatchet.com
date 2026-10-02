@@ -1,17 +1,13 @@
 import paletteData from '@/content/bespoke-palette.json';
 import {SIZES,selectionMessage,bouquetVariant,validatePalette,defaultSize} from '../../public/editor-assets/bespoke-model.js';
 import {loadProducts,checkout} from '@/lib/shopify.mjs';
+import {squish,shake,bump,tweenPrice,swapArrangement,entrance,paintBlooms,celebrate,pointIn,throwPaint,syncList} from './bouquet-motion';
 const $ = <T extends HTMLElement = HTMLElement>(selector:string) => document.querySelector<T>(selector)!;
 let palette=paletteData, sizeId=defaultSize(paletteData.colors).id, selected:string[]=[], busy=false;
 const button=$<HTMLButtonElement>('#bouquet-checkout');
 const swatches=[...document.querySelectorAll<HTMLButtonElement>('[data-color]')];
-// Reuse the arrangement drawing, with unique SVG references for each preview.
-for (const [target, suffix] of [['#mini-art', 'mini'], ['#expanded-art', 'expanded']]) {
-  const art = document.querySelector('.flower-art svg')!.cloneNode(true) as SVGElement;
-  art.querySelector('#petal')!.id = `petal-${suffix}`;
-  art.querySelectorAll('use').forEach(petal => petal.setAttribute('href', `#petal-${suffix}`));
-  $(target).append(art);
-}
+// Reuse the arrangement drawing for the small and enlarged previews.
+for (const target of ['#mini-art', '#expanded-art']) $(target).append(document.querySelector('.flower-art svg')!.cloneNode(true));
 const miniPreview = $('#mini-preview');
 miniPreview.hidden = false;
 miniPreview.inert = true;
@@ -45,7 +41,37 @@ addEventListener('resize', schedulePreviewUpdate);
 const previewResize = new ResizeObserver(schedulePreviewUpdate);
 [siteHeader, largePreview, paletteStage].forEach(element => previewResize.observe(element));
 updateMiniPreview();
-function render() {
+const mainArt = document.querySelector<SVGSVGElement>('.composition .flower-art svg')!;
+// The bouquet drawing the visitor can see right now, if any.
+function visibleArt() {
+  if (previewDialog.open) return $('#expanded-art').querySelector('svg')!;
+  const art = mainArt.getBoundingClientRect(), top = siteHeader.getBoundingClientRect().bottom;
+  if (art.bottom - art.height * .35 > top && art.top + art.height * .35 < innerHeight) return mainArt;
+  return miniPreview.classList.contains('is-visible') ? $('#mini-art').querySelector('svg')! : null;
+}
+// Spreads the chosen colors so neighboring blooms differ, the biggest blooms
+// show every color first, and each color appears about equally often.
+const slotCache=new Map<string,number[]>();
+function colorSlot(bloom:SVGGElement,count:number){
+  if(count<2)return 0;
+  const group=bloom.closest('[data-arrangement]')!, key=`${group.getAttribute('data-arrangement')}:${count}`;
+  if(!slotCache.has(key)){
+    const blooms=[...group.querySelectorAll<SVGGElement>('.bloom')].map(b=>({i:Number(b.dataset.bloom),x:Number(b.dataset.x),y:Number(b.dataset.y),s:Number(b.dataset.s)})).sort((a,b)=>b.s-a.s);
+    const slots:number[]=[], uses=Array(count).fill(0);
+    for(const b of blooms){
+      const cost=(slot:number)=>uses[slot]*10+blooms.reduce((sum,o)=>slots[o.i]===slot?sum+30*(90/Math.hypot(o.x-b.x,o.y-b.y))**2:sum,0);
+      const slot=[...uses.keys()].reduce((best,slot)=>cost(slot)<cost(best)?slot:best,0);
+      slots[b.i]=slot;uses[slot]++;
+    }
+    slotCache.set(key,slots);
+  }
+  return slotCache.get(key)![Number(bloom.dataset.bloom)];
+}
+let shownSize=sizeId, wasReady=false, wasCheckoutReady=false, lastCount=0, firstRender=true;
+type Color=typeof palette.colors[number];
+// `cheer` is when a celebration should start, timed so the bouquet's hop and
+// petal toss burst out together with the blooms rather than after them.
+function render(motion:{delay?:number,origin?:[number,number],cheer?:number}={}) {
   const size=SIZES.find(s=>s.id===sizeId)!;
   const colors=selected.map(id=>palette.colors.find(c=>c.id===id)).filter((c): c is typeof palette.colors[number]=>!!c);
   const availableCount=palette.colors.filter(c=>c.available).length;
@@ -70,30 +96,48 @@ function render() {
   $('#preview-dialog-title').textContent=`Your ${size.name}`;
   $('#art-title').textContent=`Your ${size.name}`;
   $('#art-caption').textContent=colors.length?colors.map(c=>c.name).join(' + '):'A blank canvas. Make it yours.';
-  document.querySelectorAll<SVGElement>('[data-arrangement]').forEach(arrangement=>{
-    arrangement.setAttribute('display',arrangement.dataset.arrangement===sizeId?'inline':'none');
-    arrangement.querySelectorAll<SVGElement>('[data-bloom]').forEach((b,i)=>{
-      b.style.fill=colors.length?colors[i%colors.length].hex:'#e3d8cd';
-    });
-  });
-  $('#palette-ribbon').replaceChildren(...colors.map(c=>{const el=document.createElement('span');el.style.background=c.hex;return el;}));
+  if(shownSize!==sizeId){swapArrangement(shownSize,sizeId);shownSize=sizeId;}
+  paintBlooms(bloom=>colors[colorSlot(bloom,colors.length)]?.hex,motion);
+  const dot=(c:Color)=>{const el=document.createElement('span');el.style.background=c.hex;return el;};
+  syncList($('#palette-ribbon'),colors,c=>c.id,dot);
+  syncList($('#mini-dots'),colors,c=>c.id,dot);
   $('#summary-size').textContent=`${size.name} · Bespoke Bouquet`;
-  $('#summary-price').textContent=`$${size.price}`;
-  const chips=colors.map(c=>{const chip=document.createElement('button');chip.type='button';chip.className='color-chip';chip.textContent=`${c.name} ×`;chip.setAttribute('aria-label',`Remove ${c.name}`);chip.disabled=busy;chip.onclick=()=>{selected=selected.filter(id=>id!==c.id);render();swatches.find(s=>s.dataset.color===c.id)?.focus();};return chip;});
-  $('#chosen-colors').replaceChildren(...chips);
-  if(!chips.length)$('#chosen-colors').textContent='No colors chosen yet.';
+  tweenPrice($('#summary-price'),size.price);
+  syncList($('#chosen-colors'),colors,c=>c.id,c=>{const chip=document.createElement('button');chip.type='button';chip.className='color-chip';chip.textContent=`${c.name} ×`;chip.setAttribute('aria-label',`Remove ${c.name}`);chip.onclick=()=>{removeColor(c.id);swatches.find(s=>s.dataset.color===c.id)?.focus();};return chip;},(chip)=>{(chip as HTMLButtonElement).disabled=busy;});
+  if(selected.length!==lastCount&&!firstRender)bump($('#color-count'));
+  lastCount=selected.length;
   button.disabled=busy||!!message||!palette.enabled;
+  // Celebrate the moment the palette becomes complete enough to order.
+  const ready=!message&&selected.length>0;
+  if(ready&&!wasReady&&!firstRender){const art=visibleArt();if(art)setTimeout(()=>celebrate(art,colors.map(c=>c.hex)),motion.cheer??Math.max(0,motion.delay??0)+140);}
+  if(!button.disabled&&!wasCheckoutReady&&!firstRender)setTimeout(()=>squish(button,1.08),Math.max(0,motion.delay??0)+160);
+  wasReady=ready;wasCheckoutReady=!button.disabled;firstRender=false;
   button.textContent=busy?'Opening checkout…':message?'Choose your colors':!palette.enabled?'Ordering opens soon':`Checkout · $${size.price} ↗`;
 }
+const paintOf=(id:string)=>swatches.find(s=>s.dataset.color===id)?.querySelector('.paint') ?? null;
+const hexOf=(id:string)=>palette.colors.find(c=>c.id===id)?.hex ?? '#e3d8cd';
+// Removing a color sends a drop back from the bouquet to its paint pot.
+function removeColor(id:string){
+  selected=selected.filter(c=>c!==id);
+  $('#checkout-feedback').textContent='';
+  const art=visibleArt(), paint=paintOf(id);
+  if(art&&paint){const from=pointIn(art,205,180);throwPaint({x:from.x,y:from.y,width:22},paint.getBoundingClientRect(),hexOf(id),()=>squish(paint,1.1));}
+  render();
+}
 swatches.forEach(s=>s.onclick=()=>{
-  const id=s.dataset.color!;const size=SIZES.find(s=>s.id===sizeId)!;
-  if(selected.includes(id))selected=selected.filter(c=>c!==id);
-  else if(selected.length>=size.max){$('#palette-feedback').textContent=`${size.name} has room for ${size.max} colors. Remove one to try another.`;return;}
-  else selected.push(id);
-  $('#checkout-feedback').textContent='';render();
+  const id=s.dataset.color!;const size=SIZES.find(s=>s.id===sizeId)!;const paint=s.querySelector('.paint');
+  if(selected.includes(id)){removeColor(id);return;}
+  if(selected.length>=size.max){$('#palette-feedback').textContent=`${size.name} has room for ${size.max} colors. Remove one to try another.`;shake(paint);return;}
+  selected.push(id);
+  $('#checkout-feedback').textContent='';
+  squish(paint);
+  // A drop of the color arcs over to the bouquet, and the blooms change as it lands.
+  const art=visibleArt();
+  const delay=art&&paint?Math.max(0,throwPaint(paint.getBoundingClientRect(),pointIn(art,205,180),hexOf(id))-170):0;
+  render({delay,origin:[205,180]});
 });
-document.querySelectorAll<HTMLInputElement>('[name=size]').forEach(input=>input.onchange=()=>{sizeId=input.value;$('#checkout-feedback').textContent='';render();});
-$('#clear-colors').onclick=()=>{selected=[];render();swatches.find(s=>!s.disabled)?.focus();};
+document.querySelectorAll<HTMLInputElement>('[name=size]').forEach(input=>input.onchange=()=>{sizeId=input.value;$('#checkout-feedback').textContent='';squish(input.nextElementSibling,1.06);render({origin:[211,321],cheer:220});});
+$('#clear-colors').onclick=()=>{selected=[];render({origin:[211,321]});swatches.find(s=>!s.disabled)?.focus();};
 button.onclick=async()=>{
   busy=true;render();$('#checkout-feedback').textContent='Checking your colors and bouquet availability…';
   try {
@@ -110,3 +154,4 @@ button.onclick=async()=>{
   }catch(error){$('#checkout-feedback').textContent=error instanceof Error?error.message:'Checkout couldn’t open. Please try again.';busy=false;render();}
 };
 render();
+entrance(mainArt);
