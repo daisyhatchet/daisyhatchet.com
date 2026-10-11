@@ -14,6 +14,14 @@ const { title = 'Daisy Hatchet — Flowers with an edge', description = 'Seasona
     <link rel="icon" type="image/png" sizes="64x64" href="/favicon-daisy-hatchet.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <title>{title}</title>
+    <!-- Google tag (gtag.js). Purchase tracking must be set up separately in Shopify. -->
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=AW-18501980967"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'AW-18501980967');
+    </script>
   </head>
   <body>
     <SiteHeader />
