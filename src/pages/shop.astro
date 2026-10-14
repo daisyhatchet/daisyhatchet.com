@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import FulfillmentDialog from '@/components/FulfillmentDialog.astro';
 import previewProducts from '@/content/shopify-preview.json';
 const previewJSON = import.meta.env.DEV ? JSON.stringify(previewProducts).replaceAll('<', '\u003c') : null;
 ---
@@ -42,11 +43,12 @@ const previewJSON = import.meta.env.DEV ? JSON.stringify(previewProducts).replac
           <p class="checkout-note">Secure checkout with Shopify</p>
           <div class="fulfillment-notes">
             <p><strong>Porch pickup</strong>Usually ready the next day. We’ll email when your flowers are ready to collect.</p>
-            <p><strong>Local delivery</strong>$10 to Pacifica, Daly City, Montara, Moss Beach, El Granada, and Half Moon Bay. No nationwide shipping.</p>
+            <p><strong>Local delivery</strong>$10 to Pacifica, Daly City, Montara, Moss Beach, El Granada, and Half Moon Bay. Choose a weekday and a two-hour window between 10am and 4pm. No nationwide shipping.</p>
           </div>
         </div>
       </div>
     </dialog>
+    <FulfillmentDialog />
     {previewJSON && <script is:inline type="application/json" id="imported-preview" set:html={previewJSON} />}
 
   </section>
@@ -54,6 +56,7 @@ const previewJSON = import.meta.env.DEV ? JSON.stringify(previewProducts).replac
 <script>
   import {loadProducts, orderProducts, formatPrice, checkout, SHOP_DOMAIN} from '@/lib/shopify.mjs';
   import order from '@/content/shopify-order.json';
+  import {askFulfillment} from '@/scripts/fulfillment';
   const grid = document.querySelector<HTMLDivElement>('#products')!;
   const status = document.querySelector<HTMLParagraphElement>('#shop-status')!;
   const retry = document.querySelector<HTMLButtonElement>('#shop-retry')!;
@@ -123,8 +126,10 @@ const previewJSON = import.meta.env.DEV ? JSON.stringify(previewProducts).replac
       error.hidden = true;
       if (preview) { error.textContent = 'Preview only — checkout will be available after launch.'; error.hidden = false; return; }
       if (product.variants.pageInfo.hasNextPage) { location.assign(`https://${SHOP_DOMAIN}/products/${encodeURIComponent(product.handle)}`); return; }
+      const fulfillment = await askFulfillment();
+      if (!fulfillment || button.onclick !== handler) return;
       button.disabled = true; select.disabled = true; button.textContent = 'Opening checkout…';
-      try { location.assign(await checkout(variant.id)); }
+      try { location.assign(await checkout(variant.id, fetch, [], fulfillment)); }
       catch (e) { if (button.onclick !== handler) return; error.textContent = e instanceof Error ? e.message : 'Checkout could not be opened. Please try again.'; error.hidden = false; select.disabled = false; update(); }
     };
     const handler = button.onclick;

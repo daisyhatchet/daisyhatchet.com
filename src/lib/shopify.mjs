@@ -16,8 +16,8 @@ export const PRODUCTS_QUERY = `query ShopProducts($after: String) {
   }
 }`;
 
-export const CHECKOUT_MUTATION = `mutation ShopCheckout($variantId: ID!, $attributes: [AttributeInput!]!) {
-  cartCreate(input: {lines: [{merchandiseId: $variantId, quantity: 1, attributes: $attributes}]}) {
+export const CHECKOUT_MUTATION = `mutation ShopCheckout($variantId: ID!, $attributes: [AttributeInput!]!, $cartAttributes: [AttributeInput!]!, $note: String!, $buyerIdentity: CartBuyerIdentityInput) {
+  cartCreate(input: {lines: [{merchandiseId: $variantId, quantity: 1, attributes: $attributes}], attributes: $cartAttributes, note: $note, buyerIdentity: $buyerIdentity}) {
     cart { checkoutUrl totalQuantity }
     userErrors { field message }
   }
@@ -59,8 +59,12 @@ export function formatPrice(price) {
   return new Intl.NumberFormat('en-US', {style: 'currency', currency: price.currencyCode, minimumFractionDigits: Number(price.amount) % 1 ? 2 : 0}).format(Number(price.amount));
 }
 
-export async function checkout(variantId, fetcher = fetch, attributes = []) {
-  const data = await storefront(CHECKOUT_MUTATION, {variantId, attributes}, fetcher);
+// `fulfillment` comes from fulfillmentDetails(): order-level delivery details plus
+// the pickup/delivery choice Shopify checkout should open with.
+export async function checkout(variantId, fetcher = fetch, attributes = [], fulfillment = {}) {
+  const {attributes: cartAttributes = [], note = '', deliveryMethod} = fulfillment;
+  const buyerIdentity = deliveryMethod ? {preferences: {delivery: {deliveryMethod: [deliveryMethod]}}} : null;
+  const data = await storefront(CHECKOUT_MUTATION, {variantId, attributes, cartAttributes, note, buyerIdentity}, fetcher);
   const result = data.cartCreate;
   if (result.userErrors.length) throw new Error(result.userErrors.map(error => error.message).join(' '));
   if (!result.cart || result.cart.totalQuantity !== 1) throw new Error('This arrangement is no longer available. Please refresh the shop.');

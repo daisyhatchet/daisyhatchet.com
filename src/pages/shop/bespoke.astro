@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import BouquetArt from '@/components/BouquetArt.astro';
+import FulfillmentDialog from '@/components/FulfillmentDialog.astro';
 import palette from '@/content/bespoke-palette.json';
 import {SIZES,defaultSize} from '../../../public/editor-assets/bespoke-model.js';
 const initialSize = defaultSize(palette.colors);
@@ -19,9 +20,10 @@ const initialSize = defaultSize(palette.colors);
 <div class="palette-stage">
 <button type="button" class="mini-preview" id="mini-preview" aria-label="Enlarge your bouquet preview" aria-haspopup="dialog" hidden><span id="mini-art" aria-hidden="true"></span><span class="mini-copy"><strong id="mini-title">Your {initialSize.name}</strong><span id="mini-dots" aria-hidden="true"></span><span id="mini-count">0 of {initialSize.max} colors</span><span class="mini-hint">Take a closer look ↗</span></span></button>
 <fieldset class="color-field"><legend><span>02</span> Find your color story</legend><div class="palette-help"><p id="color-instruction">Pick {initialSize.min}–{initialSize.max} colors. Trust your eye.</p><span id="color-count">0 selected</span></div><div class="swatches">{palette.colors.map(c=><button type="button" class="swatch" data-color={c.id} aria-pressed="false" disabled={!c.available} aria-label={`${c.name}${c.available?'':' — unavailable'}`}><span class="paint" style={`--swatch:${c.hex}`}><span class="check">✓</span></span><span>{c.name}</span>{!c.available&&<small>Resting for now</small>}</button>)}</div><p id="palette-feedback" role="status" aria-live="polite">Choose {initialSize.min} more colors to complete your {initialSize.name}.</p><button class="reset" id="clear-colors" type="button" hidden>Start a fresh palette ↺</button></fieldset></div>
-<section class="review" aria-labelledby="review-title"><div class="review-heading"><h2 id="review-title">Your little masterpiece</h2><p id="summary-price">${initialSize.price}</p></div><p id="summary-size">{initialSize.name} · Bespoke Bouquet</p><div id="chosen-colors"></div><p class="design-note">We’ll compose your colors with the best of what’s growing. Flower varieties and exact shades vary with the season.</p><button class="button" id="bouquet-checkout" disabled>Choose your colors</button><p id="checkout-feedback" role="status" aria-live="polite"></p><p class="checkout-small">Porch pickup or $10 local delivery.<br/>Delivery eligibility is confirmed at checkout.</p></section></div></div>
+<section class="review" aria-labelledby="review-title"><div class="review-heading"><h2 id="review-title">Your little masterpiece</h2><p id="summary-price">${initialSize.price}</p></div><p id="summary-size">{initialSize.name} · Bespoke Bouquet</p><div id="chosen-colors"></div><p class="design-note">We’ll compose your colors with the best of what’s growing. Flower varieties and exact shades vary with the season.</p><button class="button" id="bouquet-checkout" disabled>Choose your colors</button><p id="checkout-feedback" role="status" aria-live="polite"></p><p class="checkout-small">Porch pickup, or $10 local delivery in a two-hour weekday window.<br/>Delivery eligibility is confirmed at checkout.</p></section></div></div>
 <section class="closing-note"><span aria-hidden="true">✳</span><h2>A bouquet with your name on it.</h2><p>No two gardens, days, or people are quite the same.<br/>Your flowers shouldn’t be either.</p></section><noscript>Please enable JavaScript to customize your bouquet.</noscript>
 <dialog id="preview-dialog" aria-labelledby="preview-dialog-title"><form method="dialog"><button class="preview-close" aria-label="Close bouquet preview">×</button></form><h2 id="preview-dialog-title">Your color study</h2><div id="expanded-art" aria-hidden="true"></div><p id="expanded-caption"></p><p class="art-note">Nature chooses the flowers; you set the mood.</p></dialog>
+<FulfillmentDialog />
 </section></BaseLayout>
 <script src="../../scripts/bespoke.ts"></script>
 <style>

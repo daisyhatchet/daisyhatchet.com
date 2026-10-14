@@ -29,7 +29,7 @@ test('checkout only accepts matching available size with the agreed USD price',(
 test('the customer color story travels on the actual Shopify cart line',async()=>{
  const attributes=[{key:'Bouquet size',value:'Classic'},{key:'Color palette',value:'Apricot, Lilac'}];
  await checkout('chosen-variant',async(_,options)=>{
- const body=JSON.parse(options.body);assert.deepEqual(body.variables,{variantId:'chosen-variant',attributes});assert.match(body.query,/attributes: \$attributes/);
+ const body=JSON.parse(options.body);assert.deepEqual(body.variables,{variantId:'chosen-variant',attributes,cartAttributes:[],note:'',buyerIdentity:null});assert.match(body.query,/attributes: \$attributes/);
  return Response.json({data:{cartCreate:{cart:{checkoutUrl:'https://daisy-hatchet.myshopify.com/checkouts/test',totalQuantity:1},userErrors:[]}}});
  },attributes);
 });

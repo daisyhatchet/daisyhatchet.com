@@ -162,3 +162,18 @@ display changes or publication were made; presentation will be decided separatel
 The owner authorized turning on the real shop. All seven products are active, the Shopify storefront password is removed, and Shopify Payments test mode is disabled. Order email notifications go to jeneva@daisyhatchet.com; the previous Gmail notification recipient is off and iPhone notifications remain enabled. Shopify's return-to-shop redirect is published (see migrations/shopify-redirect-published.md).
 
 The website migration includes live Shopify product loading and checkout, product descriptions, responsive image lightboxes, and retirement of the old shop editor in favor of Shopify. Production builds exclude imported preview data. Build and 12 tests passed before publication. No real purchase was made by the assistant.
+
+### Delivery windows and notes
+
+Shopify's standard checkout has no delivery-time picker, so the website asks first.
+Every Purchase, Buy now and Bespoke Bouquet checkout button opens a short step:
+porch pickup or local delivery. Delivery requires a weekday (next business day
+through two weeks out, Pacific time) and a two-hour window: 10am–12pm, 12–2pm or
+2–4pm. An optional "Anything we should know?" note is offered for either choice.
+
+These appear on the Shopify order: Fulfillment, Delivery date and Delivery window
+under Additional details, and the note under Notes. Checkout opens with Pickup or
+Delivery preselected to match, but customers can still switch there, so check the
+order's actual delivery method too. Shopify's own optional "Delivery instructions"
+field (behind "Add delivery instructions" at checkout) still exists and appears on
+the shipping address. Holidays are not blocked; logic lives in `src/lib/delivery.mjs`.

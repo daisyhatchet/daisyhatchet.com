@@ -1,6 +1,7 @@
 import paletteData from '@/content/bespoke-palette.json';
 import {SIZES,selectionMessage,bouquetVariant,validatePalette,defaultSize} from '../../public/editor-assets/bespoke-model.js';
 import {loadProducts,checkout} from '@/lib/shopify.mjs';
+import {askFulfillment} from './fulfillment';
 import {squish,shake,bump,tweenPrice,swapArrangement,entrance,paintBlooms,celebrate,pointIn,throwPaint,syncList} from './bouquet-motion';
 const $ = <T extends HTMLElement = HTMLElement>(selector:string) => document.querySelector<T>(selector)!;
 let palette=paletteData, sizeId=defaultSize(paletteData.colors).id, selected:string[]=[], busy=false;
@@ -139,6 +140,8 @@ swatches.forEach(s=>s.onclick=()=>{
 document.querySelectorAll<HTMLInputElement>('[name=size]').forEach(input=>input.onchange=()=>{sizeId=input.value;$('#checkout-feedback').textContent='';squish(input.nextElementSibling,1.06);render({origin:[211,321],cheer:220});});
 $('#clear-colors').onclick=()=>{selected=[];render({origin:[211,321]});swatches.find(s=>!s.disabled)?.focus();};
 button.onclick=async()=>{
+  const fulfillment=await askFulfillment();
+  if(!fulfillment||busy)return;
   busy=true;render();$('#checkout-feedback').textContent='Checking your colors and bouquet availability…';
   try {
     const response=await fetch(`/bespoke-palette.json?check=${Date.now()}`,{cache:'no-store'});
@@ -150,7 +153,7 @@ button.onclick=async()=>{
     if(!variant)throw Error('This bouquet size isn’t available to order right now. Please try another size or check back soon.');
     const size=SIZES.find(s=>s.id===sizeId)!;
     const colors=selected.map(id=>palette.colors.find(c=>c.id===id)!.name).join(', ');
-    location.assign(await checkout(variant.id,fetch,[{key:'Bouquet size',value:size.name},{key:'Color palette',value:colors}]));
+    location.assign(await checkout(variant.id,fetch,[{key:'Bouquet size',value:size.name},{key:'Color palette',value:colors}],fulfillment));
   }catch(error){$('#checkout-feedback').textContent=error instanceof Error?error.message:'Checkout couldn’t open. Please try again.';busy=false;render();}
 };
 render();
