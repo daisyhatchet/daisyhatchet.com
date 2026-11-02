@@ -17,7 +17,7 @@
       "id": "c79407f2-4771-4d7d-8725-6d69e7ad50a2",
       "name": "Cherry Bomb",
       "hex": "#c81453",
-      "available": true
+      "available": false
     },
     {
       "id": "70c2b48e-6371-4653-bc9b-3489aea69dd5",
@@ -35,7 +35,7 @@
       "id": "df28345b-5ae4-4e51-8fba-f652b9db0daa",
       "name": "Sour Apple",
       "hex": "#a1bc57",
-      "available": true
+      "available": false
     }
   ]
 }
